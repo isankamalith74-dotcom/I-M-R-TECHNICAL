@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>වෙසක් උත්සවය</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@300;400;500;600;700;800;900&family=Noto+Serif+Sinhala:wght@400;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#060a14;--bg2:#0c1225;--gold:#d4a017;--gold-l:#f0c75e;--gold-g:rgba(212,160,23,.35);--teal:#4ecdc4;--cream:#f5e6c8;--white:#f0ece4;--muted:#8899aa;--card:rgba(12,18,37,.88);--border:rgba(212,160,23,.12)}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans Sinhala',sans-serif;background:var(--bg);color:var(--white);overflow-x:hidden;line-height:1.7}
+::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--gold);border-radius:3px}
+
+#loader{position:fixed;inset:0;z-index:10000;background:var(--bg);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .8s,visibility .8s}
+#loader.hide{opacity:0;visibility:hidden;pointer-events:none}
+#loader svg{width:70px;height:70px;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1);filter:drop-shadow(0 0 8px rgba(212,160,23,.3))}50%{transform:scale(1.08);filter:drop-shadow(0 0 20px rgba(212,160,23,.6))}}
+#loader p{margin-top:18px;color:var(--gold);font-size:.85rem;letter-spacing:2px}
+#loader .bar{width:180px;height:2px;background:rgba(212,160,23,.15);border-radius:2px;margin-top:14px;overflow:hidden}
+#loader .bar span{display:block;height:100%;width:0;background:var(--gold);border-radius:2px;animation:fill 1.5s ease forwards}
+@keyframes fill{to{width:100%}}
+
+.glow{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0;opacity:.1}
+.g1{width:300px;height:300px;background:var(--gold);top:5%;left:-5%;animation:gd 12s ease-in-out infinite}
+.g2{width:280px;height:280px;background:var(--teal);bottom:5%;right:-5%;animation:gd 15s ease-in-out infinite reverse}
+@keyframes gd{0%,100%{transform:translate(0,0)}50%{transform:translate(30px,25px)}}
+
+.toast{position:fixed;top:80px;left:50%;transform:translateX(-50%) translateY(-20px);z-index:9999;padding:10px 26px;border-radius:24px;background:var(--gold);color:var(--bg);font-size:.82rem;font-weight:600;opacity:0;transition:all .4s;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+header{position:fixed;top:0;left:0;right:0;z-index:1000;padding:14px 28px;display:flex;align-items:center;justify-content:space-between;backdrop-filter:blur(14px);background:rgba(6,10,20,.6);border-bottom:1px solid var(--border);transition:all .4s}
+header.scrolled{padding:10px 28px;background:rgba(6,10,20,.94);box-shadow:0 4px 24px rgba(0,0,0,.4)}
+.logo{display:flex;align-items:center;gap:9px}
+.logo svg{width:32px;height:32px}
+.logo span{font-family:'Noto Serif Sinhala',serif;font-size:1.05rem;font-weight:700;color:var(--gold)}
+.langs{display:flex;gap:3px}
+.lang-btn{padding:4px 11px;border-radius:16px;border:1px solid var(--border);background:0;color:var(--muted);cursor:pointer;font-size:.72rem;font-family:inherit;transition:all .3s}
+.lang-btn.on{background:var(--gold);color:var(--bg);border-color:var(--gold);font-weight:700}
+.lang-btn:hover:not(.on){border-color:var(--gold);color:var(--gold)}
+nav{display:flex;gap:20px}
+nav a{color:var(--muted);text-decoration:none;font-size:.8rem;transition:color .3s;position:relative}
+nav a:hover,nav a.on{color:var(--gold)}
+nav a::after{content:'';position:absolute;bottom:-3px;left:0;width:0;height:2px;background:var(--gold);transition:width .3s}
+nav a:hover::after,nav a.on::after{width:100%}
+.mob-btn{display:none;background:0;border:0;color:var(--gold);font-size:1.3rem;cursor:pointer}
+#mob-nav{position:fixed;inset:0;z-index:999;background:rgba(6,10,20,.98);backdrop-filter:blur(20px);display:none;flex-direction:column;align-items:center;justify-content:center;gap:26px}
+#mob-nav.open{display:flex}
+#mob-nav a{color:var(--cream);text-decoration:none;font-size:1.15rem;font-family:'Noto Serif Sinhala',serif;transition:color .3s}
+#mob-nav a:hover{color:var(--gold)}
+#mob-nav .x{position:absolute;top:18px;right:22px;background:0;border:0;color:var(--gold);font-size:1.4rem;cursor:pointer}
+
+#hero{position:relative;height:100vh;min-height:620px;display:flex;align-items:center;justify-content:center;overflow:hidden}
+#stars{position:absolute;inset:0;z-index:0}
+#lanterns{position:absolute;inset:0;z-index:1;pointer-events:none}
+#moon{position:absolute;top:8%;right:12%;width:100px;height:100px;border-radius:50%;background:radial-gradient(circle at 40% 40%,#ffeedd,#f5e6c8 40%,#e8d5a8 70%,rgba(200,180,140,.3));box-shadow:0 0 40px rgba(240,199,94,.25),0 0 80px rgba(240,199,94,.1),0 0 120px rgba(240,199,94,.05);z-index:1;opacity:.85;animation:moonGlow 5s ease-in-out infinite}
+@keyframes moonGlow{0%,100%{box-shadow:0 0 40px rgba(240,199,94,.25),0 0 80px rgba(240,199,94,.1)}50%{box-shadow:0 0 60px rgba(240,199,94,.35),0 0 100px rgba(240,199,94,.15)}}
+.hero-ov{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 80%,transparent 0%,var(--bg) 70%);z-index:2}
+.hero-c{position:relative;z-index:3;text-align:center;padding:0 20px;max-width:780px}
+.hero-c h1{font-family:'Noto Serif Sinhala',serif;font-size:clamp(2.2rem,6vw,4.2rem);font-weight:900;background:linear-gradient(135deg,var(--gold-l),var(--gold),var(--cream),var(--gold-l));background-size:200% 200%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 4s ease-in-out infinite;line-height:1.15;margin-bottom:10px}
+@keyframes shimmer{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.hero-c .sub{font-size:clamp(.95rem,2.2vw,1.25rem);color:var(--teal);margin-bottom:18px;font-weight:300;letter-spacing:3px}
+.hero-c .msg{font-size:clamp(.85rem,1.7vw,1rem);color:var(--cream);opacity:.8;max-width:560px;margin:0 auto 28px;font-weight:300;line-height:1.9}
+.cta{display:inline-flex;align-items:center;gap:9px;padding:13px 34px;border-radius:36px;background:linear-gradient(135deg,var(--gold),var(--gold-l));color:var(--bg);font-weight:700;font-size:.92rem;text-decoration:none;transition:all .4s;box-shadow:0 4px 28px var(--gold-g);position:relative;overflow:hidden}
+.cta::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);transform:translateX(-100%);transition:transform .6s}
+.cta:hover::before{transform:translateX(100%)}
+.cta:hover{transform:translateY(-3px);box-shadow:0 8px 36px rgba(212,160,23,.5)}
+.mus-hint{display:flex;align-items:center;gap:7px;justify-content:center;margin-top:18px;color:var(--muted);font-size:.75rem;opacity:.7}
+.mus-hint i{color:var(--gold);animation:mp 1.5s ease-in-out infinite}
+@keyframes mp{0%,100%{transform:scale(1);opacity:.7}50%{transform:scale(1.15);opacity:1}}
+.sc-hint{position:absolute;bottom:26px;left:50%;transform:translateX(-50%);z-index:3;color:var(--muted);font-size:.7rem;text-align:center;animation:sb 2.5s ease-in-out infinite}
+.sc-hint i{display:block;margin-top:5px;font-size:.85rem;color:var(--gold);opacity:.5}
+@keyframes sb{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(9px)}}
+
+section{padding:80px 20px;position:relative}
+.wrap{max-width:1060px;margin:0 auto}
+.tag{display:inline-flex;align-items:center;gap:7px;padding:5px 16px;border-radius:18px;background:rgba(212,160,23,.06);border:1px solid var(--border);color:var(--gold);font-size:.75rem;margin-bottom:14px;letter-spacing:1px}
+.stit{font-family:'Noto Serif Sinhala',serif;font-size:clamp(1.4rem,3.5vw,2.1rem);font-weight:800;background:linear-gradient(135deg,var(--gold-l),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px;line-height:1.3}
+.sdesc{color:var(--muted);font-size:.9rem;max-width:580px;margin-bottom:38px;line-height:1.8}
+
+.tl{position:relative;max-width:680px;margin:0 auto;padding-left:40px}
+.tl::before{content:'';position:absolute;left:14px;top:0;bottom:0;width:2px;background:linear-gradient(180deg,transparent,var(--gold),var(--teal),var(--gold),transparent)}
+.tl-i{position:relative;margin-bottom:48px;opacity:0;transform:translateY(30px);transition:all .7s cubic-bezier(.22,1,.36,1)}
+.tl-i.vis{opacity:1;transform:translateY(0)}
+.tl-d{position:absolute;left:-32px;top:10px;width:15px;height:15px;border-radius:50%;border:3px solid var(--gold);background:var(--bg);z-index:2;transition:all .5s}
+.tl-i.vis .tl-d{background:var(--gold);box-shadow:0 0 16px var(--gold-g)}
+.tl-i:nth-child(2) .tl-d{border-color:var(--teal)}
+.tl-i:nth-child(2).vis .tl-d{background:var(--teal);box-shadow:0 0 16px rgba(78,205,196,.4)}
+.tl-c{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px 20px;transition:all .4s}
+.tl-i:hover .tl-c{border-color:rgba(212,160,23,.25);box-shadow:0 6px 28px rgba(0,0,0,.3)}
+.tl-i h3{font-family:'Noto Serif Sinhala',serif;font-size:1.1rem;color:var(--gold-l);margin-bottom:7px;font-weight:700}
+.tl-i p{color:var(--cream);font-size:.86rem;opacity:.8;line-height:1.9}
+
+.vg{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
+.vc{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px 20px;text-align:center;position:relative;overflow:hidden;transition:all .5s cubic-bezier(.22,1,.36,1);opacity:0;transform:translateY(30px);cursor:default}
+.vc.vis{opacity:1;transform:translateY(0)}
+.vc::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 50% -20%,var(--gold-g),transparent 70%);opacity:0;transition:opacity .5s}
+.vc:hover::before{opacity:1}
+.vc:hover{border-color:rgba(212,160,23,.3);transform:translateY(-7px)!important;box-shadow:0 10px 36px rgba(0,0,0,.4)}
+.vi{width:58px;height:58px;margin:0 auto 16px;border-radius:50%;background:rgba(212,160,23,.08);display:flex;align-items:center;justify-content:center;font-size:1.4rem;color:var(--gold);transition:all .5s;border:1px solid rgba(212,160,23,.1)}
+.vc:hover .vi{background:linear-gradient(135deg,var(--gold),var(--gold-l));color:var(--bg);box-shadow:0 0 24px var(--gold-g);transform:scale(1.1);border-color:transparent}
+.vc h3{font-family:'Noto Serif Sinhala',serif;font-size:1.05rem;color:var(--gold-l);margin-bottom:7px;font-weight:700}
+.vc p{color:var(--muted);font-size:.82rem;line-height:1.8}
+
+.tg{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:18px}
+.tc{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:26px 18px;text-align:center;transition:all .5s;opacity:0;transform:scale(.93)}
+.tc.vis{opacity:1;transform:scale(1)}
+.tc:hover{border-color:rgba(212,160,23,.3);box-shadow:0 8px 30px rgba(0,0,0,.4);transform:translateY(-4px) scale(1)!important}
+.tc-ic{font-size:2rem;margin-bottom:12px;display:block;color:var(--gold);transition:all .4s}
+.tc:hover .tc-ic{transform:scale(1.15) rotate(-4deg);filter:drop-shadow(0 0 8px var(--gold-g))}
+.tc h3{font-family:'Noto Serif Sinhala',serif;font-size:.95rem;color:var(--gold-l);margin-bottom:5px;font-weight:600}
+.tc p{color:var(--muted);font-size:.8rem;line-height:1.7}
+
+#gallery{background:var(--bg)}
+.gg{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.gi{position:relative;border-radius:14px;overflow:hidden;aspect-ratio:4/3;cursor:pointer;opacity:0;transform:scale(.93);transition:all .6s cubic-bezier(.22,1,.36,1);border:1px solid transparent}
+.gi.vis{opacity:1;transform:scale(1)}
+.gi:hover{border-color:rgba(212,160,23,.25);box-shadow:0 8px 28px rgba(0,0,0,.5);transform:scale(1.02)!important}
+.gi-canvas{width:100%;height:100%;display:block;transition:transform .5s}
+.gi:hover .gi-canvas{transform:scale(1.06)}
+.gi::after{content:'';position:absolute;inset:0;background:linear-gradient(0deg,rgba(6,10,20,.6) 0%,transparent 50%);opacity:0;transition:opacity .3s}
+.gi:hover::after{opacity:1}
+.gi-z{position:absolute;bottom:12px;right:12px;z-index:2;color:var(--white);font-size:.8rem;opacity:0;transition:all .3s}
+.gi:hover .gi-z{opacity:1}
+#lb{position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.94);display:none;align-items:center;justify-content:center;backdrop-filter:blur(10px);cursor:pointer}
+#lb.open{display:flex}
+#lb canvas{max-width:90vw;max-height:85vh;border-radius:10px;box-shadow:0 0 60px rgba(212,160,23,.15)}
+#lb .x{position:absolute;top:20px;right:22px;color:var(--white);font-size:1.6rem;cursor:pointer;opacity:.6;transition:opacity .3s;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:rgba(255,255,255,.05)}
+#lb .x:hover{opacity:1}
+
+.gb{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:22px;perspective:800px}
+.gc{aspect-ratio:1;border-radius:11px;cursor:pointer;position:relative;transform-style:preserve-3d;transition:transform .5s cubic-bezier(.22,1,.36,1)}
+.gc.flip{transform:rotateY(180deg)}
+.gc.ok{pointer-events:none}
+.gc.ok .gc-f{box-shadow:0 0 18px rgba(212,160,23,.4);border-color:var(--gold)}
+.gc-b,.gc-f{position:absolute;inset:0;border-radius:11px;backface-visibility:hidden;display:flex;align-items:center;justify-content:center}
+.gc-b{background:linear-gradient(135deg,rgba(212,160,23,.12),rgba(212,160,23,.04));border:1px solid rgba(212,160,23,.18);transition:all .3s}
+.gc-b:hover{border-color:rgba(212,160,23,.35)}
+.gc-b i{color:var(--gold);font-size:1.3rem;opacity:.4}
+.gc-f{background:var(--card);border:2px solid var(--border);transform:rotateY(180deg);flex-direction:column;gap:5px}
+.gc-f i{font-size:1.5rem;color:var(--gold)}
+.gc-f span{font-size:.6rem;color:var(--muted);font-weight:500}
+.gs{display:flex;justify-content:center;gap:24px;margin-bottom:18px;flex-wrap:wrap}
+.gst{text-align:center;padding:10px 18px;background:var(--card);border:1px solid var(--border);border-radius:11px;min-width:90px}
+.gst .v{font-family:'Noto Serif Sinhala',serif;font-size:1.4rem;font-weight:800;color:var(--gold-l);display:block}
+.gst .l{font-size:.7rem;color:var(--muted);margin-top:2px}
+.gbtn{padding:9px 22px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--cream);font-family:inherit;font-size:.82rem;cursor:pointer;transition:all .3s;display:inline-flex;align-items:center;gap:7px}
+.gbtn:hover{border-color:var(--gold);color:var(--gold)}
+.gbtn.pr{background:linear-gradient(135deg,var(--gold),var(--gold-l));color:var(--bg);border-color:0;font-weight:700}
+.gbtn.pr:hover{box-shadow:0 4px 20px var(--gold-g);transform:translateY(-2px)}
+.gwin{display:none;text-align:center;padding:36px 20px}
+.gwin.show{display:block;animation:fu .5s}
+.gwin i{font-size:3.5rem;color:var(--gold);margin-bottom:14px;display:block;animation:wp 1s ease-in-out infinite}
+@keyframes wp{0%,100%{transform:scale(1);filter:drop-shadow(0 0 8px rgba(212,160,23,.3))}50%{transform:scale(1.1);filter:drop-shadow(0 0 20px rgba(212,160,23,.6))}}
+.gwin h3{font-family:'Noto Serif Sinhala',serif;font-size:1.4rem;color:var(--gold-l);margin-bottom:7px}
+.gwin p{color:var(--muted);font-size:.88rem;margin-bottom:18px}
+@keyframes fu{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+
+.cw{display:grid;grid-template-columns:1fr 1fr;gap:36px;max-width:860px;margin:0 auto}
+.ci{display:flex;flex-direction:column;gap:22px;opacity:0;transform:translateX(-28px);transition:all .7s cubic-bezier(.22,1,.36,1)}
+.ci.vis{opacity:1;transform:translateX(0)}
+.ci h3{font-family:'Noto Serif Sinhala',serif;font-size:1.2rem;color:var(--gold-l);margin-bottom:5px}
+.ci>p{color:var(--muted);font-size:.86rem;line-height:1.8}
+.cd{display:flex;align-items:center;gap:13px;padding:13px 16px;background:var(--card);border:1px solid var(--border);border-radius:11px;transition:all .3s}
+.cd:hover{border-color:rgba(212,160,23,.25);background:rgba(16,24,46,.95)}
+.cd-i{width:38px;height:38px;border-radius:9px;background:rgba(212,160,23,.1);display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:.9rem;flex-shrink:0}
+.cd-t span{display:block;font-size:.68rem;color:var(--muted);margin-bottom:1px}
+.cd-t strong{color:var(--cream);font-size:.85rem;font-weight:600}
+.cf{opacity:0;transform:translateX(28px);transition:all .7s cubic-bezier(.22,1,.36,1)}
+.cf.vis{opacity:1;transform:translateX(0)}
+.fg{margin-bottom:16px;position:relative}
+.fg label{display:block;font-size:.78rem;color:var(--gold);margin-bottom:5px;font-weight:500}
+.fg input,.fg textarea{width:100%;padding:11px 15px;border-radius:9px;border:1px solid var(--border);background:var(--card);color:var(--cream);font-family:inherit;font-size:.88rem;transition:all .3s;outline:none;resize:vertical}
+.fg input::placeholder,.fg textarea::placeholder{color:rgba(136,153,170,.45)}
+.fg input:focus,.fg textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(212,160,23,.08),0 4px 18px rgba(0,0,0,.3)}
+.fg textarea{min-height:100px}
+.fe{font-size:.7rem;color:#ef4444;margin-top:3px;display:none}
+.fg.err .fe{display:block}
+.fg.err input,.fg.err textarea{border-color:#ef4444}
+.sbtn{width:100%;padding:13px;border-radius:11px;border:0;background:linear-gradient(135deg,var(--gold),var(--gold-l));color:var(--bg);font-weight:700;font-size:.92rem;font-family:inherit;cursor:pointer;transition:all .4s;display:flex;align-items:center;justify-content:center;gap:8px;position:relative;overflow:hidden}
+.sbtn::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);transform:translateX(-100%);transition:transform .5s}
+.sbtn:hover::before{transform:translateX(100%)}
+.sbtn:hover{transform:translateY(-2px);box-shadow:0 6px 28px var(--gold-g)}
+.fok{display:none;text-align:center;padding:28px}
+.fok.show{display:block;animation:fu .5s}
+.fok i{font-size:2.8rem;color:var(--gold);margin-bottom:12px;display:block}
+.fok h3{font-family:'Noto Serif Sinhala',serif;color:var(--gold-l);margin-bottom:6px}
+.fok p{color:var(--muted);font-size:.86rem}
+
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:44px 20px 28px;text-align:center;position:relative}
+footer::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:50px;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent)}
+footer .fl{margin-bottom:16px;color:var(--gold);font-size:1.6rem;opacity:.6}
+footer p{color:var(--muted);font-size:.8rem;margin-bottom:5px}
+footer .cr{color:var(--gold);font-size:.85rem;font-weight:600;margin-top:10px}
+
+#ctrls{position:fixed;bottom:28px;left:28px;z-index:999;display:flex;gap:9px}
+.cb{width:42px;height:42px;border-radius:50%;border:1px solid var(--border);background:rgba(12,18,37,.92);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.9rem;transition:all .3s;backdrop-filter:blur(8px)}
+.cb.on{color:var(--gold);border-color:var(--gold);box-shadow:0 0 14px var(--gold-g);background:rgba(212,160,23,.1)}
+.cb:hover:not(.on){border-color:var(--gold);color:var(--gold)}
+
+@media(max-width:900px){.cw{grid-template-columns:1fr;gap:28px}}
+@media(max-width:768px){
+  nav{display:none}.mob-btn{display:block}header{padding:11px 14px}.logo span{font-size:.9rem}
+  section{padding:55px 14px}.gg{grid-template-columns:repeat(2,1fr)}
+  .tl{padding-left:30px}.tl::before{left:9px}.tl-d{left:-26px;width:13px;height:13px}
+  #ctrls{bottom:18px;left:14px}#moon{width:65px;height:65px;top:6%;right:8%}
+}
+@media(max-width:480px){.gg{grid-template-columns:1fr 1fr;gap:8px}.vg{grid-template-columns:1fr}.tg{grid-template-columns:1fr 1fr}.gb{gap:7px}.gc-f i{font-size:1.1rem}.gc-f span{font-size:.55rem}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+
+<div id="loader">
+  <svg viewBox="0 0 100 100" fill="none"><path d="M50 15C50 15,35 35,35 50C35 58,42 65,50 65C58 65,65 58,65 50C65 35,50 15,50 15Z" fill="none" stroke="#d4a017" stroke-width="1.5" opacity=".5"/><path d="M50 20C50 20,25 40,25 55C25 65,36 72,50 72C64 72,75 65,75 55C75 40,50 20,50 20Z" fill="none" stroke="#f0c75e" stroke-width="1.5" opacity=".7"/><path d="M50 25C50 25,18 45,18 60C18 72,32 80,50 80C68 80,82 72,82 60C82 45,50 25,50 25Z" fill="none" stroke="#d4a017" stroke-width="2"/><circle cx="50" cy="50" r="4" fill="#f0c75e" opacity=".8"/></svg>
+  <p id="lt">වෙසක් අත්දැකීම පූරණය වෙමින්...</p>
+  <div class="bar"><span></span></div>
+</div>
+
+<div class="glow g1"></div><div class="glow g2"></div>
+<div class="toast" id="toast"></div>
+
+<header id="hdr">
+  <div class="logo">
+    <svg viewBox="0 0 40 40" fill="none"><path d="M20 6C20 6,12 16,12 22C12 26,15.6 30,20 30C24.4 30,28 26,28 22C28 16,20 6,20 6Z" fill="none" stroke="#d4a017" stroke-width="1.5"/><path d="M20 10C20 10,8 20,8 27C8 32,13.4 36,20 36C26.6 36,32 32,32 27C32 20,20 10,20 10Z" fill="none" stroke="#f0c75e" stroke-width="1.8"/><circle cx="20" cy="22" r="2.5" fill="#f0c75e" opacity=".7"/></svg>
+    <span id="lt2">වෙසක් උත්සවය</span>
+  </div>
+  <nav>
+    <a href="#hero" class="on" data-n="home">මුල් පිටුව</a>
+    <a href="#meaning" data-n="meaning">අර්ථය</a>
+    <a href="#values" data-n="values">ආදර්ශ</a>
+    <a href="#traditions" data-n="trad">සම්ප්‍රදායන්</a>
+    <a href="#gallery" data-n="gal">ගැලරිය</a>
+    <a href="#game" data-n="game">ක්‍රීඩාව</a>
+    <a href="#contact" data-n="con">සම්බන්ධ</a>
+  </nav>
+  <div style="display:flex;align-items:center;gap:9px">
+    <div class="langs">
+      <button class="lang-btn on" data-l="si">සිං</button>
+      <button class="lang-btn" data-l="en">EN</button>
+      <button class="lang-btn" data-l="ta">தமி</button>
+    </div>
+    <button class="mob-btn" id="mob" aria-label="Menu"><i class="fas fa-bars"></i></button>
+  </div>
+</header>
+
+<div id="mob-nav">
+  <button class="x" aria-label="Close"><i class="fas fa-times"></i></button>
+  <a href="#hero" data-n="home">මුල් පිටුව</a>
+  <a href="#meaning" data-n="meaning">අර්ථය</a>
+  <a href="#values" data-n="values">ආදර්ශ</a>
+  <a href="#traditions" data-n="trad">සම්ප්‍රදායන්</a>
+  <a href="#gallery" data-n="gal">ගැලරිය</a>
+  <a href="#game" data-n="game">ක්‍රීඩාව</a>
+  <a href="#contact" data-n="con">සම්බන්ධ වන්න</a>
+</div>
+
+<section id="hero">
+  <canvas id="stars"></canvas>
+  <canvas id="lanterns"></canvas>
+  <div id="moon"></div>
+  <div class="hero-ov"></div>
+  <div class="hero-c">
+    <h1 data-t="heroTitle">වෙසක් උත්සවය</h1>
+    <div class="sub" data-t="heroSub">ආලෝකය, කරුණාව, සාමය</div>
+    <p class="msg" data-t="heroMsg">වෙසක් අපට මතක් කරන්නේ කරුණාවෙන් හා සාමයෙන් ජීවත් වීමටයි.</p>
+    <a href="#meaning" class="cta"><i class="fas fa-dharmachakra"></i> <span data-t="explore">අර්ථය දැනගන්න</span></a>
+    <div class="mus-hint"><i class="fas fa-music"></i> <span data-t="musHint">වෙසක් සින්දුව වාදනය වෙමින් පවතී</span></div>
+  </div>
+  <div class="sc-hint"><span data-t="scroll">පහළට අනුචලනය කරන්න</span><i class="fas fa-chevron-down"></i></div>
+</section>
+
+<section id="meaning">
+  <div class="wrap">
+    <div class="tag"><i class="fas fa-dharmachakra"></i> <span data-t="mTag">වෙසක් අර්ථය</span></div>
+    <h2 class="stit" data-t="mTit">බුදුරජාණන් වහන්සේගේ ජීවිතයේ වැදගත් සිදුවීම්</h2>
+    <p class="sdesc" data-t="mDesc">වෙසක් පුර පසළොස්වක පෝය දිනයේදී සිදු වූ තුන් විශිෂ්ට සිදුවීම් ලොව පුරා බෞද්ධයන් විසින් සමරනු ලබයි.</p>
+    <div class="tl">
+      <div class="tl-i"><div class="tl-d"></div><div class="tl-c"><h3 data-t="bTit">බුදුරජාණන් වහන්සේගේ උපත</h3><p data-t="bDesc">ලුම්බිනි නුවරදී ක්‍රි.පූ. 623 දී සිදුවූ මෙම අද්විතීය උපත මනුෂ්‍ය ඉතිහාසයේ වඩාත්ම වැදගත් සිදුවීම්වලින් එකකි.</p></div></div>
+      <div class="tl-i"><div class="tl-d"></div><div class="tl-c"><h3 data-t="eTit">බුද්ධත්වය ලැබීම</h3><p data-t="eDesc">බුද්ධගයාහි බෝධි රුක් යට දැඩි භාවනාවෙන් පසු නිර්වාණය හා සම්යක් සම්බෝධිය ලබා බුදුරජාණන් වහන්සේ බවට පත්වූහ.</p></div></div>
+      <div class="tl-i"><div class="tl-d"></div><div class="tl-c"><h3 data-t="pTit">පරිනිර්වාණය</h3><p data-t="pDesc">කුශිනාරා නුවරදී අවුරුදු 80ක් ජීවත්වීමෙන් පසු මහා පරිනිර්වාණය ප්‍රාප්ත වූහ.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="values">
+  <div class="wrap">
+    <div class="tag"><i class="fas fa-heart"></i> <span data-t="vTag">ආදර්ශ සහ වටිනාකම්</span></div>
+    <h2 class="stit" data-t="vTit">බුද්ධ ධර්මයේ මූලික වටිනාකම්</h2>
+    <p class="sdesc" data-t="vDesc">මේවා සෑම මනුෂ්‍යයෙකුගේම ජීවිතය සුන්දර කිරීමට අවශ්‍ය සදාචාරාත්මක පදනම් වේ.</p>
+    <div class="vg">
+      <div class="vc"><div class="vi"><i class="fas fa-hand-holding-heart"></i></div><h3 data-t="kar">කරුණාව</h3><p data-t="karD">සෑම සතෙකුටම අනුකම්පාවෙන් සැලකීම. දුකට පත් සතුන්ගේ දුක දුරු කිරීමට කැපවීම.</p></div>
+      <div class="vc"><div class="vi"><i class="fas fa-dove"></i></div><h3 data-t="met">මෛත්‍රී</h3><p data-t="metD">සෑම ජීවියෙකුටම මිත්‍රශීලී ආදරය දැක්වීම. කිසිදු බේදයකින් තොර සාමකාමී ආකල්පය.</p></div>
+      <div class="vc"><div class="vi"><i class="fas fa-gift"></i></div><h3 data-t="dha">දාන</h3><p data-t="dhaD">පරිත්‍යාගයේ ලොකු බලය. තමන් ඇති දෙය අනුන්ට පරිත්‍යාග කිරීමෙන් මනස ශුද්ධ වේ.</p></div>
+      <div class="vc"><div class="vi"><i class="fas fa-shield-alt"></i></div><h3 data-t="ahi">අහිංසාව</h3><p data-t="ahiD">කිසිදු සතෙකුට හිංසා නොකිරීම. ශරීරයෙන්, වචනයෙන් හා මනසින් අහිංසාව පිළිපැදීම.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="traditions">
+  <div class="wrap">
+    <div class="tag"><i class="fas fa-fire"></i> <span data-t="tTag">වෙසක් සම්ප්‍රදායන්</span></div>
+    <h2 class="stit" data-t="tTit">පුරාණින් පැවතෙන වෙසක් සම්ප්‍රදායන්</h2>
+    <p class="sdesc" data-t="tDesc">ශ්‍රී ලංකාවේ වෙසක් උත්සවය ලෝකයේ වඩාත්ම ප්‍රබෝධමත් බෞද්ධ උත්සවයකි.</p>
+    <div class="tg">
+      <div class="tc"><span class="tc-ic"><i class="fas fa-utensils"></i></span><h3 data-t="dan">දන්සල්</h3><p data-t="danD">නොමිලේ ආහාර, පාන හා අනෙකුත් අවශ්‍යතා බෙදාදීම.</p></div>
+      <div class="tc"><span class="tc-ic"><i class="fas fa-lightbulb"></i></span><h3 data-t="pah">පහන් දැල්වීම</h3><p data-t="pahD">බුද්ධත්වයේ ආලෝකය සංකේතවත් කරමින් පහන් දල්වනු ලැබේ.</p></div>
+      <div class="tc"><span class="tc-ic"><i class="fas fa-gopuram"></i></span><h3 data-t="kud">වෙසක් කූඩු</h3><p data-t="kudD">බුදුරජාණන් වහන්සේගේ ජීවිත කතා නිරූපණය කරන අලංකාර කූඩු.</p></div>
+      <div class="tc"><span class="tc-ic"><i class="fas fa-music"></i></span><h3 data-t="bak">භක්ති ගී</h3><p data-t="bakD">බුදුරජාණන් වහන්සේගේ ගුණ ප්‍රකාශ කරන ආධ්‍යාත්මික ගීත.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="gallery">
+  <div class="wrap">
+    <div class="tag"><i class="fas fa-images"></i> <span data-t="gTag">රූප ගැලරිය</span></div>
+    <h2 class="stit" data-t="gTit">බුදුරජාණන් වහන්සේගේ සිරිත්</h2>
+    <p class="sdesc" data-t="gDesc">කැන්වස් මගින් නිර්මාණය කළ සුන්දර වෙසක් දර්ශන.</p>
+    <div class="gg" id="galGrid"></div>
+  </div>
+</section>
+
+<div id="lb" onclick="closeLB()"><span class="x"><i class="fas fa-times"></i></span><canvas id="lbCanvas"></canvas></div>
+
+<section id="game">
+  <div class="wrap">
+    <div class="tag"><i class="fas fa-gamepad"></i> <span data-t="gmTag">වෙසක් ක්‍රීඩාව</span></div>
+    <h2 class="stit" data-t="gmTit">අමුතු අමුතු ගැලපීම</h2>
+    <p class="sdesc" data-t="gmDesc">කාඩ්පත් හරවා යුගල සොයන්න.</p>
+    <div id="gmArea">
+      <div class="gs"><div class="gst"><span class="v" id="gMov">0</span><span class="l" data-t="gMovL">ගමන්</span></div><div class="gst"><span class="v" id="gPir">0/8</span><span class="l" data-t="gPirL">යුගල</span></div><div class="gst"><span class="v" id="gTim">0:00</span><span class="l" data-t="gTimL">වේලාව</span></div></div>
+      <div class="gb" id="gBoard"></div>
+      <div style="text-align:center"><button class="gbtn pr" onclick="startGame()"><i class="fas fa-redo"></i> <span data-t="gNew">නව ක්‍රීඩාව</span></button></div>
+    </div>
+    <div class="gwin" id="gWin"><i class="fas fa-trophy"></i><h3 data-t="gWinT">අනුමැතිය!</h3><p id="gWinM"></p><button class="gbtn pr" onclick="startGame()"><i class="fas fa-redo"></i> <span data-t="gAgain">නැවත ක්‍රීඩා කරන්න</span></button></div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="tag"><i class="fas fa-envelope"></i> <span data-t="cTag">සම්බන්ධතා</span></div>
+    <h2 class="stit" data-t="cTit">සම්බන්ධ වන්න</h2>
+    <p class="sdesc" data-t="cDesc">ඕනෑම අදහසක්, යෝජනාවක් හෝ ප්‍රශ්නයක් ඇත්නම් අපව සම්බන්ධ කරගන්න.</p>
+    <div class="cw">
+      <div class="ci" id="ciBlock">
+        <div><h3 data-t="cHead">අපව ගැන</h3><p data-t="cAbout">මෙම වෙබ් අඩවිය වෙසක් උත්සවය පිළිබඳ අධ්‍යාපනය හා අත්දැකීම ලෝකයට ගෙන යාම සඳහා නිර්මාණය කරන ලදි.</p></div>
+        <div class="cd"><div class="cd-i"><i class="fas fa-map-marker-alt"></i></div><div class="cd-t"><span data-t="cAddr">ලිපිනය</span><strong>ශ්‍රී ලංකාව</strong></div></div>
+        <div class="cd"><div class="cd-i"><i class="fas fa-envelope"></i></div><div class="cd-t"><span data-t="cEml">විද්‍යුත් තැපෑල</span><strong>vesak@srilanka.lk</strong></div></div>
+        <div class="cd"><div class="cd-i"><i class="fas fa-phone"></i></div><div class="cd-t"><span data-t="cPhn">දුරකථනය</span><strong>+94 11 234 5678</strong></div></div>
+      </div>
+      <div class="cf" id="cfBlock">
+        <form id="cForm" onsubmit="return sendForm(event)">
+          <div class="fg" id="fN"><label data-t="cNm">නම</label><input type="text" id="iN" data-ph="cNmP"><div class="fe" data-t="cNmE">කරුණාකර නම ඇතුළත් කරන්න</div></div>
+          <div class="fg" id="fE"><label data-t="cEm">විද්‍යුත් තැපෑල</label><input type="email" id="iE" data-ph="cEmP"><div class="fe" data-t="cEmE">වලංගු තැපෑලක් ඇතුළත් කරන්න</div></div>
+          <div class="fg" id="fS"><label data-t="cSj">මාතෘකාව</label><input type="text" id="iS" data-ph="cSjP"><div class="fe" data-t="cSjE">මාතෘකාවක් ඇතුළත් කරන්න</div></div>
+          <div class="fg" id="fM"><label data-t="cMs">පණිවිඩය</label><textarea id="iM" data-ph="cMsP"></textarea><div class="fe" data-t="cMsE">පණිවිඩයක් ඇතුළත් කරන්න</div></div>
+          <button type="submit" class="sbtn"><i class="fas fa-paper-plane"></i> <span data-t="cSend">පණිවිඩය යවන්න</span></button>
+        </form>
+        <div class="fok" id="fOk"><i class="fas fa-check-circle"></i><h3 data-t="cOkT">සාර්ථකයි!</h3><p data-t="cOkM">ඔබගේ පණිවිඩය සාර්ථකව යවන ලදි.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="fl"><i class="fas fa-spa"></i></div>
+  <p data-t="fM1">සියලු සත්ත්වයන් සුඛිතා හෝන්තු</p>
+  <p data-t="fM2">ලෝකයේ සියලු සත්ත්වයන් සැපවත් වේවා</p>
+  <p class="cr">Created by Isanka</p>
+</footer>
+
+<div id="ctrls">
+  <button class="cb on" id="sndBtn" title="සින්දුව" aria-label="Music"><i class="fas fa-music"></i></button>
+  <button class="cb" id="shrBtn" title="සබැඳිය" aria-label="Share"><i class="fas fa-share-alt"></i></button>
+</div>
+
+<script>
+/* ===== භාෂා පද්ධතිය ===== */
+var L={
+si:{nav:['මුල් පිටුව','අර්ථය','ආදර්ශ','සම්ප්‍රදායන්','ගැලරිය','ක්‍රීඩාව','සම්බන්ධ'],heroTitle:'වෙසක් උත්සවය',heroSub:'ආලෝකය, කරුණාව, සාමය',heroMsg:'වෙසක් අපට මතක් කරන්නේ කරුණාවෙන් හා සාමයෙන් ජීවත් වීමටයි.',explore:'අර්ථය දැනගන්න',scroll:'පහළට අනුචලනය කරන්න',musHint:'වෙසක් සින්දුව වාදනය වෙමින් පවතී',mTag:'වෙසක් අර්ථය',mTit:'බුදුරජාණන් වහන්සේගේ ජීවිතයේ වැදගත් සිදුවීම්',mDesc:'වෙසක් පුර පසළොස්වක පෝය දිනයේදී සිදු වූ තුන් විශිෂ්ට සිදුවීම් ලොව පුරා බෞද්ධයන් විසින් සමරනු ලබයි.',bTit:'බුදුරජාණන් වහන්සේගේ උපත',bDesc:'ලුම්බිනි නුවරදී ක්‍රි.පූ. 623 දී සිදුවූ මෙම අද්විතීය උපත මනුෂ්‍ය ඉතිහාසයේ වඩාත්ම වැදගත් සිදුවීම්වලින් එකකි.',eTit:'බුද්ධත්වය ලැබීම',eDesc:'බුද්ධගයාහි බෝධි රුක් යට දැඩි භාවනාවෙන් පසු නිර්වාණය හා සම්යක් සම්බෝධිය ලබා බුදුරජාණන් වහන්සේ බවට පත්වූහ.',pTit:'පරිනිර්වාණය',pDesc:'කුශිනාරා නුවරදී අවුරුදු 80ක් ජීවත්වීමෙන් පසු මහා පරිනිර්වාණය ප්‍රාප්ත වූහ.',vTag:'ආදර්ශ සහ වටිනාකම්',vTit:'බුද්ධ ධර්මයේ මූලික වටිනාකම්',vDesc:'මේවා සෑම මනුෂ්‍යයෙකුගේම ජීවිතය සුන්දර කිරීමට අවශ්‍ය සදාචාරාත්මක පදනම් වේ.',kar:'කරුණාව',karD:'සෑම සතෙකුටම අනුකම්පාවෙන් සැලකීම. දුකට පත් සතුන්ගේ දුක දුරු කිරීමට කැපවීම.',met:'මෛත්‍රී',metD:'සෑම ජීවියෙකුටම මිත්‍රශීලී ආදරය දැක්වීම. කිසිදු බේදයකින් තොර සාමකාමී ආකල්පය.',dha:'දාන',dhaD:'පරිත්‍යාගයේ ලොකු බලය. තමන් ඇති දෙය අනුන්ට පරිත්‍යාග කිරීමෙන් මනස ශුද්ධ වේ.',ahi:'අහිංසාව',ahiD:'කිසිදු සතෙකුට හිංසා නොකිරීම. ශරීරයෙන්, වචනයෙන් හා මනසින් අහිංසාව පිළිපැදීම.',tTag:'වෙසක් සම්ප්‍රදායන්',tTit:'පුරාණින් පැවතෙන වෙසක් සම්ප්‍රදායන්',tDesc:'ශ්‍රී ලංකාවේ වෙසක් උත්සවය ලෝකයේ වඩාත්ම ප්‍රබෝධමත් බෞද්ධ උත්සවයකි.',dan:'දන්සල්',danD:'නොමිලේ ආහාර, පාන හා අනෙකුත් අවශ්‍යතා බෙදාදීම.',pah:'පහන් දැල්වීම',pahD:'බුද්ධත්වයේ ආලෝකය සංකේතවත් කරමින් පහන් දල්වනු ලැබේ.',kud:'වෙසක් කූඩු',kudD:'බුදුරජාණන් වහන්සේගේ ජීවිත කතා නිරූපණය කරන අලංකාර කූඩු.',bak:'භක්ති ගී',bakD:'බුදුරජාණන් වහන්සේගේ ගුණ ප්‍රකාශ කරන ආධ්‍යාත්මික ගීත.',gTag:'රූප ගැලරිය',gTit:'බුදුරජාණන් වහන්සේගේ සිරිත්',gDesc:'කැන්වස් මගින් නිර්මාණය කළ සුන්දර වෙසක් දර්ශන.',gmTag:'වෙසක් ක්‍රීඩාව',gmTit:'අමුතු අමුතු ගැලපීම',gmDesc:'කාඩ්පත් හරවා යුගල සොයන්න.',gMovL:'ගමන්',gPirL:'යුගල',gTimL:'වේලාව',gNew:'නව ක්‍රීඩාව',gWinT:'අනුමැතිය!',gAgain:'නැවත ක්‍රීඩා කරන්න',gWinP:'ගමන් {m}කින් හා වේලාව {t}කින් ජයග්‍රහණය!',cTag:'සම්බන්ධතා',cTit:'සම්බන්ධ වන්න',cDesc:'ඕනෑම අදහසක්, යෝජනාවක් හෝ ප්‍රශ්නයක් ඇත්නම් අපව සම්බන්ධ කරගන්න.',cHead:'අපව ගැන',cAbout:'මෙම වෙබ් අඩවිය වෙසක් උත්සවය පිළිබඳ අධ්‍යාපනය හා අත්දැකීම ලෝකයට ගෙන යාම සඳහා නිර්මාණය කරන ලදි.',cAddr:'ලිපිනය',cEml:'විද්‍යුත් තැපෑල',cPhn:'දුරකථනය',cNm:'නම',cEm:'විද්‍යුත් තැපෑල',cSj:'මාතෘකාව',cMs:'පණිවිඩය',cNmP:'ඔබගේ නම',cEmP:'email@example.com',cSjP:'මාතෘකාව',cMsP:'පණිවිඩය ලියන්න',cNmE:'නම ඇතුළත් කරන්න',cEmE:'වලංගු තැපෑලක් ඇතුළත් කරන්න',cSjE:'මාතෘකාව ඇතුළත් කරන්න',cMsE:'පණිවිඩය ඇතුළත් කරන්න',cSend:'පණිවිඩය යවන්න',cOkT:'සාර්ථකයි!',cOkM:'ඔබගේ පණිවිඩය සාර්ථකව යවන ලදි.',fM1:'සියලු සත්ත්වයන් සුඛිතා හෝන්තු',fM2:'ලෝකයේ සියලු සත්ත්වයන් සැපවත් වේවා',loader:'වෙසක් අත්දැකීම පූරණය වෙමින්...',tShare:'සබැඳිය පිටපත් කරන ලදි!',tSndOn:'සින්දුව සක්‍රීයයි',tSndOff:'සින්දුව අක්‍රීයයි',iLotus:'නෙළුම්',iLantern:'කූඩු',iDhamma:'ධර්මය',iBodhi:'බෝධිය',iTemple:'විහාරය',iDana:'දානය',iLight:'ආලෝකය',iPeace:'සාමය'},
+en:{nav:['Home','Meaning','Values','Traditions','Gallery','Game','Contact'],heroTitle:'Vesak Festival',heroSub:'Light, Compassion, Peace',heroMsg:'Vesak reminds us to live with compassion and peace.',explore:'Discover the Meaning',scroll:'Scroll down',musHint:'Vesak music is now playing',mTag:'Meaning of Vesak',mTit:'Significant Events in the Buddha\'s Life',mDesc:'Three momentous events celebrated by Buddhists worldwide on Vesak full moon day.',bTit:'Birth of the Buddha',bDesc:'This unique birth in Lumbini in 623 BCE is one of the most significant events in human history.',eTit:'Attaining Enlightenment',eDesc:'Seated under the Bodhi tree, Prince Siddhartha attained Nibbana and became the Buddha.',pTit:'Mahaparinibbana',pDesc:'After 80 years, the Buddha passed into Mahaparinibbana in Kusinara.',vTag:'Values',vTit:'Fundamental Values of Buddha Dhamma',vDesc:'Ethical foundations necessary to make every human life beautiful.',kar:'Compassion',karD:'Treating every being with empathy and dedication to alleviating suffering.',met:'Loving-kindness',metD:'Friendly love to every living being with a peaceful attitude.',dha:'Generosity',dhaD:'The great power of giving. Purifying the mind by sharing.',ahi:'Non-violence',ahiD:'Causing no harm in body, speech, or mind.',tTag:'Traditions',tTit:'Ancient Vesak Traditions',tDesc:'Sri Lanka\'s Vesak is the most vibrant Buddhist celebration.',dan:'Dansal',danD:'Free distribution of food and necessities.',pah:'Lighting Lamps',pahD:'Lamps symbolizing enlightenment are lit everywhere.',kud:'Vesak Lanterns',kudD:'Beautiful lanterns depicting the Buddha\'s life.',bak:'Bhakthi Geetha',bakD:'Spiritual songs praising the Buddha\'s virtues.',gTag:'Gallery',gTit:'Sacred Moments',gDesc:'Beautiful Vesak scenes created with canvas.',gmTag:'Vesak Game',gmTit:'Memory Match',gmDesc:'Flip cards to find matching pairs.',gMovL:'Moves',gPirL:'Pairs',gTimL:'Time',gNew:'New Game',gWinT:'Congratulations!',gAgain:'Play Again',gWinP:'Won in {m} moves and {t}!',cTag:'Contact',cTit:'Get in Touch',cDesc:'Have ideas or questions? Contact us.',cHead:'About Us',cAbout:'This website brings Vesak education and experience to the world.',cAddr:'Address',cEml:'Email',cPhn:'Phone',cNm:'Name',cEm:'Email',cSj:'Subject',cMs:'Message',cNmP:'Your name',cEmP:'email@example.com',cSjP:'Subject',cMsP:'Write your message',cNmE:'Please enter your name',cEmE:'Please enter a valid email',cSjE:'Please enter a subject',cMsE:'Please enter a message',cSend:'Send Message',cOkT:'Success!',cOkM:'Your message was sent successfully.',fM1:'Sabbe Satta Sukhita Hontu',fM2:'May all beings be happy',loader:'Loading Vesak experience...',tShare:'Link copied!',tSndOn:'Music enabled',tSndOff:'Music disabled',iLotus:'Lotus',iLantern:'Lantern',iDhamma:'Dhamma',iBodhi:'Bodhi',iTemple:'Temple',iDana:'Generosity',iLight:'Light',iPeace:'Peace'},
+ta:{nav:['முகப்பு','பொருள்','மதிப்புகள்','பாரம்பரியங்கள்','தொகுப்பு','விளையாட்டு','தொடர்பு'],heroTitle:'வைசாக விழா',heroSub:'ஒளி, கருணை, அமைதி',heroMsg:'வைசாகம் கருணையுடன் வாழ நினைவூட்டுகிறது.',explore:'பொருளை அறிய',scroll:'கீழே உருட்டவும்',musHint:'வைசாக இசை இயக்கப்படுகிறது',mTag:'வைசாகம்',mTit:'புத்தரின் வாழ்க்கையில் முக்கிய நிகழ்வுகள்',mDesc:'வைசாக பௌர்ணமியில் நடந்த மூன்று நிகழ்வுகள்.',bTit:'புத்தரின் பிறப்பு',bDesc:'லும்பினியில் கிமு 623-இல் நடந்த பிறப்பு.',eTit:'ஞானம் அடைதல்',eDesc:'போதி மரத்தடியில் ஞானம் அடைந்தார்.',pTit:'மகாபரிநிர்வாணம்',pDesc:'குசிநாராவில் மகாபரிநிர்வாணம் அடைந்தார்.',vTag:'மதிப்புகள்',vTit:'புத்த தர்ம அடிப்படை மதிப்புகள்',vDesc:'ஒவ்வொரு மனிதனின் வாழ்க்கையை அழகாக்க தேவையானவை.',kar:'கருணை',karD:'ஒவ்வொரு உயிருக்கும் இரக்கம்.',met:'மைத்திரி',metD:'அமைதியான அன்பு.',dha:'தானம்',dhaD:'தருதலின் சக்தி.',ahi:'அகிம்சை',ahiD:'உடல், சொல், மனம் ஆகியவற்றில் அகிம்சை.',tTag:'பாரம்பரியங்கள்',tTit:'பண்டைய வைசாக பாரம்பரியங்கள்',tDesc:'இலங்கையில் வைசாகம் மிகவும் விளக்கமானது.',dan:'தானசாலை',danD:'இலவச உணவு வழங்குதல்.',pah:'விளக்கேற்றுதல்',pahD:'ஞான ஒளியை குறியீடு செய்து விளக்குகள் ஏற்றப்படுகின்றன.',kud:'வைசாக கூடுகள்',kudD:'புத்தரின் வாழ்க்கை கதைகளை சித்தரிக்கும் கூடுகள்.',bak:'பக்தி பாடல்கள்',bakD:'புத்தரின் பண்புகளைப் புகழ்ந்து பாடல்கள்.',gTag:'தொகுப்பு',gTit:'புனித தருணங்கள்',gDesc:'கேன்வாஸ் மூலம் உருவாக்கிய அழகான காட்சிகள்.',gmTag:'விளையாட்டு',gmTit:'நினைவு பொருத்தம்',gmDesc:'அட்டைகளை புரட்டி ஜோடிகளை கண்டுபிடி.',gMovL:'நடவடிக்கை',gPirL:'ஜோடிகள்',gTimL:'நேரம்',gNew:'புதிய விளையாட்டு',gWinT:'வாழ்த்துக்கள்!',gAgain:'மீண்டும் விளையாடு',gWinP:'{m} நடவடிக்கைகளில் மற்றும் {t}-இல் வெற்றி!',cTag:'தொடர்பு',cTit:'தொடர்பு கொள்ளுங்கள்',cDesc:'யோசனைகள் இருந்தால் தொடர்பு கொள்ளுங்கள்.',cHead:'எங்களைப் பற்றி',cAbout:'இந்த வலைத்தளம் வைசாக கல்வியை உலகிற்கு கொண்டு செல்ல உருவாக்கப்பட்டது.',cAddr:'முகவரி',cEml:'மின்னஞ்சல்',cPhn:'தொலைபேசி',cNm:'பெயர்',cEm:'மின்னஞ்சல்',cSj:'பொருள்',cMs:'செய்தி',cNmP:'உங்கள் பெயர்',cEmP:'email@example.com',cSjP:'பொருள்',cMsP:'செய்தியை எழுதவும்',cNmE:'பெயரை உள்ளிடவும்',cEmE:'சரியான மின்னஞ்சலை உள்ளிடவும்',cSjE:'பொருளை உள்ளிடவும்',cMsE:'செய்தியை உள்ளிடவும்',cSend:'செய்தி அனுப்பு',cOkT:'வெற்றி!',cOkM:'உங்கள் செய்தி வெற்றிகரமாக அனுப்பப்பட்டது.',fM1:'சப்பே சத்தா சுகிதா ஹோந்து',fM2:'அனைத்து உயிர்களும் நலம் பெற்றிருக்கட்டும்',loader:'வைசாக அனுபவம் ஏற்றப்படுகிறது...',tShare:'இணைப்பு நகலெடுக்கப்பட்டது!',tSndOn:'இசை இயக்கப்பட்டது',tSndOff:'இசை முடக்கப்பட்டது',iLotus:'தாமரை',iLantern:'கூடு',iDhamma:'தர்மம்',iBodhi:'போதி',iTemple:'கோவில்',iDana:'தானம்',iLight:'ஒளி',iPeace:'அமைதி'}
+};
+var lang='si';
+function setLang(l){
+  lang=l;var d=L[l];if(!d)return;
+  document.getElementById('lt2').textContent=d.heroTitle;
+  var nk=['home','meaning','values','trad','gal','game','con'];
+  document.querySelectorAll('[data-n]').forEach(function(a){var i=nk.indexOf(a.dataset.n);if(i>=0)a.textContent=d.nav[i];});
+  document.querySelectorAll('[data-t]').forEach(function(el){var k=el.dataset.t;if(d[k]){el.style.opacity='0';el.style.transform='translateY(5px)';setTimeout(function(){el.textContent=d[k];el.style.transition='all .3s';el.style.opacity='1';el.style.transform='translateY(0)';},60);}});
+  document.querySelectorAll('[data-ph]').forEach(function(el){var k=el.dataset.ph;if(d[k])el.placeholder=d[k];});
+  document.getElementById('lt').textContent=d.loader;
+  document.documentElement.lang=l;
+  document.body.style.fontFamily=l==='ta'?"'Noto Sans Tamil',sans-serif":"'Noto Sans Sinhala',sans-serif";
+  document.querySelectorAll('.lang-btn').forEach(function(b){b.classList.toggle('on',b.dataset.l===l);});
+  if(gameActive)startGame();
+}
+document.querySelectorAll('.lang-btn').forEach(function(b){b.addEventListener('click',function(){setLang(b.dataset.l);});});
+
+/* ===== Toast ===== */
+function toast(m){var t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2200);}
+
+/* ===== තරු ===== */
+var sC=document.getElementById('stars'),sX=sC.getContext('2d'),stArr=[];
+function initS(){sC.width=innerWidth;sC.height=innerHeight;stArr=[];var n=Math.min(300,Math.floor(sC.width*sC.height/4000));for(var i=0;i<n;i++)stArr.push({x:Math.random()*sC.width,y:Math.random()*sC.height,r:Math.random()*1.3+0.3,p:Math.random()*6.28,s:Math.random()*0.004+0.002});}
+function drawS(t){sX.clearRect(0,0,sC.width,sC.height);for(var i=0;i<stArr.length;i++){var s=stArr[i],a=0.2+0.8*Math.abs(Math.sin(t*s.s+s.p));sX.beginPath();sX.arc(s.x,s.y,Math.max(0.1,s.r),0,6.28);sX.fillStyle='rgba(240,236,228,'+a+')';sX.fill();}}
+initS();addEventListener('resize',initS);
+
+/* ===== කූඩු ===== */
+var lC=document.getElementById('lanterns'),lX=lC.getContext('2d'),lArr=[];
+function initL(){lC.width=innerWidth;lC.height=innerHeight;}
+function mkL(x,y){return{x:x!==undefined?x:Math.random()*lC.width,y:y!==undefined?y:lC.height+50,sz:Math.random()*14+20,vy:Math.random()*0.3+0.12,vx:(Math.random()-0.5)*0.2,wp:Math.random()*6.28,ws:Math.random()*0.01+0.005,a:0,ta:Math.random()*0.2+0.4};}
+function drawL(c,l){c.save();c.globalAlpha=l.a;var s=l.sz;
+var g=c.createRadialGradient(l.x,l.y,0,l.x,l.y,s*2.5);g.addColorStop(0,'rgba(240,199,94,'+0.1*l.a+')');g.addColorStop(1,'rgba(240,199,94,0)');c.fillStyle=g;c.fillRect(l.x-s*2.5,l.y-s*2.5,s*5,s*5);
+c.beginPath();c.moveTo(l.x-s*0.12,l.y-s);c.lineTo(l.x+s*0.12,l.y-s);c.lineTo(l.x+s*0.16,l.y-s*0.25);c.lineTo(l.x-s*0.16,l.y-s*0.25);c.closePath();c.fillStyle='rgba(180,140,40,'+0.5*l.a+')';c.fill();
+c.beginPath();c.ellipse(l.x,l.y,s*0.38,s*0.6,0,0,6.28);var bg=c.createLinearGradient(l.x-s*0.38,l.y,l.x+s*0.38,l.y);bg.addColorStop(0,'rgba(212,160,23,'+0.3*l.a+')');bg.addColorStop(0.4,'rgba(240,199,94,'+0.6*l.a+')');bg.addColorStop(0.6,'rgba(240,199,94,'+0.6*l.a+')');bg.addColorStop(1,'rgba(212,160,23,'+0.3*l.a+')');c.fillStyle=bg;c.fill();c.strokeStyle='rgba(180,140,40,'+0.4*l.a+')';c.lineWidth=0.6;c.stroke();
+c.beginPath();c.ellipse(l.x,l.y,s*0.15,s*0.28,0,0,6.28);c.fillStyle='rgba(255,240,180,'+0.4*l.a+')';c.fill();
+c.beginPath();c.ellipse(l.x,l.y+s*0.6,s*0.28,s*0.06,0,0,6.28);c.fillStyle='rgba(180,140,40,'+0.4*l.a+')';c.fill();
+c.restore();}
+function initLanterns(){for(var i=0;i<12;i++){var l=mkL();l.y=Math.random()*lC.height*0.8;l.a=l.ta;lArr.push(l);}}
+function updL(){lX.clearRect(0,0,lC.width,lC.height);for(var i=0;i<lArr.length;i++){var l=lArr[i];l.wp+=l.ws;l.x+=l.vx+Math.sin(l.wp)*0.35;l.y-=l.vy;if(l.a<l.ta)l.a+=0.003;if(l.y<-80){l.y=lC.height+50;l.x=Math.random()*lC.width;l.a=0;}drawL(lX,l);}}
+initL();initLanterns();addEventListener('resize',initL);
+setInterval(function(){if(lArr.length<20)lArr.push(mkL());},4000);
+
+/* ===== Animation Loop ===== */
+function anim(t){drawS(t);updL();requestAnimationFrame(anim);}
+requestAnimationFrame(anim);
+
+/* ===== Scroll Reveal ===== */
+var rObs=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)e.target.classList.add('vis');});},{threshold:0.1,rootMargin:'0px 0px -20px 0px'});
+document.querySelectorAll('.tl-i,.vc,.tc,.ci,.cf').forEach(function(el){rObs.observe(el);});
+
+/* ===== Header Scroll ===== */
+var hdr=document.getElementById('hdr');
+addEventListener('scroll',function(){
+  hdr.classList.toggle('scrolled',scrollY>50);
+  var ss=['hero','meaning','values','traditions','gallery','game','contact'],c='hero';
+  ss.forEach(function(id){var s=document.getElementById(id);if(s&&scrollY>=s.offsetTop-180)c=id;});
+  document.querySelectorAll('nav a').forEach(function(a){a.classList.toggle('on',a.dataset.n===c.replace('traditions','trad').replace('contact','con'));});
+});
+
+/* ===== Mobile Nav ===== */
+document.getElementById('mob').addEventListener('click',function(){document.getElementById('mob-nav').classList.add('open');});
+document.querySelector('#mob-nav .x').addEventListener('click',function(){document.getElementById('mob-nav').classList.remove('open');});
+document.querySelectorAll('#mob-nav a').forEach(function(a){a.addEventListener('click',function(){document.getElementById('mob-nav').classList.remove('open');});});
+
+/* ===== Smooth Scroll ===== */
+document.querySelectorAll('a[href^="#"]').forEach(function(a){a.addEventListener('click',function(e){e.preventDefault();var t=document.querySelector(a.getAttribute('href'));if(t)t.scrollIntoView({behavior:'smooth'});});});
+
+/* ===== Gallery Canvas Drawings ===== */
+var galScenes=[
+  function(c,w,h){c.fillStyle='#0a0e1a';c.fillRect(0,0,w,h);for(var i=0;i<60;i++){c.beginPath();c.arc(Math.random()*w,Math.random()*h,Math.random()*1.5+0.3,0,6.28);c.fillStyle='rgba(240,236,228,'+Math.random()*0.7+')';c.fill();}var cx=w/2,cy=h*0.7;c.beginPath();c.moveTo(cx,cy-40);c.bezierCurveTo(cx-35,cy-20,cx-30,cy+10,cx,cy+15);c.bezierCurveTo(cx+30,cy+10,cx+35,cy-20,cx,cy-40);c.fillStyle='rgba(212,160,23,0.15)';c.fill();c.strokeStyle='rgba(212,160,23,0.5)';c.lineWidth=1.5;c.stroke();for(var i=0;i<5;i++){var a=i*1.26-0.63;c.beginPath();c.ellipse(cx+Math.cos(a)*35,cy-10+Math.sin(a)*15,12,6,a,0,6.28);c.fillStyle='rgba(240,199,94,'+(0.1+i*0.04)+')';c.fill();c.strokeStyle='rgba(212,160,23,0.3)';c.stroke();}},
+  function(c,w,h){c.fillStyle='#080c18';c.fillRect(0,0,w,h);for(var i=0;i<40;i++){c.beginPath();c.arc(Math.random()*w,Math.random()*h*0.6,Math.random()*1+0.2,0,6.28);c.fillStyle='rgba(240,236,228,'+Math.random()*0.5+')';c.fill();}for(var i=0;i<6;i++){var lx=w*0.15+i*w*0.14,ly=h*0.3+i*15,sz=18+i*3;c.save();c.globalAlpha=0.6+i*0.05;var g=c.createRadialGradient(lx,ly,0,lx,ly,sz*2);g.addColorStop(0,'rgba(240,199,94,0.2)');g.addColorStop(1,'rgba(240,199,94,0)');c.fillStyle=g;c.fillRect(lx-sz*2,ly-sz*2,sz*4,sz*4);c.beginPath();c.ellipse(lx,ly,sz*0.4,sz*0.7,0,0,6.28);c.fillStyle='rgba(240,199,94,0.5)';c.fill();c.strokeStyle='rgba(212,160,23,0.4)';c.lineWidth=0.8;c.stroke();c.restore();}},
+  function(c,w,h){var g=c.createLinearGradient(0,0,0,h);g.addColorStop(0,'#0a0e1a');g.addColorStop(1,'#121830');c.fillStyle=g;c.fillRect(0,0,w,h);c.beginPath();c.moveTo(w*0.2,h);c.lineTo(w*0.2,h*0.3);c.lineTo(w*0.35,h*0.25);c.lineTo(w*0.35,h);c.fillStyle='rgba(212,160,23,0.08)';c.fill();c.strokeStyle='rgba(212,160,23,0.3)';c.lineWidth=1;c.stroke();c.beginPath();c.moveTo(w*0.3,h*0.25);c.bezierCurveTo(w*0.3,h*0.1,w*0.5,h*0.05,w*0.5,h*0.2);c.bezierCurveTo(w*0.5,h*0.05,w*0.7,h*0.1,w*0.7,h*0.25);c.fillStyle='rgba(212,160,23,0.06)';c.fill();c.strokeStyle='rgba(212,160,23,0.25)';c.stroke();var gl=c.createRadialGradient(w*0.5,h*0.18,0,w*0.5,h*0.18,40);gl.addColorStop(0,'rgba(240,199,94,0.15)');gl.addColorStop(1,'rgba(240,199,94,0)');c.fillStyle=gl;c.fillRect(0,0,w,h);},
+  function(c,w,h){c.fillStyle='#060a14';c.fillRect(0,0,w,h);for(var i=0;i<80;i++){c.beginPath();c.arc(Math.random()*w,Math.random()*h,Math.random()*1.2+0.2,0,6.28);c.fillStyle='rgba(240,236,228,'+Math.random()*0.6+')';c.fill();}c.beginPath();c.arc(w*0.75,h*0.2,30,0,6.28);var mg=c.createRadialGradient(w*0.75,h*0.2,0,w*0.75,h*0.2,30);mg.addColorStop(0,'rgba(255,238,221,0.7)');mg.addColorStop(0.5,'rgba(245,230,200,0.4)');mg.addColorStop(1,'rgba(200,180,140,0)');c.fillStyle=mg;c.fill();for(var i=0;i<8;i++){var lx=w*0.1+i*w*0.1,ly=h*0.5+Math.random()*h*0.3;var lg=c.createRadialGradient(lx,ly,0,lx,ly,15);lg.addColorStop(0,'rgba(240,199,94,0.3)');lg.addColorStop(1,'rgba(240,199,94,0)');c.fillStyle=lg;c.fillRect(lx-15,ly-15,30,30);c.beginPath();c.arc(lx,ly,3,0,6.28);c.fillStyle='rgba(255,240,180,0.6)';c.fill();}},
+  function(c,w,h){c.fillStyle='#0a0e1a';c.fillRect(0,0,w,h);for(var i=0;i<50;i++){c.beginPath();c.arc(Math.random()*w,Math.random()*h*0.5,Math.random()*1+0.2,0,6.28);c.fillStyle='rgba(240,236,228,'+Math.random()*0.5+')';c.fill();}var wy=h*0.65;c.beginPath();c.moveTo(0,wy);for(var x=0;x<w;x+=5)c.lineTo(x,wy+Math.sin(x*0.03)*4);c.lineTo(w,h);c.lineTo(0,h);c.fillStyle='rgba(78,205,196,0.06)';c.fill();for(var i=0;i<7;i++){var fx=w*0.12+i*w*0.12,fy=wy-5-Math.random()*10;c.beginPath();c.ellipse(fx,fy,8,14,0,0,6.28);c.fillStyle='rgba(240,199,94,'+(0.15+Math.random()*0.15)+')';c.fill();c.strokeStyle='rgba(212,160,23,0.3)';c.lineWidth=0.6;c.stroke();}},
+  function(c,w,h){c.fillStyle='#080c16';c.fillRect(0,0,w,h);for(var i=0;i<70;i++){c.beginPath();c.arc(Math.random()*w,Math.random()*h,Math.random()*1.3+0.2,0,6.28);c.fillStyle='rgba(240,236,228,'+Math.random()*0.6+')';c.fill();}c.save();c.globalAlpha=0.15;c.font='bold '+Math.floor(h*0.5)+'px "Noto Serif Sinhala"';c.textAlign='center';c.textBaseline='middle';c.fillStyle='#d4a017';c.fillText('\u0D85',w/2,h/2);c.restore();for(var i=0;i<20;i++){var px=w*0.3+Math.random()*w*0.4,py=h*0.2+Math.random()*h*0.6;c.beginPath();c.arc(px,py,Math.random()*2+0.5,0,6.28);c.fillStyle='rgba(240,199,94,'+Math.random()*0.3+')';c.fill();}}
+];
+
+function buildGallery(){
+  var grid=document.getElementById('galGrid');grid.innerHTML='';
+  for(var i=0;i<6;i++){
+    var div=document.createElement('div');div.className='gi';
+    var cvs=document.createElement('canvas');cvs.className='gi-canvas';cvs.width=400;cvs.height=300;
+    galScenes[i](cvs.getContext('2d'),400,300);
+    var z=document.createElement('span');z.className='gi-z';z.innerHTML='<i class="fas fa-search-plus"></i>';
+    div.appendChild(cvs);div.appendChild(z);
+    div.setAttribute('data-idx',i);
+    div.addEventListener('click',function(){openLB(parseInt(this.dataset.idx));});
+    grid.appendChild(div);
+    setTimeout(function(){div.classList.add('vis');},100+i*80);
+  }
+}
+buildGallery();
+
+/* ===== Lightbox ===== */
+var lb=document.getElementById('lb'),lbC=document.getElementById('lbCanvas');
+function openLB(idx){
+  lbC.width=800;lbC.height=600;galScenes[idx](lbC.getContext('2d'),800,600);
+  lb.classList.add('open');document.body.style.overflow='hidden';
+}
+function closeLB(){lb.classList.remove('open');document.body.style.overflow='';}
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&lb.classList.contains('open'))closeLB();});
+
+/* ===== වෙසක් සින්දුව ===== */
+var mCtx=null,mOn=false;
+function startMusic(){
+  mCtx=new(window.AudioContext||window.webkitAudioContext)();
+  var mg=mCtx.createGain();mg.gain.value=0;mg.connect(mCtx.destination);
+  mg.gain.linearRampToValueAtTime(0.5,mCtx.currentTime+3);
+  var sa=130.81,pa=196,ga=164.81,ma=174.61,ni=123.47;
+  function dr(f,v,d){var o=mCtx.createOscillator();o.type='sine';o.frequency.value=f;o.detune.value=d||0;var g=mCtx.createGain();g.gain.value=v;o.connect(g);g.connect(mg);o.start();return o;}
+  dr(sa,0.1,0);dr(sa,0.06,4);dr(pa,0.07,0);dr(pa*0.5,0.05,-2);
+  var mel=[{f:sa,d:.55},{f:ga,d:.35},{f:ma,d:.45},{f:pa,d:.7},{f:ga,d:.35},{f:ga*0.875,d:.4},{f:sa,d:.7},{f:ni*2,d:.45},{f:ni*1.875,d:.35},{f:pa*2,d:.55},{f:ma*2,d:.4},{f:ga*2,d:.35},{f:pa,d:.5},{f:sa,d:.9},{f:pa,d:.35},{f:ga,d:.4},{f:ma,d:.5},{f:pa,d:.4},{f:ga*2,d:.5},{f:ma*2,d:.35},{f:pa*2,d:.7},{f:sa*2,d:.4},{f:ni*2,d:.35},{f:pa*2*0.9375,d:.5},{f:ga*2,d:.35},{f:ma*2,d:.4},{f:pa,d:.7},{f:sa,d:1.1}];
+  function playMel(st){var t=st;for(var i=0;i<mel.length;i++){var n=mel[i];var o=mCtx.createOscillator();o.type='triangle';o.frequency.value=n.f;var e=mCtx.createGain();e.gain.setValueAtTime(0,t);e.gain.linearRampToValueAtTime(0.06,t+0.04);e.gain.exponentialRampToValueAtTime(0.001,t+n.d-0.02);o.connect(e);e.connect(mg);o.start(t);o.stop(t+n.d+0.01);if(n.f<sa*2){var o2=mCtx.createOscillator();o2.type='sine';o2.frequency.value=n.f*2;var e2=mCtx.createGain();e2.gain.setValueAtTime(0,t);e2.gain.linearRampToValueAtTime(0.02,t+0.04);e2.gain.exponentialRampToValueAtTime(0.001,t+n.d*0.6);o2.connect(e2);e2.connect(mg);o2.start(t);o2.stop(t+n.d+0.01);}var vb=mCtx.createOscillator();vb.frequency.value=5;var vg=mCtx.createGain();vg.gain.value=1.5;vb.connect(vg);vg.connect(o.frequency);vb.start(t);vb.stop(t+n.d+0.01);t+=n.d;}return t;}
+  function playTab(st,dur){var ct=st,cy=2.4;while(ct<st+dur){for(var i=0;i<4;i++){var o=mCtx.createOscillator();o.type='sine';o.frequency.value=75+Math.random()*8;var e=mCtx.createGain();e.gain.setValueAtTime(0,ct+i*0.6);e.gain.linearRampToValueAtTime(0.08,ct+i*0.6+0.008);e.gain.exponentialRampToValueAtTime(0.001,ct+i*0.6+0.12);o.connect(e);e.connect(mg);o.start(ct+i*0.6);o.stop(ct+i*0.6+0.15);}ct+=cy;}}
+  var t=mCtx.currentTime+0.5;var melDur=playMel(t);playTab(t,melDur);
+  var loop=function(){var nt=mCtx.currentTime;if(nt>t+melDur+2){t=nt;melDur=playMel(t);playTab(t,melDur);}};setInterval(loop,2000);
+  mOn=true;
+}
+function stopMusic(){if(mCtx){mCtx.close();mCtx=null;}mOn=false;}
+
+document.getElementById('sndBtn').addEventListener('click',function(){
+  if(mOn){stopMusic();this.classList.remove('on');this.innerHTML='<i class="fas fa-music"></i>';toast(L[lang].tSndOff);}
+  else{startMusic();this.classList.add('on');this.innerHTML='<i class="fas fa-volume-up"></i>';toast(L[lang].tSndOn);}
+});
+
+/* ===== Share ===== */
+document.getElementById('shrBtn').addEventListener('click',function(){
+  if(navigator.share)navigator.share({title:'වෙසක් උත්සවය',url:location.href});
+  else{navigator.clipboard.writeText(location.href).then(function(){toast(L[lang].tShare);});}
+});
+
+/* ===== ක්‍රීඩාව ===== */
+var gameActive=false,gCards=[],gFlipped=[],gMatched=0,gMoves=0,gTimer=null,gSec=0;
+var icons=[{ic:'fa-spa',k:'iLotus'},{ic:'fa-gopuram',k:'iLantern'},{ic:'fa-dharmachakra',k:'iDhamma'},{ic:'fa-tree',k:'iBodhi'},{ic:'fa-landmark',k:'iTemple'},{ic:'fa-gift',k:'iDana'},{ic:'fa-sun',k:'iLight'},{ic:'fa-dove',k:'iPeace'}];
+
+function startGame(){
+  gameActive=true;gMatched=0;gMoves=0;gSec=0;gFlipped=[];clearInterval(gTimer);
+  document.getElementById('gMov').textContent='0';document.getElementById('gPir').textContent='0/8';document.getElementById('gTim').textContent='0:00';
+  document.getElementById('gmArea').style.display='block';document.getElementById('gWin').classList.remove('show');
+  var arr=[];for(var i=0;i<8;i++){arr.push({id:i,type:'a'});arr.push({id:i,type:'b'});}
+  for(var i=arr.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var tmp=arr[i];arr[i]=arr[j];arr[j]=tmp;}
+  gCards=arr;
+  var board=document.getElementById('gBoard');board.innerHTML='';
+  var d=L[lang];
+  for(var i=0;i<arr.length;i++){
+    var div=document.createElement('div');div.className='gc';div.setAttribute('data-i',i);
+    var ic=icons[arr[i].id];
+    div.innerHTML='<div class="gc-b"><i class="fas fa-question"></i></div><div class="gc-f"><i class="fas '+ic.ic+'"></i><span>'+d[ic.k]+'</span></div>';
+    div.addEventListener('click',(function(idx){return function(){flipCard(idx);};})(i));
+    board.appendChild(div);
+  }
+  gTimer=setInterval(function(){gSec++;var m=Math.floor(gSec/60),s=gSec%60;document.getElementById('gTim').textContent=m+':'+(s<10?'0':'')+s;},1000);
+}
+
+function flipCard(idx){
+  if(!gameActive)return;
+  var cards=document.querySelectorAll('.gc');
+  var card=cards[idx];
+  if(card.classList.contains('flip')||card.classList.contains('ok'))return;
+  if(gFlipped.length>=2)return;
+  card.classList.add('flip');gFlipped.push(idx);
+  if(gFlipped.length===2){
+    gMoves++;document.getElementById('gMov').textContent=gMoves;
+    var a=gCards[gFlipped[0]],b=gCards[gFlipped[1]];
+    if(a.id===b.id&&a.type!==b.type){
+      cards[gFlipped[0]].classList.add('ok');cards[gFlipped[1]].classList.add('ok');
+      gMatched++;document.getElementById('gPir').textContent=gMatched+'/8';
+      gFlipped=[];
+      if(gMatched===8){clearInterval(gTimer);gameActive=false;setTimeout(showWin,600);}
+    }else{
+      setTimeout(function(){cards[gFlipped[0]].classList.remove('flip');cards[gFlipped[1]].classList.remove('flip');gFlipped=[];},800);
+    }
+  }
+}
+
+function showWin(){
+  var m=Math.floor(gSec/60),s=gSec%60;var ts=m+':'+(s<10?'0':'')+s;
+  var d=L[lang];document.getElementById('gWinM').textContent=d.gWinP.replace('{m}',gMoves).replace('{t}',ts);
+  document.getElementById('gmArea').style.display='none';document.getElementById('gWin').classList.add('show');
+}
+
+startGame();
+
+/* ===== Contact Form ===== */
+function sendForm(e){
+  e.preventDefault();var d=L[lang],ok=true;
+  var n=document.getElementById('iN'),em=document.getElementById('iE'),sj=document.getElementById('iS'),ms=document.getElementById('iM');
+  ['fN','fE','fS','fM'].forEach(function(id){document.getElementById(id).classList.remove('err');});
+  if(!n.value.trim()){document.getElementById('fN').classList.add('err');ok=false;}
+  if(!em.value.trim()||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em.value)){document.getElementById('fE').classList.add('err');ok=false;}
+  if(!sj.value.trim()){document.getElementById('fS').classList.add('err');ok=false;}
+  if(!ms.value.trim()){document.getElementById('fM').classList.add('err');ok=false;}
+  if(!ok)return false;
+  document.getElementById('cForm').style.display='none';document.getElementById('fOk').classList.add('show');
+  setTimeout(function(){document.getElementById('cForm').style.display='block';document.getElementById('fOk').classList.remove('show');document.getElementById('cForm').reset();},3500);
+  return false;
+}
+document.querySelectorAll('.fg input,.fg textarea').forEach(function(el){
+  el.addEventListener('focus',function(){this.closest('.fg').classList.remove('err');});
+});
+
+/* ===== Loader ===== */
+addEventListener('load',function(){setTimeout(function(){document.getElementById('loader').classList.add('hide');startMusic();},1600);});
+
+/* ===== Click Ripple ===== */
+document.addEventListener('click',function(e){
+  if(e.target.closest('#lb')||e.target.closest('#ctrls')||e.target.closest('header')||e.target.closest('.gc')||e.target.closest('.gi')||e.target.closest('button'))return;
+  var r=document.createElement('div');r.style.cssText='position:fixed;left:'+e.clientX+'px;top:'+e.clientY+'px;width:6px;height:6px;border-radius:50%;background:radial-gradient(circle,rgba(240,199,94,0.5),transparent);transform:translate(-50%,-50%) scale(0);pointer-events:none;z-index:9998;animation:ra .7s ease-out forwards;';document.body.appendChild(r);setTimeout(function(){r.remove();},800);
+});
+var rs=document.createElement('style');rs.textContent='@keyframes ra{to{transform:translate(-50%,-50%) scale(45);opacity:0}}';document.head.appendChild(rs);
+</script>
+</body>
+</html>
