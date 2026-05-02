@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="si" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>සම්බන්ධ වන්න</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@300;400;500;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sinhala: ['"Noto Sans Sinhala"', 'sans-serif'],
+            montserrat: ['"Montserrat"', 'sans-serif'],
+          },
+          colors: {
+            gold: { 100:'#F9F1D8', 300:'#EEDC9A', 500:'#D4AF37', 600:'#B5952F', 900:'#8A7122' },
+          },
+          backgroundImage: {
+            'gradient-gold': 'linear-gradient(135deg, #F9F1D8 0%, #D4AF37 50%, #B5952F 100%)',
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    ::selection {
+      background-color: #F9F1D8;
+      color: #8A7122;
+    }
+
+    body {
+      font-family: 'Noto Sans Sinhala', sans-serif;
+    }
+
+    .input-field {
+      transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .input-field:focus {
+      border-color: #D4AF37;
+      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.15);
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, #F9F1D8 0%, #D4AF37 50%, #B5952F 100%);
+      transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .btn-gold:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px -5px rgba(212, 175, 55, 0.4);
+    }
+
+    .btn-gold:active {
+      transform: translateY(0);
+    }
+
+    .contact-card {
+      transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .contact-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px -12px rgba(0, 0, 0, 0.1);
+      border-color: rgba(212, 175, 55, 0.3);
+    }
+
+    .floating-label {
+      transition: all 200ms ease;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fade-in-up {
+      animation: fadeInUp 0.6s ease-out forwards;
+    }
+
+    .animate-delay-1 { animation-delay: 0.1s; opacity: 0; }
+    .animate-delay-2 { animation-delay: 0.2s; opacity: 0; }
+    .animate-delay-3 { animation-delay: 0.3s; opacity: 0; }
+    .animate-delay-4 { animation-delay: 0.4s; opacity: 0; }
+    .animate-delay-5 { animation-delay: 0.5s; opacity: 0; }
+
+    /* Toast */
+    .toast {
+      transform: translateX(100%);
+      opacity: 0;
+      transition: all 400ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .toast.show {
+      transform: translateX(0);
+      opacity: 1;
+    }
+
+    /* Spinner */
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .spinner {
+      animation: spin 0.7s linear infinite;
+    }
+
+    /* Pattern overlay */
+    .pattern-bg {
+      background-image: 
+        radial-gradient(circle at 20% 80%, rgba(212, 175, 55, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(212, 175, 55, 0.03) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(212, 175, 55, 0.02) 0%, transparent 70%);
+    }
+  </style>
+</head>
+
+<body class="bg-zinc-50 min-h-screen pattern-bg">
+
+  <!-- Toast Notification -->
+  <div id="toast" class="toast fixed top-6 right-6 z-50 bg-white rounded-2xl shadow-2xl border border-zinc-100 p-4 flex items-center gap-3 max-w-sm">
+    <div class="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center flex-shrink-0">
+      <i data-lucide="check-circle" class="w-5 h-5 text-green-500"></i>
+    </div>
+    <div>
+      <p class="text-sm font-semibold text-zinc-900" id="toast-title">සාර්ථකයි!</p>
+      <p class="text-xs text-zinc-500 mt-0.5" id="toast-message">ඔබේ පණිවිඩය යවන ලදී.</p>
+    </div>
+    <button onclick="hideToast()" class="text-zinc-400 hover:text-zinc-600 transition-colors ml-2">
+      <i data-lucide="x" class="w-4 h-4"></i>
+    </button>
+  </div>
+
+  <!-- Main Container -->
+  <div class="min-h-screen flex items-center justify-center p-4 md:p-8">
+    <div class="w-full max-w-5xl">
+
+      <!-- Header -->
+      <div class="text-center mb-10 animate-fade-in-up animate-delay-1">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-gold-100 border border-gold-300/30 mb-4">
+          <i data-lucide="mail" class="w-3.5 h-3.5 text-gold-600"></i>
+          <span class="text-xs font-medium text-gold-900 tracking-wide">සම්බන්ධ වන්න</span>
+        </div>
+        <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-zinc-900 tracking-tight leading-tight">
+          අප හා <span class="text-gold-500">සම්බන්ධ</span> වන්න
+        </h1>
+        <p class="mt-3 text-base md:text-lg text-zinc-500 font-light max-w-xl mx-auto leading-relaxed">
+          කිසියම් ප්‍රශ්නයක් හෝ යෝජනාවක් ඇත්නම් පහතින් පෝරමය පුරවන්න.
+        </p>
+      </div>
+
+      <!-- Content Grid -->
+      <div class="grid lg:grid-cols-5 gap-8">
+
+        <!-- Contact Info Cards (Left) -->
+        <div class="lg:col-span-2 space-y-4 animate-fade-in-up animate-delay-2">
+
+          <!-- Phone -->
+          <div class="contact-card bg-white rounded-2xl p-5 border border-zinc-100 cursor-default">
+            <div class="flex items-start gap-4">
+              <div class="w-12 h-12 rounded-xl bg-gold-100 flex items-center justify-center flex-shrink-0">
+                <i data-lucide="phone" class="w-5 h-5 text-gold-600"></i>
+              </div>
+              <div>
+                <h3 class="text-sm font-semibold text-zinc-900">දුරකථනය</h3>
+                <p class="text-sm text-zinc-500 mt-1">+94 77 123 4567</p>
+                <p class="text-sm text-zinc-500">+94 11 234 5678</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Email -->
+          <div class="contact-card bg-white rounded-2xl p-5 border border-zinc-100 cursor-default">
+            <div class="flex items-start gap-4">
+              <div class="w-12 h-12 rounded-xl bg-gold-100 flex items-center justify-center flex-shrink-0">
+                <i data-lucide="mail" class="w-5 h-5 text-gold-600"></i>
+              </div>
+              <div>
+                <h3 class="text-sm font-semibold text-zinc-900">ඊමේල්</h3>
+                <p class="text-sm text-zinc-500 mt-1">info@example.com</p>
+                <p class="text-sm text-zinc-500">support@example.com</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Location -->
+          <div class="contact-card bg-white rounded-2xl p-5 border border-zinc-100 cursor-default">
+            <div class="flex items-start gap-4">
+              <div class="w-12 h-12 rounded-xl bg-gold-100 flex items-center justify-center flex-shrink-0">
+                <i data-lucide="map-pin" class="w-5 h-5 text-gold-600"></i>
+              </div>
+              <div>
+                <h3 class="text-sm font-semibold text-zinc-900">ලිපිනය</h3>
+                <p class="text-sm text-zinc-500 mt-1">කොළඹ 07,</p>
+                <p class="text-sm text-zinc-500">ශ්‍රී ලංකාව</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Hours -->
+          <div class="contact-card bg-white rounded-2xl p-5 border border-zinc-100 cursor-default">
+            <div class="flex items-start gap-4">
+              <div class="w-12 h-12 rounded-xl bg-gold-100 flex items-center justify-center flex-shrink-0">
+                <i data-lucide="clock" class="w-5 h-5 text-gold-600"></i>
+              </div>
+              <div>
+                <h3 class="text-sm font-semibold text-zinc-900">වැඩ කරන වේලාව</h3>
+                <p class="text-sm text-zinc-500 mt-1">සඳුදා - සිකුරාදා: 9.00 - 5.00</p>
+                <p class="text-sm text-zinc-500">සෙනසුරාදා: 9.00 - 1.00</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Social Links -->
+          <div class="flex items-center gap-3 pt-2">
+            <a href="#" class="w-10 h-10 rounded-xl bg-white border border-zinc-100 flex items-center justify-center text-zinc-400 hover:text-gold-500 hover:border-gold-300/30 transition-all duration-200">
+              <i data-lucide="facebook" class="w-4 h-4"></i>
+            </a>
+            <a href="#" class="w-10 h-10 rounded-xl bg-white border border-zinc-100 flex items-center justify-center text-zinc-400 hover:text-gold-500 hover:border-gold-300/30 transition-all duration-200">
+              <i data-lucide="instagram" class="w-4 h-4"></i>
+            </a>
+            <a href="#" class="w-10 h-10 rounded-xl bg-white border border-zinc-100 flex items-center justify-center text-zinc-400 hover:text-gold-500 hover:border-gold-300/30 transition-all duration-200">
+              <i data-lucide="twitter" class="w-4 h-4"></i>
+            </a>
+            <a href="#" class="w-10 h-10 rounded-xl bg-white border border-zinc-100 flex items-center justify-center text-zinc-400 hover:text-gold-500 hover:border-gold-300/30 transition-all duration-200">
+              <i data-lucide="linkedin" class="w-4 h-4"></i>
+            </a>
+          </div>
+
+        </div>
+
+        <!-- Contact Form (Right) -->
+        <div class="lg:col-span-3 animate-fade-in-up animate-delay-3">
+          <form id="contactForm" class="bg-white rounded-3xl p-6 md:p-8 border border-zinc-100 shadow-sm" novalidate>
+
+            <!-- Name Row -->
+            <div class="grid md:grid-cols-2 gap-5 mb-5">
+              <div>
+                <label for="firstName" class="block text-sm font-medium text-zinc-700 mb-2">
+                  මුල් නම <span class="text-red-400">*</span>
+                </label>
+                <div class="relative">
+                  <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                    <i data-lucide="user" class="w-4 h-4 text-zinc-300"></i>
+                  </div>
+                  <input 
+                    type="text" 
+                    id="firstName" 
+                    name="firstName"
+                    placeholder="කමල්" 
+                    required
+                    class="input-field w-full pl-10 pr-4 py-3 rounded-xl border border-zinc-200 bg-zinc-50/50 text-zinc-900 text-sm placeholder:text-zinc-400 outline-none"
+                  >
+                </div>
+                <p class="text-xs text-red-400 mt-1.5 hidden" id="firstNameError">කරුණාකර මුල් නම ඇතුලත් කරන්න.</p>
+              </div>
+
+              <div>
+                <label for="lastName" class="block text-sm font-medium text-zinc-700 mb-2">
+                  අග නම <span class="text-red-400">*</span>
+                </label>
+                <div class="relative">
+                  <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                    <i data-lucide="user" class="w-4 h-4 text-zinc-300"></i>
+                  </div>
+                  <input 
+                    type="text" 
+                    id="lastName" 
+                    name="lastName"
+                    placeholder="ෆොන්සේකා" 
+                    required
+                    class="input-field w-full pl-10 pr-4 py-3 rounded-xl border border-zinc-200 bg-zinc-50/50 text-zinc-900 text-sm placeholder:text-zinc-400 outline-none"
+                  >
+                </div>
+                <p class="text-xs text-red-400 mt-1.5 hidden" id="lastNameError">කරුණාකර අග නම ඇතුලත් කරන්න.</p>
+              </div>
+            </div>
+
+            <!-- Email -->
+            <div class="mb-5">
+              <label for="email" class="block text-sm font-medium text-zinc-700 mb-2">
+                ඊමේල් ලිපිනය <span class="text-red-400">*</span>
+              </label>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                  <i data-lucide="at-sign" class="w-4 h-4 text-zinc-300"></i>
+                </div>
+                <input 
+                  type="email" 
+                  id="email" 
+                  name="email"
+                  placeholder="kamal@example.com" 
+                  required
+                  class="input-field w-full pl-10 pr-4 py-3 rounded-xl border border-zinc-200 bg-zinc-50/50 text-zinc-900 text-sm placeholder:text-zinc-400 outline-none font-montserrat"
+                >
+              </div>
+              <p class="text-xs text-red-400 mt-1.5 hidden" id="emailError">කරුණාකර වලංගු ඊමේල් ලිපිනයක් ඇතුලත් කරන්න.</p>
+            </div>
+
+            <!-- Phone -->
+            <div class="mb-5">
+              <label for="phone" class="block text-sm font-medium text-zinc-700 mb-2">
+                දුරකථන අංකය
+              </label>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                  <i data-lucide="phone" class="w-4 h-4 text-zinc-300"></i>
+                </div>
+                <input 
+                  type="tel" 
+                  id="phone" 
+                  name="phone"
+                  placeholder="+94 77 123 4567" 
+                  class="input-field w-full pl-10 pr-4 py-3 rounded-xl border border-zinc-200 bg-zinc-50/50 text-zinc-900 text-sm placeholder:text-zinc-400 outline-none font-montserrat"
+                >
+              </div>
+            </div>
+
+            <!-- Subject -->
+            <div class="mb-5">
+              <label for="subject" class="block text-sm font-medium text-zinc-700 mb-2">
+                විෂය <span class="text-red-400">*</span>
+              </label>
+              <div class="relative">
+                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                  <i data-lucide="tag" class="w-4 h-4 text-zinc-300"></i>
+                </div>
+                <select 
+                  id="subject" 
+                  name="subject"
+                  required
+                  class="input-field w-full pl-10 pr-10 py-3 rounded-xl border border-zinc-200 bg-zinc-50/50 text-zinc-900 text-sm outline-none appearance-none cursor-pointer"
+                >
+                  <option value="" disabled selected class="text-zinc-400">විෂය තෝරන්න...</option>
+                  <option value="general">සාමාන්‍ය ප්‍රශ්නයක්</option>
+                  <option value="support">තාක්ෂණික සහාය</option>
+                  <option value="business">ව්‍යාපාර සාකච්ඡාව</option>
+                  <option value="feedback">ප්‍රතිචාරයක්</option>
+                  <option value="complaint">පැමිණිල්ලක්</option>
+                  <option value="other">වෙනත්</option>
+                </select>
+                <div class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none">
+                  <i data-lucide="chevron-down" class="w-4 h-4 text-zinc-400"></i>
+                </div>
+              </div>
+              <p class="text-xs text-red-400 mt-1.5 hidden" id="subjectError">කරුණාකර විෂය තෝරන්න.</p>
+            </div>
+
+            <!-- Message -->
+            <div class="mb-6">
+              <label for="message" class="block text-sm font-medium text-zinc-700 mb-2">
+                පණිවිඩය <span class="text-red-400">*</span>
+              </label>
+              <div class="relative">
+                <div class="absolute top-3.5 left-3.5 pointer-events-none">
+                  <i data-lucide="message-square" class="w-4 h-4 text-zinc-300"></i>
+                </div>
+                <textarea 
+                  id="message" 
+                  name="message"
+                  rows="5" 
+                  placeholder="ඔබේ පණිවිඩය මෙහි ලියන්න..." 
+                  required
+                  class="input-field w-full pl-10 pr-4 py-3 rounded-xl border border-zinc-200 bg-zinc-50/50 text-zinc-900 text-sm placeholder:text-zinc-400 outline-none resize-none"
+                ></textarea>
+              </div>
+              <div class="flex items-center justify-between mt-1.5">
+                <p class="text-xs text-red-400 hidden" id="messageError">කරුණාකර පණිවිඩය ඇතුලත් කරන්න.</p>
+                <p class="text-xs text-zinc-400 ml-auto" id="charCount">0 / 500</p>
+              </div>
+            </div>
+
+            <!-- Checkbox -->
+            <div class="mb-6 flex items-start gap-3">
+              <input 
+                type="checkbox" 
+                id="agree" 
+                name="agree"
+                class="mt-1 w-4 h-4 rounded border-zinc-300 text-gold-500 focus:ring-gold-500/20 cursor-pointer accent-[#D4AF37]"
+              >
+              <label for="agree" class="text-sm text-zinc-500 leading-relaxed cursor-pointer">
+                මම <a href="#" class="text-gold-600 hover:text-gold-900 underline underline-offset-2 transition-colors">රහස්‍යතා ප්‍රතිපත්තිය</a> කියවා එයට එකඟ වෙමි.
+              </label>
+            </div>
+
+            <!-- Submit Button -->
+            <button 
+              type="submit" 
+              id="submitBtn"
+              class="btn-gold w-full py-3.5 rounded-xl text-zinc-900 font-semibold text-sm tracking-wide flex items-center justify-center gap-2"
+            >
+              <span id="btnText">පණිවිඩය යවන්න</span>
+              <i data-lucide="send" class="w-4 h-4" id="btnIcon"></i>
+              <!-- Spinner (hidden by default) -->
+              <svg id="btnSpinner" class="hidden spinner w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+              </svg>
+            </button>
+
+          </form>
+        </div>
+
+      </div>
+
+      <!-- Footer note -->
+      <div class="text-center mt-8 animate-fade-in-up animate-delay-5">
+        <p class="text-xs text-zinc-400">
+          <i data-lucide="shield-check" class="w-3 h-3 inline-block mr-1 -mt-0.5"></i>
+          ඔබේ තොරතුරු ආරක්ෂිත බව අපි සහතික වෙමු.
+        </p>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // Initialize Lucide icons
+    lucide.createIcons();
+
+    // DOM Elements
+    const form = document.getElementById('contactForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const btnText = document.getElementById('btnText');
+    const btnIcon = document.getElementById('btnIcon');
+    const btnSpinner = document.getElementById('btnSpinner');
+    const charCount = document.getElementById('charCount');
+    const messageField = document.getElementById('message');
+    const toast = document.getElementById('toast');
+
+    // Character count
+    messageField.addEventListener('input', () => {
+      const len = messageField.value.length;
+      charCount.textContent = `${len} / 500`;
+      if (len > 500) {
+        charCount.classList.add('text-red-400');
+        charCount.classList.remove('text-zinc-400');
+      } else {
+        charCount.classList.remove('text-red-400');
+        charCount.classList.add('text-zinc-400');
+      }
+    });
+
+    // Clear error on input
+    document.querySelectorAll('.input-field').forEach(field => {
+      field.addEventListener('input', () => {
+        const errorEl = document.getElementById(field.id + 'Error');
+        if (errorEl) {
+          errorEl.classList.add('hidden');
+        }
+        field.classList.remove('border-red-300');
+      });
+    });
+
+    // Validate field
+    function validateField(id, condition) {
+      const field = document.getElementById(id);
+      const errorEl = document.getElementById(id + 'Error');
+      if (!condition) {
+        if (errorEl) errorEl.classList.remove('hidden');
+        field.classList.add('border-red-300');
+        field.classList.remove('border-zinc-200');
+        return false;
+      } else {
+        if (errorEl) errorEl.classList.add('hidden');
+        field.classList.remove('border-red-300');
+        field.classList.add('border-zinc-200');
+        return true;
+      }
+    }
+
+    // Email validation regex
+    function isValidEmail(email) {
+      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    // Show toast
+    function showToast(title, message, type = 'success') {
+      const toastTitle = document.getElementById('toast-title');
+      const toastMessage = document.getElementById('toast-message');
+      const iconContainer = toast.querySelector('.w-10');
+
+      toastTitle.textContent = title;
+      toastMessage.textContent = message;
+
+      if (type === 'error') {
+        iconContainer.className = 'w-10 h-10 rounded-full bg-red-50 flex items-center justify-center flex-shrink-0';
+        iconContainer.innerHTML = '<i data-lucide="alert-circle" class="w-5 h-5 text-red-500"></i>';
+      } else {
+        iconContainer.className = 'w-10 h-10 rounded-full bg-green-50 flex items-center justify-center flex-shrink-0';
+        iconContainer.innerHTML = '<i data-lucide="check-circle" class="w-5 h-5 text-green-500"></i>';
+      }
+
+      lucide.createIcons();
+      toast.classList.add('show');
+
+      setTimeout(() => hideToast(), 4000);
+    }
+
+    function hideToast() {
+      toast.classList.remove('show');
+    }
+
+    // Form submit
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      // Validation
+      let isValid = true;
+
+      isValid = validateField('firstName', document.getElementById('firstName').value.trim() !== '') && isValid;
+      isValid = validateField('lastName', document.getElementById('lastName').value.trim() !== '') && isValid;
+      isValid = validateField('email', isValidEmail(document.getElementById('email').value.trim())) && isValid;
+      isValid = validateField('subject', document.getElementById('subject').value !== '') && isValid;
+      isValid = validateField('message', document.getElementById('message').value.trim() !== '' && document.getElementById('message').value.length <= 500) && isValid;
+
+      if (!isValid) {
+        showToast('දෝෂයක් ඇත', 'කරුණාකර සියලු අවශ්‍ය ක්ෂේත්‍ර නිවැරදිව පුරවන්න.', 'error');
+        return;
+      }
+
+      // Loading state
+      submitBtn.disabled = true;
+      btnText.textContent = 'යවමින්...';
+      btnIcon.classList.add('hidden');
+      btnSpinner.classList.remove('hidden');
+
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 2000));
+
+      // Success state
+      submitBtn.disabled = false;
+      btnText.textContent = 'පණිවිඩය යවන්න';
+      btnIcon.classList.remove('hidden');
+      btnSpinner.classList.add('hidden');
+
+      showToast('සාර්ථකයි!', 'ඔබේ පණිවිඩය සාර්ථකව යවන ලදී. අපි ඉක්මනින් ප්‍රතිචාර දක්වමු.');
+
+      // Reset form
+      form.reset();
+      charCount.textContent = '0 / 500';
+    });
+  </script>
+
+</body>
+</html>
