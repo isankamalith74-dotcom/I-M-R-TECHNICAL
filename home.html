@@ -1,0 +1,2135 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyHub LK - ශ්‍රී ලංකාවේ අංක එකේ ඉගෙනුම් වේදිකාව</title>
+    <meta name="description" content="StudyHub LK - Past Papers, Quiz, AI Assistant, Student Community. ශ්‍රී ලංකාවේ #1 AI බලයෙන් යුත් ඉගෙනුම් වේදිකාව.">
+    
+    <!-- Google Fonts - Sinhala + English -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- AOS Animation Library -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+
+    <style>
+        :root {
+            /* Primary Colors */
+            --primary: #6366F1;
+            --primary-dark: #4F46E5;
+            --primary-light: #EEF2FF;
+            --secondary: #06B6D4;
+            --secondary-light: #ECFEFF;
+            --accent: #F59E0B;
+            --accent-light: #FFFBEB;
+            --success: #10B981;
+            --success-light: #D1FAE5;
+            --danger: #EF4444;
+            --danger-light: #FEE2E2;
+            
+            /* Backgrounds */
+            --bg-primary: #F8FAFC;
+            --bg-secondary: #F1F5F9;
+            --surface: #FFFFFF;
+            
+            /* Text Colors */
+            --text-primary: #0F172A;
+            --text-secondary: #475569;
+            --text-light: #94A3B8;
+            
+            /* Borders */
+            --border: #E2E8F0;
+            --border-light: #F1F5F9;
+            
+            /* Gradients */
+            --gradient-1: linear-gradient(135deg, #6366F1, #06B6D4);
+            --gradient-2: linear-gradient(135deg, #F59E0B, #EF4444);
+            --gradient-3: linear-gradient(135deg, #10B981, #06B6D4);
+            
+            /* Shadows */
+            --shadow-xs: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 8px rgba(0,0,0,0.08);
+            --shadow-lg: 0 10px 20px rgba(0,0,0,0.1);
+            --shadow-xl: 0 20px 40px rgba(0,0,0,0.12);
+            --shadow-2xl: 0 30px 60px rgba(0,0,0,0.15);
+            --shadow-primary: 0 10px 30px rgba(99, 102, 241, 0.3);
+            --shadow-secondary: 0 10px 30px rgba(6, 182, 212, 0.3);
+            
+            /* Border Radius - Extra Rounded */
+            --radius-xs: 8px;
+            --radius-sm: 14px;
+            --radius-md: 20px;
+            --radius-lg: 28px;
+            --radius-xl: 36px;
+            --radius-2xl: 48px;
+            --radius-full: 9999px;
+            
+            /* Transitions */
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-bounce: 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        /* ============================================
+           GLOBAL STYLES
+           ============================================ */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        html { 
+            scroll-behavior: smooth; 
+            font-size: 16px;
+        }
+        
+        body {
+            font-family: 'Noto Sans Sinhala', 'Inter', 'Poppins', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.8;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Sinhala Text Base Style */
+        .sinhala-text {
+            font-family: 'Noto Sans Sinhala', sans-serif;
+            font-feature-settings: "kern", "liga";
+        }
+
+        /* ============================================
+           SCROLLBAR
+           ============================================ */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
+        /* ============================================
+           SCROLL PROGRESS BAR
+           ============================================ */
+        .scroll-progress {
+            position: fixed;
+            top: 0; left: 0;
+            height: 3px;
+            background: var(--gradient-1);
+            z-index: 10001;
+            width: 0%;
+            transition: width 0.1s linear;
+            border-radius: 0 2px 2px 0;
+        }
+
+        /* ============================================
+           PRELOADER
+           ============================================ */
+        .preloader {
+            position: fixed;
+            inset: 0;
+            background: var(--surface);
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 1.5rem;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+        
+        .preloader.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .preloader-logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 3rem;
+            font-weight: 900;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: preloaderPulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes preloaderPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.05); }
+        }
+
+        .preloader-spinner {
+            display: flex;
+            gap: 10px;
+        }
+
+        .preloader-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--primary);
+            animation: dotBounce 1.2s ease-in-out infinite;
+        }
+
+        .preloader-dot:nth-child(2) { animation-delay: 0.15s; background: var(--secondary); }
+        .preloader-dot:nth-child(3) { animation-delay: 0.3s; background: var(--accent); }
+
+        @keyframes dotBounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-25px); }
+        }
+
+        /* ============================================
+           BACKGROUND ANIMATION
+           ============================================ */
+        .bg-animation {
+            position: fixed;
+            inset: 0;
+            z-index: -2;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .bg-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(120px);
+            opacity: 0.07;
+            animation: floatOrb 20s ease-in-out infinite;
+        }
+
+        .bg-orb--1 {
+            width: 600px; height: 600px;
+            background: var(--primary);
+            top: -15%; left: -15%;
+            animation-delay: 0s;
+        }
+
+        .bg-orb--2 {
+            width: 500px; height: 500px;
+            background: var(--secondary);
+            bottom: -15%; right: -15%;
+            animation-delay: -7s;
+        }
+
+        .bg-orb--3 {
+            width: 350px; height: 350px;
+            background: var(--accent);
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            animation-delay: -14s;
+        }
+
+        @keyframes floatOrb {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(60px, -60px) scale(1.15); }
+            50% { transform: translate(-40px, 40px) scale(0.9); }
+            75% { transform: translate(-60px, -30px) scale(1.05); }
+        }
+
+        .bg-grid {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            pointer-events: none;
+            background-image: 
+                linear-gradient(var(--border) 1px, transparent 1px),
+                linear-gradient(90deg, var(--border) 1px, transparent 1px);
+            background-size: 60px 60px;
+            opacity: 0.3;
+        }
+
+        /* ============================================
+           NAVIGATION BAR - FULLY FIXED
+           ============================================ */
+        .navbar {
+            position: fixed;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 94%;
+            max-width: 1280px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: var(--radius-full);
+            z-index: 1000;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .navbar.scrolled {
+            box-shadow: var(--shadow-xl);
+            background: rgba(255, 255, 255, 0.95);
+            border-color: rgba(255, 255, 255, 0.8);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.6rem 1.5rem;
+            gap: 1rem;
+        }
+
+        /* Logo */
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            text-decoration: none;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: var(--transition-bounce);
+        }
+
+        .logo:hover {
+            transform: scale(1.03);
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            background: var(--gradient-1);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 800;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.35);
+            transition: var(--transition-bounce);
+        }
+
+        .logo:hover .logo-icon {
+            transform: rotate(-10deg) scale(1.1);
+            box-shadow: 0 6px 25px rgba(99, 102, 241, 0.5);
+        }
+
+        .logo-text {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 800;
+            font-size: 1.35rem;
+            color: var(--text-primary);
+            white-space: nowrap;
+        }
+
+        .text-gradient {
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Navigation Links */
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            list-style: none;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.5rem 0.85rem;
+            border-radius: var(--radius-full);
+            font-weight: 500;
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.25s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .nav-link i {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            transition: inherit;
+        }
+
+        .nav-link:hover {
+            color: var(--primary);
+            background: var(--primary-light);
+        }
+
+        .nav-link:hover i {
+            color: var(--primary);
+        }
+
+        .nav-link.active {
+            color: var(--primary) !important;
+            background: var(--primary-light);
+            font-weight: 600;
+        }
+
+        .nav-link.active i {
+            color: var(--primary) !important;
+        }
+
+        /* Badge */
+        .badge-new {
+            background: var(--gradient-2);
+            color: white;
+            font-size: 0.6rem;
+            font-weight: 700;
+            padding: 0.12rem 0.5rem;
+            border-radius: var(--radius-full);
+            margin-left: 0.2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Nav Actions */
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            flex-shrink: 0;
+        }
+
+        /* Button Styles - FULLY FIXED */
+        .btn {
+            padding: 0.55rem 1.3rem;
+            border-radius: var(--radius-full);
+            border: none;
+            font-weight: 600;
+            font-size: 0.88rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            font-family: 'Inter', sans-serif;
+            text-decoration: none;
+            white-space: nowrap;
+            position: relative;
+            overflow: hidden;
+            min-height: 40px;
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Login Button - Special Style */
+        .btn-login {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-login:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-login:focus {
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+        }
+
+        /* Signup/CTA Button */
+        .btn-signup {
+            background: var(--gradient-1);
+            color: white;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+        }
+
+        .btn-signup:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+        }
+
+        .btn-signup:focus {
+            outline: none;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+        }
+
+        /* Icon Button */
+        .btn-icon {
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-icon:hover {
+            background: var(--primary-light);
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        /* Large Button */
+        .btn-lg {
+            padding: 0.9rem 2.2rem;
+            font-size: 1.05rem;
+            border-radius: var(--radius-full);
+            min-height: 50px;
+        }
+
+        /* ============================================
+           MOBILE MENU TOGGLE - FULLY FIXED
+           ============================================ */
+        .mobile-toggle {
+            display: none;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            transition: all 0.3s ease;
+            flex-shrink: 0;
+            z-index: 1001;
+        }
+
+        .mobile-toggle:hover {
+            background: var(--primary-light);
+            border-color: var(--primary);
+        }
+
+        .mobile-toggle span {
+            display: block;
+            width: 18px;
+            height: 2.5px;
+            background: var(--text-primary);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-toggle.active {
+            background: var(--primary-light);
+            border-color: var(--primary);
+        }
+
+        .mobile-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .mobile-toggle.active span:nth-child(2) {
+            opacity: 0;
+            transform: scaleX(0);
+        }
+
+        .mobile-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        /* ============================================
+           HERO SECTION
+           ============================================ */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 7rem 2rem 4rem;
+            position: relative;
+        }
+
+        .hero-container {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            width: 100%;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--primary-light);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            padding: 0.45rem 1.2rem;
+            border-radius: var(--radius-full);
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-family: 'Noto Sans Sinhala', sans-serif;
+        }
+
+        .dot-live {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+            animation: livePulse 2s infinite;
+        }
+
+        @keyframes livePulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            50% { box-shadow: 0 0 0 12px rgba(16, 185, 129, 0); }
+        }
+
+        .hero-title {
+            font-family: 'Noto Sans Sinhala', 'Poppins', sans-serif;
+            font-size: clamp(2.5rem, 5vw, 3.8rem);
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-desc {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            line-height: 1.9;
+            margin-bottom: 2rem;
+            max-width: 520px;
+            font-family: 'Noto Sans Sinhala', sans-serif;
+        }
+
+        .hero-cta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .hero-stat {
+            background: var(--surface);
+            padding: 1.2rem 1.4rem;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            text-align: center;
+            flex: 1;
+            min-width: 110px;
+            border: 1px solid var(--border-light);
+            transition: var(--transition);
+            cursor: default;
+        }
+
+        .hero-stat:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .hero-stat .stat-number {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .hero-stat .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 0.2rem;
+            font-family: 'Noto Sans Sinhala', 'Inter', sans-serif;
+        }
+
+        /* Hero Visual - Floating Mockup */
+        .hero-visual {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .hero-mockup {
+            background: var(--surface);
+            border-radius: var(--radius-2xl);
+            box-shadow: var(--shadow-2xl);
+            padding: 1.5rem;
+            border: 1px solid var(--border-light);
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .mockup-header {
+            display: flex;
+            gap: 7px;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .mockup-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .mockup-dot:nth-child(1) { background: #FF5F57; }
+        .mockup-dot:nth-child(2) { background: #FFBD2E; }
+        .mockup-dot:nth-child(3) { background: #28CA41; }
+
+        .mockup-items {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .mockup-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.85rem 1rem;
+            background: var(--bg-primary);
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            font-weight: 500;
+            animation: slideInLeft 0.5s ease forwards;
+            opacity: 0;
+            font-family: 'Noto Sans Sinhala', 'Inter', sans-serif;
+        }
+
+        .mockup-item:nth-child(1) { animation-delay: 0.3s; }
+        .mockup-item:nth-child(2) { animation-delay: 0.6s; }
+        .mockup-item:nth-child(3) { animation-delay: 0.9s; }
+        .mockup-item:nth-child(4) { animation-delay: 1.2s; }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* ============================================
+           SECTION STYLES
+           ============================================ */
+        .section {
+            padding: 5rem 2rem;
+            position: relative;
+        }
+
+        .section-container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .section-badge {
+            display: inline-block;
+            background: var(--primary-light);
+            color: var(--primary);
+            padding: 0.4rem 1.3rem;
+            border-radius: var(--radius-full);
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 1rem;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .section-title {
+            font-family: 'Noto Sans Sinhala', 'Poppins', sans-serif;
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        .section-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            max-width: 600px;
+            margin: 0 auto;
+            font-family: 'Noto Sans Sinhala', 'Inter', sans-serif;
+        }
+
+        /* ============================================
+           FEATURES GRID - EXTRA ROUNDED CARDS
+           ============================================ */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--surface);
+            padding: 2.5rem 2rem;
+            border-radius: var(--radius-2xl);
+            border: 2px solid var(--border-light);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-1);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: 0;
+            border-radius: var(--radius-2xl);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-12px);
+            box-shadow: var(--shadow-2xl);
+            border-color: var(--primary);
+        }
+
+        .feature-card:hover::before {
+            opacity: 0.03;
+        }
+
+        .feature-card > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .feature-icon-circle {
+            width: 80px;
+            height: 80px;
+            background: var(--primary-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            margin: 0 auto 1.5rem;
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.1);
+        }
+
+        .feature-card:hover .feature-icon-circle {
+            background: var(--gradient-1);
+            color: white;
+            transform: scale(1.1) rotate(-5deg);
+            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.3);
+        }
+
+        .feature-card h3 {
+            font-family: 'Noto Sans Sinhala', 'Poppins', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.8;
+            font-family: 'Noto Sans Sinhala', 'Inter', sans-serif;
+        }
+
+        /* ============================================
+           SUBJECTS GRID - ROUNDED CARDS
+           ============================================ */
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+
+        .subject-card {
+            background: var(--surface);
+            padding: 2.5rem 1.5rem;
+            border-radius: var(--radius-2xl);
+            text-align: center;
+            border: 2px solid var(--border-light);
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+
+        .subject-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-xl);
+            border-color: var(--primary);
+        }
+
+        .subject-emoji {
+            font-size: 3.8rem;
+            margin-bottom: 1rem;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+
+        .subject-card:hover .subject-emoji {
+            transform: scale(1.2) rotate(8deg);
+        }
+
+        .subject-card h3 {
+            font-family: 'Noto Sans Sinhala', 'Poppins', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        /* ============================================
+           TESTIMONIALS - ROUNDED
+           ============================================ */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+        }
+
+        .testimonial-card {
+            background: var(--surface);
+            padding: 2.5rem 2rem;
+            border-radius: var(--radius-2xl);
+            border: 2px solid var(--border-light);
+            transition: all 0.4s ease;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .testimonial-stars {
+            color: var(--accent);
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+
+        .testimonial-text {
+            color: var(--text-secondary);
+            font-style: italic;
+            line-height: 1.9;
+            margin-bottom: 1.5rem;
+            font-family: 'Noto Sans Sinhala', 'Inter', sans-serif;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.1rem;
+        }
+
+        .author-info strong {
+            display: block;
+            font-family: 'Noto Sans Sinhala', 'Inter', sans-serif;
+        }
+
+        .author-info span {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        /* ============================================
+           CTA SECTION
+           ============================================ */
+        .cta-section {
+            background: var(--gradient-1);
+            padding: 5rem 2rem;
+            text-align: center;
+            color: white;
+            border-radius: var(--radius-2xl);
+            margin: 3rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        .cta-section h2 {
+            font-family: 'Noto Sans Sinhala', 'Poppins', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            position: relative;
+            font-weight: 800;
+        }
+
+        .cta-section p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            margin-bottom: 2rem;
+            position: relative;
+            font-family: 'Noto Sans Sinhala', 'Inter', sans-serif;
+        }
+
+        .btn-white {
+            background: white;
+            color: var(--primary);
+            font-size: 1.1rem;
+            padding: 1rem 2.5rem;
+            position: relative;
+            border-radius: var(--radius-full);
+            font-weight: 700;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-white:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+        }
+
+        /* ============================================
+           FOOTER
+           ============================================ */
+        .footer {
+            background: var(--text-primary);
+            color: white;
+            padding: 5rem 2rem 2rem;
+            position: relative;
+            margin-top: 4rem;
+        }
+
+        .footer-wave {
+            position: absolute;
+            top: -2px;
+            left: 0;
+            width: 100%;
+            overflow: hidden;
+            line-height: 0;
+        }
+
+        .footer-wave svg {
+            width: 100%;
+            height: 60px;
+        }
+
+        .footer-grid {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1.2fr;
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-brand h3 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.6rem;
+            margin-bottom: 1rem;
+        }
+
+        .footer-brand p {
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.8;
+            font-family: 'Noto Sans Sinhala', 'Inter', sans-serif;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 1.5rem;
+        }
+
+        .footer-social a {
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .footer-social a:hover {
+            background: var(--primary);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.4);
+        }
+
+        .footer-links h4,
+        .footer-contact h4 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.05rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .footer-links a {
+            display: block;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 0.75rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-family: 'Noto Sans Sinhala', 'Inter', sans-serif;
+        }
+
+        .footer-links a:hover {
+            color: white;
+            padding-left: 8px;
+        }
+
+        .footer-contact p {
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'Noto Sans Sinhala', 'Inter', sans-serif;
+        }
+
+        .footer-bottom {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.85rem;
+            font-family: 'Noto Sans Sinhala', 'Inter', sans-serif;
+        }
+
+        /* ============================================
+           BACK TO TOP BUTTON
+           ============================================ */
+        .back-to-top {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-1);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            box-shadow: var(--shadow-lg);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(20px);
+            transition: all 0.4s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-primary);
+        }
+
+        /* ============================================
+           LOGIN MODAL - FULLY FIXED
+           ============================================ */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 5000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-box {
+            background: var(--surface);
+            border-radius: var(--radius-2xl);
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: var(--shadow-2xl);
+            transform: scale(0.9) translateY(20px);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .modal-overlay.active .modal-box {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--bg-secondary);
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            transition: all 0.3s ease;
+            z-index: 1;
+        }
+
+        .modal-close-btn:hover {
+            background: var(--danger);
+            color: white;
+            transform: rotate(90deg);
+        }
+
+        .modal-tabs {
+            display: flex;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-full);
+            padding: 4px;
+            margin-bottom: 2rem;
+        }
+
+        .modal-tab {
+            flex: 1;
+            padding: 0.7rem;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border-radius: var(--radius-full);
+            transition: all 0.3s ease;
+            color: var(--text-secondary);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .modal-tab.active {
+            background: var(--surface);
+            color: var(--primary);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-family: 'Noto Sans Sinhala', 'Inter', sans-serif;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.85rem 1.2rem;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            font-size: 0.95rem;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+            background: var(--surface);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .auth-alt-text {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-family: 'Noto Sans Sinhala', 'Inter', sans-serif;
+        }
+
+        .auth-alt-text a {
+            color: var(--primary);
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .auth-alt-text a:hover {
+            text-decoration: underline;
+        }
+
+        /* ============================================
+           RESPONSIVE DESIGN - FULLY FIXED
+           ============================================ */
+        @media (max-width: 1200px) {
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .subjects-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .testimonials-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 968px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+            .hero-desc {
+                margin: 0 auto 2rem;
+            }
+            .hero-cta {
+                justify-content: center;
+            }
+            .hero-stats {
+                justify-content: center;
+            }
+            .hero-visual {
+                order: -1;
+                max-width: 400px;
+                margin: 0 auto;
+            }
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            /* Mobile Navigation */
+            .navbar {
+                top: 6px;
+                width: 96%;
+                border-radius: var(--radius-md);
+            }
+            
+            .nav-container {
+                padding: 0.5rem 1rem;
+            }
+
+            .mobile-toggle {
+                display: flex;
+            }
+
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: calc(100% + 6px);
+                left: 0;
+                right: 0;
+                background: rgba(255, 255, 255, 0.98);
+                backdrop-filter: blur(30px);
+                -webkit-backdrop-filter: blur(30px);
+                flex-direction: column;
+                padding: 0.75rem;
+                border-radius: var(--radius-lg);
+                box-shadow: var(--shadow-2xl);
+                border: 1px solid var(--border);
+                gap: 0.25rem;
+                z-index: 999;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-link {
+                width: 100%;
+                padding: 0.75rem 1rem;
+                border-radius: var(--radius-md);
+                justify-content: flex-start;
+                font-size: 0.9rem;
+            }
+
+            .nav-link i {
+                width: 24px;
+                text-align: center;
+                font-size: 1rem;
+            }
+
+            /* Grid adjustments */
+            .features-grid,
+            .subjects-grid,
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-section {
+                margin: 2rem 1rem;
+                padding: 3rem 1.5rem;
+            }
+
+            .cta-section h2 {
+                font-size: 1.8rem;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-box {
+                padding: 2rem 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero {
+                padding: 6rem 1rem 2rem;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .hero-stats {
+                flex-direction: column;
+            }
+
+            .logo-text {
+                font-size: 1.1rem;
+            }
+
+            .btn-lg {
+                padding: 0.75rem 1.5rem;
+                font-size: 0.95rem;
+            }
+        }
+
+        /* ============================================
+           FOCUS VISIBLE - Accessibility
+           ============================================ */
+        .btn:focus-visible,
+        .nav-link:focus-visible,
+        .mobile-toggle:focus-visible,
+        input:focus-visible,
+        select:focus-visible {
+            outline: 3px solid var(--primary);
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <!-- ============================================
+         SCROLL PROGRESS
+         ============================================ -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- ============================================
+         PRELOADER
+         ============================================ -->
+    <div class="preloader" id="preloader">
+        <div class="preloader-logo">StudyHub LK</div>
+        <div class="preloader-spinner">
+            <div class="preloader-dot"></div>
+            <div class="preloader-dot"></div>
+            <div class="preloader-dot"></div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         BACKGROUND
+         ============================================ -->
+    <div class="bg-animation">
+        <div class="bg-orb bg-orb--1"></div>
+        <div class="bg-orb bg-orb--2"></div>
+        <div class="bg-orb bg-orb--3"></div>
+    </div>
+    <div class="bg-grid"></div>
+
+    <!-- ============================================
+         NAVIGATION - FULLY FIXED
+         ============================================ -->
+    <nav class="navbar" id="navbar" role="navigation" aria-label="Main navigation">
+        <div class="nav-container">
+            <!-- Logo -->
+            <a href="#" class="logo" aria-label="StudyHub LK Home">
+                <div class="logo-icon">SH</div>
+                <span class="logo-text">StudyHub <span class="text-gradient">LK</span></span>
+            </a>
+
+            <!-- Mobile Toggle -->
+            <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <!-- Navigation Links -->
+            <div class="nav-links" id="navLinks" role="menubar">
+                <a href="#" class="nav-link active" role="menuitem">
+                    <i class="fas fa-home" aria-hidden="true"></i> Home
+                </a>
+                <a href="#features" class="nav-link" role="menuitem">
+                    <i class="fas fa-star" aria-hidden="true"></i> Features
+                </a>
+                <a href="papers.html" class="nav-link" role="menuitem">
+                    <i class="fas fa-file-alt" aria-hidden="true"></i> Past Papers
+                </a>
+                <a href="notes.html" class="nav-link" role="menuitem">
+                    <i class="fas fa-sticky-note" aria-hidden="true"></i> Notes
+                </a>
+                <a href="quiz.html" class="nav-link" role="menuitem">
+                    <i class="fas fa-trophy" aria-hidden="true"></i> Quiz
+                </a>
+                <a href="ai.html" class="nav-link" role="menuitem">
+                    <i class="fas fa-robot" aria-hidden="true"></i> AI Assistant
+                    <span class="badge-new">New</span>
+                </a>
+                <a href="community.html" class="nav-link" role="menuitem">
+                    <i class="fas fa-users" aria-hidden="true"></i> Community
+                </a>
+                <a href="contact.html" class="nav-link" role="menuitem">
+                    <i class="fas fa-envelope" aria-hidden="true"></i> Contact
+                </a>
+            </div>
+
+            <!-- Actions -->
+            <div class="nav-actions">
+                <button class="btn-icon" title="Search" aria-label="Search">
+                    <i class="fas fa-search" aria-hidden="true"></i>
+                </button>
+                <!-- Login Button - FULLY FIXED -->
+                <button class="btn btn-login" onclick="openModal()" aria-label="Login to your account">
+                    <i class="fas fa-sign-in-alt" aria-hidden="true"></i> Login
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ============================================
+         MAIN CONTENT
+         ============================================ -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero" id="home" aria-label="Hero section">
+            <div class="hero-container">
+                <div class="hero-text" data-aos="fade-up" data-aos-duration="800">
+                    <div class="hero-badge">
+                        <span class="dot-live" aria-hidden="true"></span>
+                        🇱🇰 ශ්‍රී ලංකාවේ #1 ඉගෙනුම් වේදිකාව
+                    </div>
+                    <h1 class="hero-title">
+                        ඔබේ ඉගෙනීම<br>
+                        <span class="text-gradient">Smart</span> කරගන්න
+                    </h1>
+                    <p class="hero-desc sinhala-text">
+                        10,000+ පසුගිය විභාග ප්‍රශ්න පත්‍ර, AI මෙවලම්, Quiz තරඟ, 
+                        සහ 50,000+ ශ්‍රී ලාංකික සිසුන්ගෙන් යුත් ප්‍රජාව වෙත පිවිසෙන්න.
+                    </p>
+                    <div class="hero-cta">
+                        <a href="#features" class="btn btn-signup btn-lg">
+                            <i class="fas fa-rocket" aria-hidden="true"></i> විශේෂාංග බලන්න
+                        </a>
+                        <button class="btn btn-login btn-lg" onclick="openModal()">
+                            <i class="fas fa-user-plus" aria-hidden="true"></i> ලියාපදිංචි වන්න
+                        </button>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="hero-stat">
+                            <span class="stat-number" data-count="10000">0</span>
+                            <span class="stat-label">Past Papers</span>
+                        </div>
+                        <div class="hero-stat">
+                            <span class="stat-number" data-count="50000">0</span>
+                            <span class="stat-label">සිසුන්</span>
+                        </div>
+                        <div class="hero-stat">
+                            <span class="stat-number" data-count="5000">0</span>
+                            <span class="stat-label">Study Notes</span>
+                        </div>
+                        <div class="hero-stat">
+                            <span class="stat-number">4.9</span>
+                            <span class="stat-label">⭐ Rating</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-visual" data-aos="fade-left" data-aos-duration="1000">
+                    <div class="hero-mockup">
+                        <div class="mockup-header">
+                            <span class="mockup-dot" aria-hidden="true"></span>
+                            <span class="mockup-dot" aria-hidden="true"></span>
+                            <span class="mockup-dot" aria-hidden="true"></span>
+                        </div>
+                        <div class="mockup-items">
+                            <div class="mockup-item">📚 2024 A/L Past Papers</div>
+                            <div class="mockup-item">🤖 AI Study Summary</div>
+                            <div class="mockup-item">🏆 Quiz Score: 95%</div>
+                            <div class="mockup-item">👥 50,000+ සිසුන්</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="section" id="features" aria-label="Features section">
+            <div class="section-container">
+                <div class="section-header" data-aos="fade-up">
+                    <div class="section-badge">විශේෂාංග</div>
+                    <h2 class="section-title">ඔබට අවශ්‍ය <span class="text-gradient">සියලුම</span> මෙවලම්</h2>
+                    <p class="section-subtitle sinhala-text">ශ්‍රී ලාංකික සිසුන් සඳහා විශේෂයෙන් නිර්මාණය කළ ප්‍රබල ඉගෙනුම් මෙවලම්</p>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                        <div class="feature-icon-circle">📚</div>
+                        <h3>Past Papers පුස්තකාලය</h3>
+                        <p>2010-2025 දක්වා ප්‍රශ්න පත්‍ර 10,000+ ක්. Smart search, offline download පහසුකම් සමඟ.</p>
+                    </div>
+                    <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                        <div class="feature-icon-circle">🤖</div>
+                        <h3>AI සහායක</h3>
+                        <p>සිංහල සහ English දෙකෙන්ම 24/7 AI tutor. Summaries, quizzes, study plans generate කරන්න.</p>
+                    </div>
+                    <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                        <div class="feature-icon-circle">🏆</div>
+                        <h3>Quiz තරඟාවලිය</h3>
+                        <p>දිනපතා අභියෝග, ශ්‍රී ලංකා leaderboard, MCQ quizzes සමඟ ඔබේ දැනුම පරීක්ෂා කරන්න.</p>
+                    </div>
+                    <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+                        <div class="feature-icon-circle">👥</div>
+                        <h3>ශිෂ්‍ය ප්‍රජාව</h3>
+                        <p>50,000+ සිසුන් සමඟ සම්බන්ධ වන්න. ප්‍රශ්න අසන්න, study groups හදාගන්න.</p>
+                    </div>
+                    <div class="feature-card" data-aos="fade-up" data-aos-delay="500">
+                        <div class="feature-icon-circle">📝</div>
+                        <h3>Notes හුවමාරුව</h3>
+                        <p>ඔබගේ study notes upload කරන්න, අනුන්ගේ notes download කරන්න. Community voted quality.</p>
+                    </div>
+                    <div class="feature-card" data-aos="fade-up" data-aos-delay="600">
+                        <div class="feature-icon-circle">📱</div>
+                        <h3>ජංගම ඉගෙනුම</h3>
+                        <p>ඕනෑම device එකකින් study කරන්න. Offline සඳහා materials download කරගන්න.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Subjects Section -->
+        <section class="section" style="background: var(--surface);" aria-label="Popular subjects">
+            <div class="section-container">
+                <div class="section-header" data-aos="fade-up">
+                    <div class="section-badge">විෂයන්</div>
+                    <h2 class="section-title">ජනප්‍රිය <span class="text-gradient">විෂයන්</span></h2>
+                    <p class="section-subtitle sinhala-text">ඔබේ විභාගයට අවශ්‍ය resources explore කරන්න</p>
+                </div>
+                <div class="subjects-grid">
+                    <div class="subject-card" data-aos="zoom-in" data-aos-delay="100">
+                        <span class="subject-emoji">📊</span>
+                        <h3>සංයුක්ත ගණිතය</h3>
+                        <p style="color:var(--text-secondary);font-size:0.85rem;">2,500+ Papers</p>
+                    </div>
+                    <div class="subject-card" data-aos="zoom-in" data-aos-delay="200">
+                        <span class="subject-emoji">🔬</span>
+                        <h3>ජීව විද්‍යාව</h3>
+                        <p style="color:var(--text-secondary);font-size:0.85rem;">1,800+ Papers</p>
+                    </div>
+                    <div class="subject-card" data-aos="zoom-in" data-aos-delay="300">
+                        <span class="subject-emoji">💻</span>
+                        <h3>ICT</h3>
+                        <p style="color:var(--text-secondary);font-size:0.85rem;">2,000+ Papers</p>
+                    </div>
+                    <div class="subject-card" data-aos="zoom-in" data-aos-delay="400">
+                        <span class="subject-emoji">⚛️</span>
+                        <h3>භෞතික විද්‍යාව</h3>
+                        <p style="color:var(--text-secondary);font-size:0.85rem;">1,600+ Papers</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section class="section" id="testimonials" aria-label="Student testimonials">
+            <div class="section-container">
+                <div class="section-header" data-aos="fade-up">
+                    <div class="section-badge">අදහස්</div>
+                    <h2 class="section-title">සිසුන්ගේ <span class="text-gradient">අදහස්</span></h2>
+                    <p class="section-subtitle sinhala-text">StudyHub LK ගැන අපගේ සිසුන් පවසන දේ</p>
+                </div>
+                <div class="testimonials-grid">
+                    <div class="testimonial-card" data-aos="fade-up" data-aos-delay="100">
+                        <div class="testimonial-stars" aria-label="5 stars">⭐⭐⭐⭐⭐</div>
+                        <p class="testimonial-text sinhala-text">"StudyHub LK මට A/L විභාගයට 3As ගන්න ගොඩක් උදව් කළා! Past papers සහ AI summaries නියමයි!"</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">SP</div>
+                            <div class="author-info">
+                                <strong>සඳුනි පෙරේරා</strong>
+                                <span>A/L 2024 - Biology</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card" data-aos="fade-up" data-aos-delay="200">
+                        <div class="testimonial-stars" aria-label="5 stars">⭐⭐⭐⭐⭐</div>
+                        <p class="testimonial-text sinhala-text">"Quiz Arena එක ඇත්තටම නියමයි! දිනපතා practice කරාම knowledge එක ගොඩක් improve වුණා."</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">KM</div>
+                            <div class="author-info">
+                                <strong>කසුන් මෙන්ඩිස්</strong>
+                                <span>O/L 2024 - Commerce</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="testimonial-card" data-aos="fade-up" data-aos-delay="300">
+                        <div class="testimonial-stars" aria-label="5 stars">⭐⭐⭐⭐⭐</div>
+                        <p class="testimonial-text sinhala-text">"සිංහලෙන් AI assistant එක පාවිච්චි කරන්න ලැබීම නියමයි! සංකීර්ණ topics පවා ලේසියෙන් තේරුම් ගන්න පුළුවන්."</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">NJ</div>
+                            <div class="author-info">
+                                <strong>නිමාලි ජයසිංහ</strong>
+                                <span>A/L 2025 - Maths</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta-section" data-aos="zoom-in" aria-label="Call to action">
+            <h2>ඔබේ ඉගෙනීම Transform කරන්න සූදානම්ද?</h2>
+            <p>දැනටමත් 50,000+ ශ්‍රී ලාංකික සිසුන් StudyHub LK සමඟ ඉගෙනුම ලබයි</p>
+            <button class="btn btn-white btn-lg" onclick="openModal()">
+                <i class="fas fa-rocket" aria-hidden="true"></i> නොමිලේ ආරම්භ කරන්න
+            </button>
+        </section>
+    </main>
+
+    <!-- ============================================
+         FOOTER
+         ============================================ -->
+    <footer class="footer" role="contentinfo">
+        <div class="footer-wave">
+            <svg viewBox="0 0 1200 120" preserveAspectRatio="none" aria-hidden="true">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" fill="var(--text-primary)"/>
+            </svg>
+        </div>
+        <div class="footer-grid">
+            <div class="footer-brand">
+                <h3>StudyHub <span style="color: var(--primary);">LK</span></h3>
+                <p>Sri Lanka's #1 AI-powered education platform. ශ්‍රී ලංකාවේ දක්ෂම ඉගෙනුම් වේදිකාව.</p>
+                <div class="footer-social">
+                    <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+                    <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <h4>ඉක්මන් සබැඳි</h4>
+                <a href="papers.html">Past Papers</a>
+                <a href="notes.html">Study Notes</a>
+                <a href="quiz.html">Quiz Arena</a>
+                <a href="ai.html">AI Assistant</a>
+            </div>
+            <div class="footer-links">
+                <h4>සම්පත්</h4>
+                <a href="#">O/L සම්පත්</a>
+                <a href="#">A/L සම්පත්</a>
+                <a href="#">විභාග කාලසටහන</a>
+                <a href="contact.html">උදව්</a>
+            </div>
+            <div class="footer-contact">
+                <h4>සම්බන්ධ වන්න</h4>
+                <p><i class="fas fa-envelope"></i> info@studyhublk.com</p>
+                <p><i class="fas fa-phone"></i> +94 77 123 4567</p>
+                <p><i class="fas fa-map-marker-alt"></i> කොළඹ, ශ්‍රී ලංකාව</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 StudyHub LK. සියලුම හිමිකම් ඇවිරිණි.</p>
+            <p>ශ්‍රී ලංකාවේ ❤️ සමඟ නිර්මාණය කරන ලදී 🇱🇰</p>
+        </div>
+    </footer>
+
+    <!-- ============================================
+         BACK TO TOP
+         ============================================ -->
+    <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" aria-label="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- ============================================
+         LOGIN MODAL - FULLY FIXED
+         ============================================ -->
+    <div class="modal-overlay" id="authModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal-box" style="position: relative;">
+            <button class="modal-close-btn" onclick="closeModal()" aria-label="Close modal">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <div class="modal-tabs" role="tablist">
+                <button class="modal-tab active" role="tab" onclick="switchModalTab('login')" aria-selected="true">පිවිසෙන්න</button>
+                <button class="modal-tab" role="tab" onclick="switchModalTab('register')" aria-selected="false">ලියාපදිංචි වන්න</button>
+            </div>
+
+            <!-- Login Form -->
+            <div id="loginFormSection">
+                <h2 id="modalTitle" style="font-family:'Noto Sans Sinhala','Poppins',sans-serif; margin-bottom:0.25rem;">ආයුබෝවන්! 👋</h2>
+                <p style="color:var(--text-secondary); margin-bottom:1.5rem; font-family:'Noto Sans Sinhala',sans-serif;">ඔබගේ ගිණුමට පිවිසෙන්න</p>
+                <div class="form-group">
+                    <label>ඊමේල් ලිපිනය</label>
+                    <input type="email" placeholder="your@email.com" autocomplete="email">
+                </div>
+                <div class="form-group">
+                    <label>මුරපදය</label>
+                    <input type="password" placeholder="••••••••" autocomplete="current-password">
+                </div>
+                <button class="btn btn-signup" style="width:100%; margin-top:0.5rem;">
+                    <i class="fas fa-sign-in-alt"></i> පිවිසෙන්න
+                </button>
+                <p class="auth-alt-text sinhala-text">ගිණුමක් නැද්ද? <a onclick="switchModalTab('register')">ලියාපදිංචි වන්න</a></p>
+            </div>
+
+            <!-- Register Form -->
+            <div id="registerFormSection" style="display:none;">
+                <h2 style="font-family:'Noto Sans Sinhala','Poppins',sans-serif; margin-bottom:0.25rem;">ගිණුමක් සාදන්න 🚀</h2>
+                <p style="color:var(--text-secondary); margin-bottom:1.5rem; font-family:'Noto Sans Sinhala',sans-serif;">ඔබේ ඉගෙනුම් ගමන ආරම්භ කරන්න</p>
+                <div class="form-group">
+                    <label>සම්පූර්ණ නම</label>
+                    <input type="text" placeholder="ඔබගේ නම" autocomplete="name">
+                </div>
+                <div class="form-group">
+                    <label>ඊමේල් ලිපිනය</label>
+                    <input type="email" placeholder="your@email.com" autocomplete="email">
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>ශ්‍රේණිය</label>
+                        <select>
+                            <option value="">තෝරන්න</option>
+                            <option>O/L - Science</option>
+                            <option>O/L - Commerce</option>
+                            <option>A/L - Maths</option>
+                            <option>A/L - Biology</option>
+                            <option>A/L - Commerce</option>
+                            <option>University</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>මුරපදය</label>
+                        <input type="password" placeholder="මුරපදයක් සාදන්න" autocomplete="new-password">
+                    </div>
+                </div>
+                <button class="btn btn-signup" style="width:100%; margin-top:0.5rem;">
+                    <i class="fas fa-user-plus"></i> ලියාපදිංචි වන්න
+                </button>
+                <p class="auth-alt-text sinhala-text">දැනටමත් ගිණුමක් තිබේද? <a onclick="switchModalTab('login')">පිවිසෙන්න</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         SCRIPTS
+         ============================================ -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <script>
+        // ============================================
+        // AOS INITIALIZATION
+        // ============================================
+        AOS.init({
+            duration: 800,
+            easing: 'ease-out-cubic',
+            once: true,
+            offset: 50,
+            disable: 'mobile'
+        });
+
+        // ============================================
+        // DOM ELEMENTS
+        // ============================================
+        const scrollProgress = document.getElementById('scrollProgress');
+        const navbar = document.getElementById('navbar');
+        const backToTopBtn = document.getElementById('backToTop');
+        const mobileToggle = document.getElementById('mobileToggle');
+        const navLinks = document.getElementById('navLinks');
+        const authModal = document.getElementById('authModal');
+        const preloader = document.getElementById('preloader');
+
+        // ============================================
+        // PRELOADER
+        // ============================================
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                preloader.classList.add('hidden');
+            }, 600);
+        });
+
+        // ============================================
+        // SCROLL HANDLERS
+        // ============================================
+        window.addEventListener('scroll', () => {
+            // Scroll Progress
+            const windowHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrolled = (window.scrollY / windowHeight) * 100;
+            scrollProgress.style.width = scrolled + '%';
+
+            // Navbar Shadow
+            navbar.classList.toggle('scrolled', window.scrollY > 50);
+
+            // Back to Top Button
+            backToTopBtn.classList.toggle('visible', window.scrollY > 500);
+
+            // Update Active Nav Link
+            updateActiveNavLink();
+        });
+
+        // ============================================
+        // ACTIVE NAV LINK ON SCROLL
+        // ============================================
+        function updateActiveNavLink() {
+            const sections = document.querySelectorAll('section[id]');
+            let currentSection = 'home';
+
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 150;
+                if (window.scrollY >= sectionTop) {
+                    currentSection = section.getAttribute('id');
+                }
+            });
+
+            document.querySelectorAll('.nav-link[href^="#"]').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === '#' + currentSection) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        // ============================================
+        // MOBILE MENU - FULLY FIXED
+        // ============================================
+        mobileToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isActive = navLinks.classList.toggle('active');
+            mobileToggle.classList.toggle('active');
+            mobileToggle.setAttribute('aria-expanded', isActive);
+        });
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                mobileToggle.classList.remove('active');
+                mobileToggle.setAttribute('aria-expanded', 'false');
+            });
+        });
+
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!navbar.contains(e.target) && navLinks.classList.contains('active')) {
+                navLinks.classList.remove('active');
+                mobileToggle.classList.remove('active');
+                mobileToggle.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        // Close mobile menu on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && navLinks.classList.contains('active')) {
+                navLinks.classList.remove('active');
+                mobileToggle.classList.remove('active');
+                mobileToggle.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        // ============================================
+        // MODAL - FULLY FIXED
+        // ============================================
+        function openModal() {
+            authModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            // Focus first input after animation
+            setTimeout(() => {
+                const firstInput = authModal.querySelector('input');
+                if (firstInput) firstInput.focus();
+            }, 400);
+        }
+
+        function closeModal() {
+            authModal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function switchModalTab(tab) {
+            const loginSection = document.getElementById('loginFormSection');
+            const registerSection = document.getElementById('registerFormSection');
+            const tabs = document.querySelectorAll('.modal-tab');
+
+            if (tab === 'login') {
+                loginSection.style.display = 'block';
+                registerSection.style.display = 'none';
+                tabs[0].classList.add('active');
+                tabs[1].classList.remove('active');
+                tabs[0].setAttribute('aria-selected', 'true');
+                tabs[1].setAttribute('aria-selected', 'false');
+            } else {
+                loginSection.style.display = 'none';
+                registerSection.style.display = 'block';
+                tabs[1].classList.add('active');
+                tabs[0].classList.remove('active');
+                tabs[1].setAttribute('aria-selected', 'true');
+                tabs[0].setAttribute('aria-selected', 'false');
+            }
+        }
+
+        // Close modal on overlay click
+        authModal.addEventListener('click', (e) => {
+            if (e.target === authModal) {
+                closeModal();
+            }
+        });
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && authModal.classList.contains('active')) {
+                closeModal();
+            }
+        });
+
+        // ============================================
+        // COUNTER ANIMATION
+        // ============================================
+        const counterObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const counter = entry.target;
+                    const target = parseInt(counter.getAttribute('data-count'));
+                    let current = 0;
+                    const increment = target / 100;
+                    
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= target) {
+                            counter.textContent = target.toLocaleString();
+                            clearInterval(timer);
+                        } else {
+                            counter.textContent = Math.floor(current).toLocaleString();
+                        }
+                    }, 16);
+                    
+                    counterObserver.unobserve(counter);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        document.querySelectorAll('[data-count]').forEach(counter => {
+            counterObserver.observe(counter);
+        });
+
+        // ============================================
+        // SMOOTH SCROLL FOR ANCHOR LINKS
+        // ============================================
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const offset = 100; // Navbar height offset
+                    const targetPosition = target.offsetTop - offset;
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // ============================================
+        // CONSOLE LOG
+        // ============================================
+        console.log('🚀 StudyHub LK - සම්පූර්ණයෙන්ම Fix කරන ලදී!');
+        console.log('✅ Login Button - Phone & Laptop දෙකටම Works');
+        console.log('✅ සිංහල Fonts - Noto Sans Sinhala');
+        console.log('✅ Features Cards - Extra Rounded');
+        console.log('✅ Mobile Menu - Perfectly Working');
+        console.log('✅ Modal - Opens/Closes Correctly');
+    </script>
+</body>
+</html>
