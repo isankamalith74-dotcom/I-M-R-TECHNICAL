@@ -1,0 +1,1189 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXORA X - AI Creative Suite</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700&family=Noto+Sans+Sinhala:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700;800;900&family=Raleway:wght@400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&family=Bebas+Neue&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Poppins', 'Noto Sans Sinhala', sans-serif; background: #0a0a1a; overflow-x: hidden; color: #e0e0ff; }
+        .font-orbitron { font-family: 'Orbitron', sans-serif; }
+        .font-montserrat { font-family: 'Montserrat', sans-serif; }
+        .font-raleway { font-family: 'Raleway', sans-serif; }
+        .font-playfair { font-family: 'Playfair Display', serif; }
+        .font-bebas { font-family: 'Bebas Neue', sans-serif; }
+        .font-inter { font-family: 'Inter', sans-serif; }
+        .font-sinhala { font-family: 'Noto Sans Sinhala', sans-serif; }
+        .bg-animation { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -2; background: linear-gradient(-45deg, #0a0a1a, #12122e, #0d1b3e, #0a0f2e, #0d0d2b); background-size: 400% 400%; animation: gradientBG 20s ease infinite; }
+        @keyframes gradientBG { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        .grid-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; background-image: linear-gradient(rgba(99,102,241,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(99,102,241,0.03) 1px, transparent 1px); background-size: 50px 50px; pointer-events: none; }
+        .particles { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; pointer-events: none; }
+        .particle { position: absolute; border-radius: 50%; animation: floatUp linear infinite; opacity: 0.6; }
+        @keyframes floatUp { 0% { transform: translateY(100vh) scale(0); opacity: 0; } 10% { opacity: 0.8; } 90% { opacity: 0.8; } 100% { transform: translateY(-10vh) scale(1); opacity: 0; } }
+        .glass-header { background: rgba(10,10,26,0.9); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(99,102,241,0.15); }
+        .neon-text { background: linear-gradient(90deg, #00d4ff, #7c3aed, #f472b6, #00d4ff); background-size: 300% 300%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; animation: neonShift 4s ease infinite; }
+        @keyframes neonShift { 0%,100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
+        .neon-glow { text-shadow: 0 0 10px rgba(0,212,255,0.5), 0 0 20px rgba(124,58,237,0.3), 0 0 40px rgba(244,114,182,0.2); }
+        .glow-btn { background: linear-gradient(135deg, #00d4ff, #7c3aed); box-shadow: 0 0 20px rgba(0,212,255,0.3), 0 0 40px rgba(124,58,237,0.2); transition: all 0.3s ease; position: relative; overflow: hidden; }
+        .glow-btn::before { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transition: left 0.5s ease; }
+        .glow-btn:hover::before { left: 100%; }
+        .glow-btn:hover { transform: translateY(-2px); box-shadow: 0 0 30px rgba(0,212,255,0.5), 0 0 60px rgba(124,58,237,0.3); }
+        .glass-card { background: rgba(255,255,255,0.03); backdrop-filter: blur(10px); border: 1px solid rgba(99,102,241,0.15); border-radius: 20px; transition: all 0.4s cubic-bezier(0.175,0.885,0.32,1.275); }
+        .glass-card:hover { transform: translateY(-5px); border-color: rgba(99,102,241,0.4); box-shadow: 0 15px 35px rgba(0,212,255,0.1), 0 0 40px rgba(124,58,237,0.1); }
+        .neon-input { background: rgba(255,255,255,0.05); border: 2px solid rgba(99,102,241,0.2); color: #e0e0ff; transition: all 0.3s ease; }
+        .neon-input:focus { border-color: #00d4ff; box-shadow: 0 0 20px rgba(0,212,255,0.2); outline: none; }
+        .neon-input::placeholder { color: rgba(160,170,255,0.4); }
+        .style-option { background: rgba(255,255,255,0.03); border: 2px solid rgba(99,102,241,0.2); border-radius: 16px; cursor: pointer; transition: all 0.3s ease; }
+        .style-option:hover { border-color: rgba(0,212,255,0.5); background: rgba(0,212,255,0.05); }
+        .style-option.selected { border-color: #00d4ff; background: rgba(0,212,255,0.1); box-shadow: 0 0 20px rgba(0,212,255,0.2); }
+        .logo-card { background: rgba(255,255,255,0.03); backdrop-filter: blur(10px); border: 1px solid rgba(99,102,241,0.2); border-radius: 20px; overflow: hidden; transition: all 0.4s ease; animation: cardAppear 0.6s ease backwards; }
+        .logo-card:hover { transform: translateY(-8px) scale(1.02); border-color: rgba(0,212,255,0.5); box-shadow: 0 20px 40px rgba(0,212,255,0.15); }
+        @keyframes cardAppear { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .name-card { background: rgba(255,255,255,0.03); backdrop-filter: blur(15px); border: 1px solid rgba(99,102,241,0.2); border-radius: 20px; transition: all 0.4s cubic-bezier(0.175,0.885,0.32,1.275); position: relative; overflow: hidden; animation: nameCardAppear 0.5s ease backwards; }
+        .name-card::before { content: ''; position: absolute; inset: 0; border-radius: 20px; padding: 1px; background: linear-gradient(135deg, transparent, rgba(0,212,255,0.1), transparent); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: destination-out; mask-composite: exclude; opacity: 0; transition: opacity 0.3s; }
+        .name-card:hover::before { opacity: 1; }
+        .name-card:hover { transform: translateY(-8px); border-color: rgba(0,212,255,0.4); box-shadow: 0 20px 50px rgba(0,212,255,0.1), 0 0 40px rgba(124,58,237,0.08); }
+        .name-card.favorited { border-color: rgba(244,114,182,0.5); box-shadow: 0 0 20px rgba(244,114,182,0.15); }
+        @keyframes nameCardAppear { from { opacity: 0; transform: translateY(40px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        .name-display { font-family: 'Orbitron', sans-serif; font-weight: 800; background: linear-gradient(135deg, #00d4ff, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; font-size: 2rem; letter-spacing: 1px; }
+        .score-bar { height: 4px; border-radius: 2px; background: linear-gradient(90deg, #00d4ff, #7c3aed); }
+        .brand-score-ring { width: 56px; height: 56px; border-radius: 50%; background: conic-gradient(from 0deg, #00d4ff var(--score), rgba(99,102,241,0.2) var(--score)); display: flex; align-items: center; justify-content: center; position: relative; }
+        .brand-score-ring::after { content: ''; position: absolute; inset: 4px; border-radius: 50%; background: #0a0a1a; }
+        .brand-score-text { position: relative; z-index: 1; font-size: 11px; font-weight: 700; color: #00d4ff; }
+        .tag-pill { background: rgba(0,212,255,0.1); border: 1px solid rgba(0,212,255,0.2); color: #22d3ee; border-radius: 100px; padding: 4px 12px; font-size: 11px; font-weight: 600; }
+        .name-action-btn { transition: all 0.25s ease; border-radius: 10px; padding: 8px 16px; font-size: 13px; font-weight: 600; cursor: pointer; border: none; display: flex; align-items: center; gap: 6px; }
+        .btn-copy { background: rgba(0,212,255,0.15); color: #22d3ee; border: 1px solid rgba(0,212,255,0.3); }
+        .btn-copy:hover { background: rgba(0,212,255,0.3); transform: scale(1.05); }
+        .btn-fav { background: rgba(244,114,182,0.15); color: #f472b6; border: 1px solid rgba(244,114,182,0.3); }
+        .btn-fav:hover { background: rgba(244,114,182,0.3); transform: scale(1.05); }
+        .btn-fav.active { background: rgba(244,114,182,0.3); border-color: #f472b6; }
+        .btn-logo { background: rgba(124,58,237,0.15); color: #a78bfa; border: 1px solid rgba(124,58,237,0.3); }
+        .btn-logo:hover { background: rgba(124,58,237,0.3); transform: scale(1.05); }
+        .nav-tab { padding: 8px 20px; border-radius: 100px; font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.3s ease; white-space: nowrap; color: rgba(160,170,255,0.6); border: 1px solid transparent; }
+        .nav-tab.active { background: linear-gradient(135deg, rgba(0,212,255,0.2), rgba(124,58,237,0.2)); border-color: rgba(0,212,255,0.3); color: #22d3ee; box-shadow: 0 0 20px rgba(0,212,255,0.15); }
+        .nav-tab:hover:not(.active) { color: #e0e0ff; background: rgba(255,255,255,0.05); }
+        .page-section { display: none; }
+        .page-section.active { display: block; }
+        .loading-ring { width: 60px; height: 60px; border: 3px solid rgba(99,102,241,0.2); border-top-color: #00d4ff; border-radius: 50%; animation: spin 1s linear infinite; }
+        .loading-dots span { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #00d4ff; animation: dotPulse 1.4s ease infinite; margin: 0 3px; }
+        .loading-dots span:nth-child(2) { animation-delay: 0.2s; background: #7c3aed; }
+        .loading-dots span:nth-child(3) { animation-delay: 0.4s; background: #f472b6; }
+        @keyframes dotPulse { 0%,80%,100% { transform: scale(0.6); opacity: 0.4; } 40% { transform: scale(1); opacity: 1; } }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .footer-glow { background: linear-gradient(180deg, transparent, rgba(0,212,255,0.05)); border-top: 1px solid rgba(99,102,241,0.1); }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0a1a; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, #00d4ff, #7c3aed); border-radius: 4px; }
+        .alert-box { animation: slideDown 0.4s ease; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        .color-dot { width: 36px; height: 36px; border-radius: 50%; cursor: pointer; border: 3px solid transparent; transition: all 0.3s ease; }
+        .color-dot:hover { transform: scale(1.15); }
+        .color-dot.selected { border-color: white; box-shadow: 0 0 15px currentColor; }
+        .modal-overlay { background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); }
+        .modal-content { background: linear-gradient(145deg, #12122e, #0a0a1a); border: 1px solid rgba(99,102,241,0.3); box-shadow: 0 25px 50px rgba(0,0,0,0.6), 0 0 40px rgba(0,212,255,0.1); animation: modalSlide 0.4s cubic-bezier(0.175,0.885,0.32,1.275); }
+        @keyframes modalSlide { from { opacity: 0; transform: scale(0.8) translateY(20px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        .download-btn { background: linear-gradient(135deg, #10b981, #059669); box-shadow: 0 4px 15px rgba(16,185,129,0.3); transition: all 0.3s ease; }
+        .download-btn:hover { transform: scale(1.05); box-shadow: 0 6px 20px rgba(16,185,129,0.5); }
+        .ai-badge { background: linear-gradient(135deg, rgba(0,212,255,0.2), rgba(124,58,237,0.2)); border: 1px solid rgba(0,212,255,0.3); animation: pulseBadge 2s infinite; }
+        @keyframes pulseBadge { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        .generated-image { width: 100%; height: 280px; object-fit: cover; border-radius: 16px; transition: all 0.3s ease; }
+        .generated-image:hover { transform: scale(1.03); }
+        .login-container { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+        .login-card { background: linear-gradient(145deg, rgba(18,18,46,0.95), rgba(10,10,26,0.95)); border: 1px solid rgba(99,102,241,0.2); border-radius: 24px; padding: 40px; width: 100%; max-width: 420px; box-shadow: 0 25px 50px rgba(0,0,0,0.5), 0 0 60px rgba(0,212,255,0.1); animation: loginAppear 0.6s ease; }
+        @keyframes loginAppear { from { opacity: 0; transform: translateY(30px) scale(0.95); } to { opacity: 1; transform: translateY(0) scale(1); } }
+        .login-logo { width: 80px; height: 80px; border-radius: 20px; background: linear-gradient(135deg, #00d4ff, #7c3aed); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; box-shadow: 0 0 30px rgba(0,212,255,0.3); animation: logoPulse 2s ease infinite; }
+        @keyframes logoPulse { 0%,100% { box-shadow: 0 0 30px rgba(0,212,255,0.3); } 50% { box-shadow: 0 0 50px rgba(0,212,255,0.5), 0 0 70px rgba(124,58,237,0.3); } }
+        .login-input { background: rgba(255,255,255,0.05); border: 2px solid rgba(99,102,241,0.2); color: #e0e0ff; border-radius: 14px; padding: 14px 18px; font-size: 16px; width: 100%; transition: all 0.3s ease; }
+        .login-input:focus { border-color: #00d4ff; box-shadow: 0 0 20px rgba(0,212,255,0.2); outline: none; }
+        .login-input::placeholder { color: rgba(160,170,255,0.4); }
+        .login-btn { background: linear-gradient(135deg, #00d4ff, #7c3aed); color: white; border: none; border-radius: 14px; padding: 14px; font-size: 16px; font-weight: 600; width: 100%; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 0 20px rgba(0,212,255,0.3); position: relative; overflow: hidden; }
+        .login-btn:hover { transform: translateY(-2px); box-shadow: 0 0 30px rgba(0,212,255,0.5), 0 0 60px rgba(124,58,237,0.3); }
+        .login-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+        .welcome-toast { position: fixed; top: 20px; right: 20px; background: linear-gradient(135deg, rgba(16,185,129,0.9), rgba(5,150,105,0.9)); backdrop-filter: blur(10px); border: 1px solid rgba(16,185,129,0.3); border-radius: 16px; padding: 16px 24px; color: white; font-weight: 500; z-index: 9999; animation: toastSlide 0.5s ease; box-shadow: 0 10px 30px rgba(16,185,129,0.3); max-width: 350px; }
+        @keyframes toastSlide { from { opacity: 0; transform: translateX(100px); } to { opacity: 1; transform: translateX(0); } }
+        .toast-exit { animation: toastExit 0.5s ease forwards; }
+        @keyframes toastExit { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(100px); } }
+        .status-msg { font-size: 12px; margin-top: 8px; padding: 6px 12px; border-radius: 8px; display: inline-block; }
+        .status-success { background: rgba(16,185,129,0.2); color: #34d399; }
+        .status-error { background: rgba(239,68,68,0.2); color: #f87171; }
+        .status-loading { background: rgba(0,212,255,0.2); color: #22d3ee; }
+        .ai-thinking { background: rgba(0,212,255,0.05); border: 1px solid rgba(0,212,255,0.2); border-radius: 20px; padding: 40px; }
+        .think-bar { height: 3px; border-radius: 2px; margin-bottom: 8px; background: linear-gradient(90deg, rgba(99,102,241,0.1), #00d4ff, rgba(99,102,241,0.1)); background-size: 200% 100%; animation: shimmer 1.5s infinite; }
+        @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+        .feature-hero { background: linear-gradient(135deg, rgba(0,212,255,0.08), rgba(124,58,237,0.05)); border: 1px solid rgba(0,212,255,0.15); border-radius: 24px; position: relative; overflow: hidden; }
+        .feature-hero::after { content: ''; position: absolute; top: -40px; right: -40px; width: 200px; height: 200px; background: radial-gradient(circle, rgba(0,212,255,0.08), transparent 70%); border-radius: 50%; pointer-events: none; }
+        .fav-count { background: linear-gradient(135deg, #f472b6, #ec4899); color: white; border-radius: 100px; padding: 1px 8px; font-size: 11px; font-weight: 700; }
+        .password-toggle { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); color: rgba(160,170,255,0.5); cursor: pointer; transition: color 0.3s; background: none; border: none; font-size: 16px; }
+        .password-toggle:hover { color: #00d4ff; }
+        @media (max-width: 768px) { .hero-title { font-size: 2.5rem !important; } .login-card { padding: 30px 20px; } .name-display { font-size: 1.5rem; } }
+    </style>
+<base target="_blank">
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="grid-overlay"></div>
+    <div class="particles" id="particles"></div>
+    <div id="toastContainer"></div>
+
+    <!-- LOGIN PAGE (GMAIL ONLY) -->
+    <div id="loginPage" class="login-container">
+        <div class="login-card">
+            <div class="login-logo"><i class="fas fa-robot text-white text-3xl"></i></div>
+            <h1 class="text-2xl font-black font-orbitron text-center text-white mb-2">NEXORA X</h1>
+            <p class="text-center text-cyan-300/60 text-sm mb-6 tracking-wider uppercase">AI Creative Suite</p>
+
+            <div id="emailLoginSection">
+                <div class="mb-6">
+                    <p class="text-center text-cyan-200/70 text-sm mb-2 font-sinhala">ඔබගේ Gmail ලිපිනය සහ මුරපදය ඇතුලත් කර ලොගින් වන්න</p>
+                    <p class="text-center text-cyan-200/40 text-xs">Enter your Gmail and password to login</p>
+                </div>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-cyan-200/70 text-sm font-medium mb-2">Gmail ලිපිනය / Email Address</label>
+                        <input type="email" id="emailAddress" class="login-input w-full" placeholder="yourname@gmail.com">
+                    </div>
+                    <div>
+                        <label class="block text-cyan-200/70 text-sm font-medium mb-2">මුරපදය / Password</label>
+                        <div class="relative">
+                            <input type="password" id="loginPassword" class="login-input w-full pr-12" placeholder="••••••••">
+                            <button type="button" class="password-toggle" onclick="togglePasswordVisibility()">
+                                <i class="fas fa-eye" id="passwordToggleIcon"></i>
+                            </button>
+                        </div>
+                        <p class="text-cyan-200/30 text-xs mt-1">අවම අක්ෂර 6ක් / Minimum 6 characters</p>
+                    </div>
+                    <div>
+                        <label class="block text-cyan-200/70 text-sm font-medium mb-2">ඔබගේ නම / Your Name</label>
+                        <input type="text" id="userName" class="login-input w-full" placeholder="John Doe">
+                    </div>
+                    <button onclick="handleEmailLogin()" id="emailLoginBtn" class="login-btn flex items-center justify-center gap-2">
+                        <i class="fas fa-envelope"></i><span>ලොගින් වන්න / Login</span>
+                    </button>
+                </div>
+                <div id="emailStatus" class="text-center mt-3 hidden"></div>
+            </div>
+
+            <div class="mt-6 text-center">
+                <p class="text-cyan-200/30 text-xs"><i class="fas fa-shield-alt mr-1"></i>ඔබගේ තොරතුරු සුරක්ෂිතව ආරක්ෂා කෙරේ</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN APP -->
+    <div id="mainApp" class="hidden">
+        <header class="glass-header sticky top-0 z-50">
+            <div class="container mx-auto px-4 py-4">
+                <div class="flex justify-between items-center flex-wrap gap-3">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-400 to-purple-600 flex items-center justify-center shadow-lg shadow-cyan-500/30">
+                            <i class="fas fa-robot text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h1 class="text-2xl font-black font-orbitron neon-text tracking-wider">NEXORA X</h1>
+                            <p class="text-xs text-cyan-300/60 tracking-[0.2em] uppercase">AI Creative Suite</p>
+                        </div>
+                    </div>
+                    <nav class="flex items-center gap-2 flex-wrap">
+                        <button class="nav-tab active" onclick="switchTab('home')" id="tab-home"><i class="fas fa-house mr-1"></i>Home</button>
+                        <button class="nav-tab" onclick="switchTab('logo')" id="tab-logo"><i class="fas fa-image mr-1"></i>Logo Generator</button>
+                        <button class="nav-tab" onclick="switchTab('names')" id="tab-names"><i class="fas fa-lightbulb mr-1"></i>Business Names</button>
+                        <button class="nav-tab" onclick="switchTab('favorites')" id="tab-favorites"><i class="fas fa-heart mr-1"></i>Favorites<span class="fav-count ml-1 hidden" id="favCount">0</span></button>
+                    </nav>
+                    <div class="flex items-center gap-3">
+                        <div class="hidden md:flex items-center gap-2 text-sm text-cyan-300/60">
+                            <i class="fas fa-user text-cyan-400"></i><span id="userDisplay"></span>
+                        </div>
+                        <div class="ai-badge px-3 py-1 rounded-full text-xs font-semibold text-cyan-300 flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>AI Live
+                        </div>
+                        <button onclick="handleLogout()" class="text-cyan-300/60 hover:text-cyan-300 text-sm transition" title="Logout"><i class="fas fa-sign-out-alt"></i></button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- HOME TAB -->
+        <div id="page-home" class="page-section active">
+            <section class="relative py-16 md:py-24 overflow-hidden">
+                <div class="container mx-auto px-4 text-center relative z-10">
+                    <div class="inline-block mb-6 px-5 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-sm font-medium"><i class="fas fa-sparkles mr-2"></i>Next Generation AI Creative Suite</div>
+                    <h2 class="hero-title text-5xl md:text-7xl font-black text-white mb-6 leading-tight font-orbitron">Build Your Brand<br><span class="neon-text neon-glow">With AI Power</span></h2>
+                    <p class="text-lg md:text-xl text-cyan-200/60 mb-12 max-w-2xl mx-auto">Generate business names, create stunning logos, and build your complete brand identity — all powered by AI.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto mb-12">
+                        <div class="feature-hero p-8 text-left cursor-pointer" onclick="switchTab('names')">
+                            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center mb-5 shadow-lg shadow-cyan-500/20"><i class="fas fa-lightbulb text-white text-xl"></i></div>
+                            <h3 class="text-xl font-bold text-white mb-2 font-orbitron">Business Name Generator</h3>
+                            <p class="text-cyan-200/50 text-sm mb-4">AI-powered creative business names with meanings, taglines & brand scores.</p>
+                            <div class="flex flex-wrap gap-2"><span class="tag-pill">10 Names/Generate</span><span class="tag-pill">Brand Score</span><span class="tag-pill">Taglines</span></div>
+                            <div class="mt-5"><span class="glow-btn text-white px-5 py-2 rounded-xl text-sm font-bold inline-flex items-center gap-2"><i class="fas fa-wand-magic-sparkles"></i>Generate Names</span></div>
+                        </div>
+                        <div class="feature-hero p-8 text-left cursor-pointer" onclick="switchTab('logo')" style="background: linear-gradient(135deg, rgba(124,58,237,0.08), rgba(244,114,182,0.05)); border-color: rgba(124,58,237,0.15);">
+                            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center mb-5 shadow-lg shadow-purple-500/20"><i class="fas fa-image text-white text-xl"></i></div>
+                            <h3 class="text-xl font-bold text-white mb-2 font-orbitron">AI Logo Creator</h3>
+                            <p class="text-cyan-200/50 text-sm mb-4">Generate 6 unique professional logo variations in seconds. Free PNG downloads.</p>
+                            <div class="flex flex-wrap gap-2">
+                                <span class="tag-pill" style="background:rgba(124,58,237,0.1);border-color:rgba(124,58,237,0.2);color:#a78bfa;">6 Variations</span>
+                                <span class="tag-pill" style="background:rgba(124,58,237,0.1);border-color:rgba(124,58,237,0.2);color:#a78bfa;">HD Quality</span>
+                                <span class="tag-pill" style="background:rgba(124,58,237,0.1);border-color:rgba(124,58,237,0.2);color:#a78bfa;">Free Download</span>
+                            </div>
+                            <div class="mt-5"><span class="text-white px-5 py-2 rounded-xl text-sm font-bold inline-flex items-center gap-2" style="background:linear-gradient(135deg,#7c3aed,#ec4899);box-shadow:0 0 20px rgba(124,58,237,0.3);"><i class="fas fa-palette"></i>Create Logo</span></div>
+                        </div>
+                    </div>
+                    <div class="flex justify-center gap-6 text-sm flex-wrap">
+                        <div class="flex items-center text-cyan-300/70"><div class="w-12 h-12 rounded-xl bg-cyan-500/10 mr-3 flex items-center justify-center border border-cyan-500/20"><i class="fas fa-bolt text-cyan-400"></i></div>Instant Generation</div>
+                        <div class="flex items-center text-cyan-300/70"><div class="w-12 h-12 rounded-xl bg-purple-500/10 mr-3 flex items-center justify-center border border-purple-500/20"><i class="fas fa-infinity text-purple-400"></i></div>Unlimited Designs</div>
+                        <div class="flex items-center text-cyan-300/70"><div class="w-12 h-12 rounded-xl bg-pink-500/10 mr-3 flex items-center justify-center border border-pink-500/20"><i class="fas fa-download text-pink-400"></i></div>Free Downloads</div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- LOGO GENERATOR TAB -->
+        <div id="page-logo" class="page-section">
+            <section class="container mx-auto px-4 py-10">
+                <div class="text-center mb-10">
+                    <h2 class="text-4xl font-black font-orbitron text-white mb-3">AI <span class="neon-text">Logo Creator</span></h2>
+                    <p class="text-cyan-200/50">Describe your brand and get 6 unique logo variations instantly</p>
+                </div>
+                <div id="logo-alerts"></div>
+                <div class="max-w-4xl mx-auto">
+                    <div class="glass-card p-6 md:p-8 mb-8">
+                        <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2"><i class="fas fa-wand-magic-sparkles text-cyan-400"></i>Describe Your Logo</h3>
+                        <div class="space-y-6">
+                            <div><label class="block text-cyan-200/70 text-sm font-medium mb-2">Brand / Company Name *</label><input type="text" id="brandName" class="neon-input w-full rounded-xl px-4 py-3 text-lg" placeholder="e.g. TechNova, GreenLeaf Cafe..." maxlength="30"></div>
+                            <div><label class="block text-cyan-200/70 text-sm font-medium mb-2">What does your brand do? (Optional)</label><textarea id="brandDesc" rows="2" class="neon-input w-full rounded-xl px-4 py-3" placeholder="e.g. Modern tech startup, Organic food store, Fitness gym..."></textarea></div>
+                            <div>
+                                <label class="block text-cyan-200/70 text-sm font-medium mb-3">Choose Style</label>
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-3" id="styleGrid">
+                                    <div class="style-option selected p-4 text-center" data-style="modern" onclick="selectStyle(this)"><i class="fas fa-cube text-2xl text-cyan-400 mb-2 block"></i><p class="text-sm font-medium text-white">Modern</p></div>
+                                    <div class="style-option p-4 text-center" data-style="minimal" onclick="selectStyle(this)"><i class="fas fa-circle text-2xl text-purple-400 mb-2 block"></i><p class="text-sm font-medium text-white">Minimal</p></div>
+                                    <div class="style-option p-4 text-center" data-style="tech" onclick="selectStyle(this)"><i class="fas fa-microchip text-2xl text-blue-400 mb-2 block"></i><p class="text-sm font-medium text-white">Tech</p></div>
+                                    <div class="style-option p-4 text-center" data-style="luxury" onclick="selectStyle(this)"><i class="fas fa-gem text-2xl text-yellow-400 mb-2 block"></i><p class="text-sm font-medium text-white">Luxury</p></div>
+                                    <div class="style-option p-4 text-center" data-style="playful" onclick="selectStyle(this)"><i class="fas fa-gamepad text-2xl text-pink-400 mb-2 block"></i><p class="text-sm font-medium text-white">Playful</p></div>
+                                    <div class="style-option p-4 text-center" data-style="nature" onclick="selectStyle(this)"><i class="fas fa-leaf text-2xl text-green-400 mb-2 block"></i><p class="text-sm font-medium text-white">Nature</p></div>
+                                    <div class="style-option p-4 text-center" data-style="vintage" onclick="selectStyle(this)"><i class="fas fa-feather text-2xl text-orange-400 mb-2 block"></i><p class="text-sm font-medium text-white">Vintage</p></div>
+                                    <div class="style-option p-4 text-center" data-style="abstract" onclick="selectStyle(this)"><i class="fas fa-shapes text-2xl text-red-400 mb-2 block"></i><p class="text-sm font-medium text-white">Abstract</p></div>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-cyan-200/70 text-sm font-medium mb-3">Primary Color Theme</label>
+                                <div class="flex gap-3 flex-wrap" id="colorGrid">
+                                    <div class="color-dot selected" style="background:linear-gradient(135deg,#00d4ff,#7c3aed);" data-colors="cyan,purple" onclick="selectColor(this)"></div>
+                                    <div class="color-dot" style="background:linear-gradient(135deg,#ef4444,#f97316);" data-colors="red,orange" onclick="selectColor(this)"></div>
+                                    <div class="color-dot" style="background:linear-gradient(135deg,#10b981,#06b6d4);" data-colors="green,cyan" onclick="selectColor(this)"></div>
+                                    <div class="color-dot" style="background:linear-gradient(135deg,#8b5cf6,#ec4899);" data-colors="purple,pink" onclick="selectColor(this)"></div>
+                                    <div class="color-dot" style="background:linear-gradient(135deg,#f59e0b,#ef4444);" data-colors="yellow,red" onclick="selectColor(this)"></div>
+                                    <div class="color-dot" style="background:linear-gradient(135deg,#3b82f6,#8b5cf6);" data-colors="blue,purple" onclick="selectColor(this)"></div>
+                                    <div class="color-dot" style="background:linear-gradient(135deg,#ffffff,#94a3b8);" data-colors="white,gray" onclick="selectColor(this)"></div>
+                                    <div class="color-dot" style="background:linear-gradient(135deg,#fbbf24,#f59e0b);" data-colors="gold,amber" onclick="selectColor(this)"></div>
+                                </div>
+                            </div>
+                            <button onclick="generateLogos()" id="generateBtn" class="glow-btn w-full text-white py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-3"><i class="fas fa-wand-magic-sparkles"></i>Generate AI Logos</button>
+                        </div>
+                    </div>
+                    <div id="loadingSection" class="hidden text-center py-16">
+                        <div class="loading-ring mx-auto mb-6"></div>
+                        <p class="text-cyan-300/70 text-lg font-medium">AI is designing your logos...</p>
+                        <p class="text-cyan-300/40 text-sm mt-2">Analyzing brand identity and generating variations</p>
+                    </div>
+                    <div id="resultsSection" class="hidden">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-2xl font-bold text-white flex items-center gap-2"><i class="fas fa-images text-cyan-400"></i>Generated Logos</h3>
+                            <button onclick="generateLogos()" class="glow-btn text-white px-5 py-2.5 rounded-xl font-medium text-sm flex items-center gap-2"><i class="fas fa-rotate"></i>Regenerate</button>
+                        </div>
+                        <div id="logosGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- BUSINESS NAMES TAB -->
+        <div id="page-names" class="page-section">
+            <section class="container mx-auto px-4 py-10">
+                <div class="text-center mb-10">
+                    <div class="inline-block mb-4 px-5 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/20 text-cyan-300 text-sm font-medium"><i class="fas fa-lightbulb mr-2"></i>AI Business Name Generator</div>
+                    <h2 class="text-4xl md:text-5xl font-black font-orbitron text-white mb-3">Find Your Perfect <span class="neon-text">Business Name</span></h2>
+                    <p class="text-cyan-200/50 max-w-xl mx-auto">Create modern, memorable brand names in seconds. Get meanings, taglines & brand scores.</p>
+                </div>
+                <div id="name-alerts"></div>
+                <div class="max-w-4xl mx-auto">
+                    <div class="glass-card p-6 md:p-8 mb-8">
+                        <h3 class="text-lg font-bold text-white mb-6 flex items-center gap-2"><i class="fas fa-sliders text-cyan-400"></i>Tell us about your business</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-5">
+                            <div><label class="block text-cyan-200/70 text-sm font-medium mb-2"><i class="fas fa-store mr-1 text-cyan-400"></i>Business Type *</label><input type="text" id="bizType" class="neon-input w-full rounded-xl px-4 py-3" placeholder="Restaurant, Tech Startup, Clothing..."></div>
+                            <div><label class="block text-cyan-200/70 text-sm font-medium mb-2"><i class="fas fa-key mr-1 text-purple-400"></i>Keywords</label><input type="text" id="bizKeywords" class="neon-input w-full rounded-xl px-4 py-3" placeholder="Modern, Luxury, Fast, Organic..."></div>
+                        </div>
+                        <div class="mb-5">
+                            <label class="block text-cyan-200/70 text-sm font-medium mb-2"><i class="fas fa-palette mr-1 text-pink-400"></i>Naming Style</label>
+                            <div class="grid grid-cols-3 md:grid-cols-5 gap-2" id="nameStyleGrid">
+                                <div class="style-option selected p-3 text-center" data-nstyle="modern" onclick="selectNameStyle(this)"><i class="fas fa-cube text-cyan-400 mb-1 block text-lg"></i><p class="text-xs font-semibold text-white">Modern</p></div>
+                                <div class="style-option p-3 text-center" data-nstyle="luxury" onclick="selectNameStyle(this)"><i class="fas fa-gem text-yellow-400 mb-1 block text-lg"></i><p class="text-xs font-semibold text-white">Luxury</p></div>
+                                <div class="style-option p-3 text-center" data-nstyle="tech" onclick="selectNameStyle(this)"><i class="fas fa-microchip text-blue-400 mb-1 block text-lg"></i><p class="text-xs font-semibold text-white">Tech</p></div>
+                                <div class="style-option p-3 text-center" data-nstyle="cute" onclick="selectNameStyle(this)"><i class="fas fa-star text-pink-400 mb-1 block text-lg"></i><p class="text-xs font-semibold text-white">Cute</p></div>
+                                <div class="style-option p-3 text-center" data-nstyle="minimal" onclick="selectNameStyle(this)"><i class="fas fa-minus text-gray-400 mb-1 block text-lg"></i><p class="text-xs font-semibold text-white">Minimal</p></div>
+                                <div class="style-option p-3 text-center" data-nstyle="corporate" onclick="selectNameStyle(this)"><i class="fas fa-briefcase text-indigo-400 mb-1 block text-lg"></i><p class="text-xs font-semibold text-white">Corporate</p></div>
+                                <div class="style-option p-3 text-center" data-nstyle="gaming" onclick="selectNameStyle(this)"><i class="fas fa-gamepad text-red-400 mb-1 block text-lg"></i><p class="text-xs font-semibold text-white">Gaming</p></div>
+                                <div class="style-option p-3 text-center" data-nstyle="elegant" onclick="selectNameStyle(this)"><i class="fas fa-feather text-orange-400 mb-1 block text-lg"></i><p class="text-xs font-semibold text-white">Elegant</p></div>
+                                <div class="style-option p-3 text-center" data-nstyle="futuristic" onclick="selectNameStyle(this)"><i class="fas fa-rocket text-purple-400 mb-1 block text-lg"></i><p class="text-xs font-semibold text-white">Futuristic</p></div>
+                            </div>
+                        </div>
+                        <button onclick="generateBusinessNames()" id="nameGenBtn" class="glow-btn w-full text-white py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-3"><i class="fas fa-wand-magic-sparkles"></i>Generate Business Names</button>
+                    </div>
+                    <div id="nameLoadingSection" class="hidden mb-8">
+                        <div class="ai-thinking text-center">
+                            <div class="mb-6"><div class="loading-ring mx-auto mb-4"></div><p class="text-cyan-300 font-semibold text-lg mb-1">AI is brainstorming names...</p><p class="text-cyan-300/40 text-sm">Analyzing your brand identity</p></div>
+                            <div class="max-w-sm mx-auto space-y-2"><div class="think-bar" style="width:100%"></div><div class="think-bar" style="width:80%"></div><div class="think-bar" style="width:60%"></div></div>
+                            <div class="loading-dots mt-6"><span></span><span></span><span></span></div>
+                        </div>
+                    </div>
+                    <div id="nameResultsSection" class="hidden">
+                        <div class="flex flex-wrap justify-between items-center mb-6 gap-3">
+                            <div><h3 class="text-2xl font-bold text-white flex items-center gap-2"><i class="fas fa-stars text-cyan-400"></i><span id="nameResultCount">10</span> Business Names Generated</h3><p class="text-cyan-300/40 text-sm mt-1" id="nameResultMeta"></p></div>
+                            <div class="flex gap-3"><button onclick="generateBusinessNames()" class="flex items-center gap-2 bg-white/5 hover:bg-white/10 border border-white/10 text-white px-4 py-2.5 rounded-xl text-sm font-medium transition"><i class="fas fa-rotate"></i>Generate More</button></div>
+                        </div>
+                        <div id="nameResultsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-5"></div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- FAVORITES TAB -->
+        <div id="page-favorites" class="page-section">
+            <section class="container mx-auto px-4 py-10">
+                <div class="text-center mb-10">
+                    <h2 class="text-4xl font-black font-orbitron text-white mb-3">Your <span class="neon-text">Saved</span> Names</h2>
+                    <p class="text-cyan-200/50">Your favorite business names saved for later</p>
+                </div>
+                <div class="max-w-4xl mx-auto">
+                    <div id="favoritesGrid" class="grid grid-cols-1 md:grid-cols-2 gap-5"></div>
+                    <div id="emptyFavorites" class="text-center py-20">
+                        <div class="w-20 h-20 rounded-2xl bg-pink-500/10 border border-pink-500/20 flex items-center justify-center mx-auto mb-5"><i class="fas fa-heart text-pink-400 text-3xl"></i></div>
+                        <p class="text-cyan-200/50 text-lg mb-2">No favorites yet</p>
+                        <p class="text-cyan-200/30 text-sm mb-6">Generate business names and click the heart to save them here</p>
+                        <button onclick="switchTab('names')" class="glow-btn text-white px-6 py-3 rounded-xl font-bold text-sm inline-flex items-center gap-2"><i class="fas fa-wand-magic-sparkles"></i>Generate Names</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <section class="container mx-auto px-4 py-16" id="homeFeatures">
+            <h3 class="text-3xl font-bold text-center text-white mb-12 font-orbitron">Why Choose <span class="neon-text">NEXORA X</span>?</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                <div class="glass-card p-6 text-center"><div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-cyan-500/20"><i class="fas fa-brain text-white text-2xl"></i></div><h4 class="text-lg font-bold text-white mb-2">AI Powered</h4><p class="text-cyan-200/50 text-sm">Claude AI generates unique, professional names and logos tailored to your exact brand vision.</p></div>
+                <div class="glass-card p-6 text-center"><div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-purple-500/20"><i class="fas fa-bolt text-white text-2xl"></i></div><h4 class="text-lg font-bold text-white mb-2">Lightning Fast</h4><p class="text-cyan-200/50 text-sm">Get 10 name variations and 6 logo designs in seconds. No waiting, no design skills needed.</p></div>
+                <div class="glass-card p-6 text-center"><div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-green-500/20"><i class="fas fa-download text-white text-2xl"></i></div><h4 class="text-lg font-bold text-white mb-2">Complete Brand Kit</h4><p class="text-cyan-200/50 text-sm">From name to logo to tagline — build your entire brand identity in one place, completely free.</p></div>
+            </div>
+        </section>
+
+        <footer class="footer-glow py-8 mt-12">
+            <div class="container mx-auto px-4 text-center">
+                <div class="flex items-center justify-center gap-3 mb-3"><div class="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-400 to-purple-600 flex items-center justify-center"><i class="fas fa-robot text-white text-sm"></i></div><span class="text-lg font-bold text-white font-orbitron">NEXORA X</span></div>
+                <p class="text-cyan-200/40 text-sm mb-2">AI Creative Suite — Build the Future of Your Brand</p>
+                <p class="text-cyan-200/30 text-xs"><i class="fas fa-code mr-1"></i>Created by <span class="text-cyan-400 font-semibold">Isanka</span></p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Preview Modal -->
+    <div id="previewModal" class="fixed inset-0 z-50 hidden modal-overlay">
+        <div class="flex items-center justify-center min-h-screen p-4">
+            <div class="modal-content w-full max-w-2xl rounded-2xl overflow-hidden p-6">
+                <div class="flex justify-between items-center mb-6"><h3 class="text-xl font-bold text-white">Logo Preview</h3><button onclick="closePreview()" class="text-white/60 hover:text-white text-2xl transition">&times;</button></div>
+                <div id="previewContainer" class="flex justify-center mb-6"></div>
+                <div class="flex gap-3">
+                    <button onclick="downloadLogo()" class="download-btn flex-1 text-white py-3 rounded-xl font-bold flex items-center justify-center gap-2"><i class="fas fa-download"></i>Download PNG</button>
+                    <button onclick="closePreview()" class="flex-1 bg-white/5 hover:bg-white/10 border border-white/10 text-white py-3 rounded-xl font-medium transition">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // EmailJS Config
+    const EMAILJS_PUBLIC_KEY = 'qim163gUzAQFfZYqn';
+    const EMAILJS_SERVICE_ID = 'service_lzfv1yk';
+    const EMAILJS_TEMPLATE_ID = 'template_nms56kj';
+
+    let selectedStyle = 'modern';
+    let selectedColors = 'cyan,purple';
+    let selectedNameStyle = 'modern';
+    let currentLogos = [];
+    let previewLogoIndex = -1;
+    let currentUser = { email: '', name: '', password: '' };
+    let favorites = JSON.parse(localStorage.getItem('nexora_favorites') || '[]');
+    let currentGeneratedNames = [];
+
+    function togglePasswordVisibility() {
+        const passwordInput = document.getElementById('loginPassword');
+        const toggleIcon = document.getElementById('passwordToggleIcon');
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            toggleIcon.classList.remove('fa-eye');
+            toggleIcon.classList.add('fa-eye-slash');
+        } else {
+            passwordInput.type = 'password';
+            toggleIcon.classList.remove('fa-eye-slash');
+            toggleIcon.classList.add('fa-eye');
+        }
+    }
+
+    function switchTab(tabName) {
+        document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+        const section = document.getElementById('page-' + tabName);
+        if (section) section.classList.add('active');
+        const tab = document.getElementById('tab-' + tabName);
+        if (tab) tab.classList.add('active');
+        const homeFeatures = document.getElementById('homeFeatures');
+        if (homeFeatures) homeFeatures.style.display = tabName === 'home' ? 'block' : 'none';
+        if (tabName === 'favorites') renderFavorites();
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+
+    async function handleEmailLogin() {
+        const emailInput = document.getElementById('emailAddress').value.trim();
+        const passwordInput = document.getElementById('loginPassword').value;
+        const nameInput = document.getElementById('userName').value.trim();
+        const loginBtn = document.getElementById('emailLoginBtn');
+        const emailStatus = document.getElementById('emailStatus');
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailInput || !emailRegex.test(emailInput)) {
+            showToast('වලංගු Gmail ලිපිනයක් ඇතුලත් කරන්න!', 'error');
+            return;
+        }
+        if (!passwordInput || passwordInput.length < 6) {
+            showToast('මුරපදය අවම අක්ෂර 6ක් විය යුතුයි!', 'error');
+            return;
+        }
+        if (!nameInput) {
+            showToast('කරුණාකර ඔබගේ නම ඇතුලත් කරන්න!', 'error');
+            return;
+        }
+
+        currentUser = { email: emailInput, name: nameInput, password: passwordInput };
+        loginBtn.disabled = true;
+        loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending Email...';
+        emailStatus.classList.remove('hidden');
+        emailStatus.innerHTML = '<span class="status-msg status-loading"><i class="fas fa-spinner fa-spin mr-1"></i>Welcome Email යවමින්...</span>';
+
+        try {
+            emailjs.init(EMAILJS_PUBLIC_KEY);
+            const templateParams = {
+                to_email: emailInput,
+                to_name: nameInput,
+                from_name: 'NEXORA X',
+                message: 'ඔබ අපගේ Nexora X වෙබ්සයිට් ගිණුම සදහා සාදරයෙන් පිලි ගන්නවා! 🎉\n\nAI powered logo generator, business name generator සහ brand identity tools භාවිතා කරන්න.\n\nThank you for joining us!',
+                subject: 'Welcome to NEXORA X - AI Creative Suite'
+            };
+            const response = await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
+            emailStatus.innerHTML = '<span class="status-msg status-success"><i class="fas fa-check mr-1"></i>Welcome Email යවන ලදී! Gmail පරීක්ෂා කරන්න</span>';
+            showToast('සාදරයෙන් පිළිගන්නවා! Welcome email යවන ලදී', 'success');
+        } catch(e) {
+            console.error('EmailJS Error:', e);
+            emailStatus.innerHTML = '<span class="status-msg status-error"><i class="fas fa-exclamation-triangle mr-1"></i>Email failed: ' + e.message + '</span>';
+            showToast('ලොගින් සාර්ථකයි! (Email failed)', 'success');
+        }
+
+        localStorage.setItem('nexora_user', JSON.stringify(currentUser));
+        setTimeout(() => { showMainApp(); }, 2000);
+    }
+
+    function showMainApp() {
+        document.getElementById('loginPage').classList.add('hidden');
+        document.getElementById('mainApp').classList.remove('hidden');
+        const userDisplay = document.getElementById('userDisplay');
+        if (currentUser.name) {
+            userDisplay.textContent = currentUser.name;
+        } else {
+            userDisplay.textContent = currentUser.email;
+        }
+        initParticles();
+        window.scrollTo(0, 0);
+    }
+
+    function handleLogout() {
+        localStorage.removeItem('nexora_user');
+        currentUser = { email: '', name: '', password: '' };
+        document.getElementById('mainApp').classList.add('hidden');
+        document.getElementById('loginPage').classList.remove('hidden');
+        document.getElementById('emailAddress').value = '';
+        document.getElementById('loginPassword').value = '';
+        document.getElementById('userName').value = '';
+        document.getElementById('emailLoginBtn').disabled = false;
+        document.getElementById('emailLoginBtn').innerHTML = '<i class="fas fa-envelope"></i><span>ලොගින් වන්න / Login</span>';
+        document.getElementById('emailStatus').classList.add('hidden');
+        showToast('ඔබ ලොග් අවුට් විය.', 'info');
+    }
+
+    function checkExistingLogin() {
+        const saved = localStorage.getItem('nexora_user');
+        if (saved) {
+            currentUser = JSON.parse(saved);
+            showMainApp();
+            showToast('නැවත සාදරයෙන් පිළිගන්නවා!', 'success');
+        }
+    }
+
+    function showToast(message, type) {
+        const container = document.getElementById('toastContainer');
+        const toast = document.createElement('div');
+        toast.className = 'welcome-toast';
+        let icon = 'check-circle';
+        if (type === 'error') {
+            icon = 'exclamation-circle';
+            toast.style.background = 'linear-gradient(135deg, rgba(239,68,68,0.9), rgba(220,38,38,0.9))';
+            toast.style.borderColor = 'rgba(239,68,68,0.3)';
+            toast.style.boxShadow = '0 10px 30px rgba(239,68,68,0.3)';
+        } else if (type === 'info') {
+            icon = 'info-circle';
+            toast.style.background = 'linear-gradient(135deg, rgba(59,130,246,0.9), rgba(37,99,235,0.9))';
+            toast.style.borderColor = 'rgba(59,130,246,0.3)';
+            toast.style.boxShadow = '0 10px 30px rgba(59,130,246,0.3)';
+        }
+        toast.innerHTML = '<i class="fas fa-' + icon + ' mr-2"></i>' + message;
+        container.appendChild(toast);
+        setTimeout(() => { toast.classList.add('toast-exit'); setTimeout(() => toast.remove(), 500); }, 4000);
+    }
+
+    function initParticles() {
+        const container = document.getElementById('particles');
+        container.innerHTML = '';
+        for (let i = 0; i < 40; i++) {
+            const p = document.createElement('div');
+            p.className = 'particle';
+            p.style.left = Math.random() * 100 + '%';
+            p.style.width = p.style.height = (2 + Math.random() * 3) + 'px';
+            p.style.animationDuration = (12 + Math.random() * 15) + 's';
+            p.style.animationDelay = Math.random() * 15 + 's';
+            const colors = ['rgba(0,212,255,0.4)', 'rgba(124,58,237,0.3)', 'rgba(244,114,182,0.3)'];
+            p.style.background = colors[Math.floor(Math.random() * colors.length)];
+            container.appendChild(p);
+        }
+    }
+
+    function selectStyle(el) {
+        document.querySelectorAll('#styleGrid .style-option').forEach(s => s.classList.remove('selected'));
+        el.classList.add('selected');
+        selectedStyle = el.dataset.style;
+    }
+
+    function selectColor(el) {
+        document.querySelectorAll('.color-dot').forEach(c => c.classList.remove('selected'));
+        el.classList.add('selected');
+        selectedColors = el.dataset.colors;
+    }
+
+    function selectNameStyle(el) {
+        document.querySelectorAll('#nameStyleGrid .style-option').forEach(s => s.classList.remove('selected'));
+        el.classList.add('selected');
+        selectedNameStyle = el.dataset.nstyle;
+    }
+
+    function showAlert(message, type, containerId) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        const div = document.createElement('div');
+        div.className = 'alert-box px-6 py-4 rounded-xl mb-4 font-medium ' + (type === 'error' ? 'bg-red-500/20 border border-red-500/30 text-red-300' : 'bg-cyan-500/20 border border-cyan-500/30 text-cyan-300');
+        div.innerHTML = '<i class="fas fa-' + (type === 'error' ? 'exclamation-circle' : 'check-circle') + ' mr-2"></i>' + message;
+        container.appendChild(div);
+        setTimeout(() => div.remove(), 4000);
+    }
+
+    async function generateBusinessNames() {
+        const bizType = document.getElementById('bizType').value.trim();
+        if (!bizType) { showAlert('Please enter your business type!', 'error', 'name-alerts'); return; }
+        const keywords = document.getElementById('bizKeywords').value.trim();
+        const btn = document.getElementById('nameGenBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> AI is thinking...';
+        document.getElementById('nameLoadingSection').classList.remove('hidden');
+        document.getElementById('nameResultsSection').classList.add('hidden');
+        try {
+            const names = await callClaudeForNames(bizType, keywords, selectedNameStyle);
+            currentGeneratedNames = names;
+            renderNameCards(names, bizType, keywords);
+            document.getElementById('nameResultsSection').classList.remove('hidden');
+            document.getElementById('nameResultCount').textContent = names.length;
+            document.getElementById('nameResultMeta').textContent = bizType + ' - ' + selectedNameStyle + ' style - ' + (keywords || 'No keywords');
+            showAlert(names.length + ' business names generated successfully!', 'success', 'name-alerts');
+        } catch(err) {
+            console.error(err);
+            showAlert('Generation failed. Please try again.', 'error', 'name-alerts');
+        } finally {
+            document.getElementById('nameLoadingSection').classList.add('hidden');
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-wand-magic-sparkles"></i>Generate Business Names';
+        }
+    }
+
+    async function callClaudeForNames(bizType, keywords, style) {
+        await new Promise(r => setTimeout(r, 2000));
+        return generateMockNames(bizType, keywords, style);
+    }
+
+    function generateMockNames(bizType, keywords, style) {
+        const stylePrefixes = {
+            modern: ['Nex', 'Vel', 'Zen', 'Aur', 'Lum', 'Sol', 'Nova', 'Or', 'El', 'Axi'],
+            luxury: ['Aure', 'Velo', 'Lux', 'Opul', 'Grand', 'Pre', 'Roy', 'Eleg', 'Sov', 'Maj'],
+            tech: ['Quant', 'Syn', 'Nex', 'Cyber', 'Digi', 'Tech', 'Data', 'Algo', 'Byte', 'Pixel'],
+            cute: ['Bubb', 'Swee', 'Cud', 'Fluf', 'Puf', 'Snu', 'Tiny', 'Moch', 'Kawa', 'Pika'],
+            minimal: ['Nu', 'Mi', 'Lo', 'Sim', 'Pur', 'Cla', 'Ess', 'Cor', 'Min', 'Bas'],
+            corporate: ['Corp', 'Biz', 'Pro', 'Enter', 'Indus', 'Com', 'Glob', 'Uni', 'All', 'Max'],
+            gaming: ['Blaz', 'Fury', 'Storm', 'Viper', 'Titan', 'Rage', 'Epic', 'Legen', 'Boss', 'Ace'],
+            elegant: ['Grace', 'Ethe', 'Sere', 'Tran', 'Harmo', 'Bliss', 'Calm', 'Pure', 'Soft', 'Gent'],
+            futuristic: ['Astro', 'Neb', 'Cos', 'Galax', 'Star', 'Orbit', 'Void', 'Quan', 'Tera', 'Hyper']
+        };
+        const styleSuffixes = {
+            modern: ['ora', 'uno', 'tro', 'via', 'ara', 'ion', 'ix', 'on', 'a', 'i'],
+            luxury: ['via', 'oura', 'en', 'ance', 'eur', 'oire', 'etta', 'ique', 'oso', 'elle'],
+            tech: ['ix', 'ify', 'ova', 'sys', 'net', 'lab', 'hub', 'core', 'bit', 'ware'],
+            cute: ['ly', 'ie', 'o', 'u', 'i', 'y', 'a', 'ee', 'oo', 'ie'],
+            minimal: ['mo', 'no', 'lo', 'so', 'to', 'ko', 'po', 'do', 'vo', 'zo'],
+            corporate: ['co', 'inc', 'group', 'corp', 'biz', 'pro', 'max', 'all', 'way', 'link'],
+            gaming: ['rage', 'storm', 'fire', 'blade', 'strike', 'quest', 'war', 'clan', 'guild', 'arena'],
+            elegant: ['ance', 'ence', 'ity', 'ure', 'ment', 'ness', 'tion', 'sion', 'dom', 'ship'],
+            futuristic: ['nova', 'tron', 'x', 'z', 'q', '7', '9', '0', 'v', 'k']
+        };
+        const prefixes = stylePrefixes[style] || stylePrefixes.modern;
+        const suffixes = styleSuffixes[style] || styleSuffixes.modern;
+        const meanings = [
+            'A modern brand built for innovation and growth',
+            'Premium quality with elegant simplicity',
+            'Forward-thinking design meets functionality',
+            'Crafted with precision and creative vision',
+            'Bold identity for the next generation',
+            'Timeless elegance with modern edge',
+            'Dynamic energy meets professional quality',
+            'Inspired by nature, designed for people',
+            'Smart solutions for smart businesses',
+            'Where creativity meets excellence'
+        ];
+        const taglines = [
+            'Crafted With Vision',
+            'Beyond Ordinary',
+            'Redefine Possible',
+            'Pure Excellence',
+            'Your Future Starts',
+            'Elevate Everything',
+            'Dream Big. Build Bigger.',
+            'Innovation Unleashed',
+            'Where Ideas Soar',
+            'Excellence Delivered'
+        ];
+        const names = [];
+        for (let i = 0; i < 10; i++) {
+            const prefix = prefixes[Math.floor(Math.random() * prefixes.length)];
+            const suffix = suffixes[Math.floor(Math.random() * suffixes.length)];
+            const name = prefix + suffix;
+            const score = Math.floor(70 + Math.random() * 29);
+            names.push({
+                name: name.charAt(0).toUpperCase() + name.slice(1),
+                meaning: meanings[Math.floor(Math.random() * meanings.length)],
+                tagline: taglines[Math.floor(Math.random() * taglines.length)],
+                pronunciation: name,
+                score: score
+            });
+        }
+        return names;
+    }
+
+    function renderNameCards(names, bizType, keywords) {
+        const grid = document.getElementById('nameResultsGrid');
+        grid.innerHTML = '';
+        names.forEach((item, i) => {
+            const isFav = favorites.some(f => f.name === item.name);
+            const scorePercent = (item.score * 3.6) + 'deg';
+            const card = document.createElement('div');
+            card.className = 'name-card p-6 ' + (isFav ? 'favorited' : '');
+            card.id = 'namecard-' + i;
+            card.style.animationDelay = (i * 0.07) + 's';
+            card.innerHTML = `
+                <div class="flex justify-between items-start mb-4">
+                    <div class="flex-1">
+                        <div class="name-display mb-1">${item.name}</div>
+                        <div class="text-cyan-300/50 text-xs font-medium tracking-wider">
+                            <i class="fas fa-volume-up mr-1 text-purple-400/60"></i>${item.pronunciation || item.name}
+                        </div>
+                    </div>
+                    <div class="brand-score-ring ml-3 flex-shrink-0" style="--score:${scorePercent}">
+                        <span class="brand-score-text">${item.score}%</span>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="tag-pill"><i class="fas fa-info-circle mr-1"></i>Meaning</span>
+                    </div>
+                    <p class="text-cyan-200/70 text-sm leading-relaxed">${item.meaning}</p>
+                </div>
+                <div class="mb-4 px-4 py-3 rounded-xl" style="background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.2);">
+                    <p class="text-purple-300/80 text-sm font-medium italic">
+                        <i class="fas fa-quote-left text-xs mr-2 text-purple-400/50"></i>
+                        ${item.tagline}
+                        <i class="fas fa-quote-right text-xs ml-2 text-purple-400/50"></i>
+                    </p>
+                </div>
+                <div class="mb-4">
+                    <p class="text-cyan-300/40 text-xs mb-2 font-medium">BRAND SCORE</p>
+                    <div class="w-full rounded-full" style="background:rgba(99,102,241,0.15);height:4px;">
+                        <div class="score-bar" style="width:${item.score}%;"></div>
+                    </div>
+                </div>
+                <div class="flex gap-2 flex-wrap relative">
+                    <button class="name-action-btn btn-copy" onclick="copyName('${item.name}', this)">
+                        <i class="fas fa-copy"></i>Copy Name
+                    </button>
+                    <button class="name-action-btn btn-fav ${isFav ? 'active' : ''}" id="fav-btn-${i}" onclick="toggleFavorite(${i}, this)">
+                        <i class="fas fa-heart"></i>${isFav ? 'Saved' : 'Favorite'}
+                    </button>
+                    <button class="name-action-btn btn-logo" onclick="sendToLogo('${item.name}')">
+                        <i class="fas fa-palette"></i>Make Logo
+                    </button>
+                </div>`;
+            grid.appendChild(card);
+        });
+    }
+
+    function copyName(name, btn) {
+        navigator.clipboard.writeText(name).then(() => {
+            const orig = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-check"></i>Copied!';
+            btn.style.background = 'rgba(16,185,129,0.3)';
+            btn.style.borderColor = 'rgba(16,185,129,0.5)';
+            btn.style.color = '#34d399';
+            setTimeout(() => {
+                btn.innerHTML = orig;
+                btn.style.background = '';
+                btn.style.borderColor = '';
+                btn.style.color = '';
+            }, 2000);
+        }).catch(() => {
+            showToast('Copy failed. Please copy manually.', 'error');
+        });
+        showToast('"' + name + '" copied to clipboard!', 'success');
+    }
+
+    function toggleFavorite(index, btn) {
+        const item = currentGeneratedNames[index];
+        if (!item) return;
+        const existingIdx = favorites.findIndex(f => f.name === item.name);
+        const card = document.getElementById('namecard-' + index);
+        if (existingIdx >= 0) {
+            favorites.splice(existingIdx, 1);
+            btn.innerHTML = '<i class="fas fa-heart"></i>Favorite';
+            btn.classList.remove('active');
+            if (card) card.classList.remove('favorited');
+            showToast('"' + item.name + '" removed from favorites', 'info');
+        } else {
+            favorites.push({ ...item, savedAt: new Date().toISOString() });
+            btn.innerHTML = '<i class="fas fa-heart"></i>Saved';
+            btn.classList.add('active');
+            if (card) card.classList.add('favorited');
+            showToast('"' + item.name + '" saved to favorites!', 'success');
+        }
+        localStorage.setItem('nexora_favorites', JSON.stringify(favorites));
+        updateFavCount();
+    }
+
+    function updateFavCount() {
+        const badge = document.getElementById('favCount');
+        if (favorites.length > 0) {
+            badge.textContent = favorites.length;
+            badge.classList.remove('hidden');
+        } else {
+            badge.classList.add('hidden');
+        }
+    }
+
+    function sendToLogo(name) {
+        document.getElementById('brandName').value = name;
+        switchTab('logo');
+        showToast('"' + name + '" sent to Logo Generator!', 'success');
+        setTimeout(() => {
+            document.getElementById('brandName').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 400);
+    }
+
+    function renderFavorites() {
+        const grid = document.getElementById('favoritesGrid');
+        const empty = document.getElementById('emptyFavorites');
+        grid.innerHTML = '';
+        if (favorites.length === 0) {
+            empty.style.display = 'block';
+            return;
+        }
+        empty.style.display = 'none';
+        favorites.forEach((item, i) => {
+            const card = document.createElement('div');
+            card.className = 'name-card favorited p-6';
+            card.style.animationDelay = (i * 0.07) + 's';
+            card.innerHTML = `
+                <div class="flex justify-between items-start mb-3">
+                    <div class="name-display">${item.name}</div>
+                    <span class="brand-score-ring" style="--score:${item.score * 3.6}deg;width:48px;height:48px;">
+                        <span class="brand-score-text">${item.score}%</span>
+                    </span>
+                </div>
+                <p class="text-cyan-200/60 text-sm mb-3">${item.meaning}</p>
+                <div class="px-4 py-2 rounded-xl mb-4" style="background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.2);">
+                    <p class="text-purple-300/80 text-sm italic">"${item.tagline}"</p>
+                </div>
+                <div class="flex gap-2">
+                    <button class="name-action-btn btn-copy" onclick="copyName('${item.name}', this)"><i class="fas fa-copy"></i>Copy</button>
+                    <button class="name-action-btn btn-logo" onclick="sendToLogo('${item.name}')"><i class="fas fa-palette"></i>Make Logo</button>
+                    <button class="name-action-btn" style="background:rgba(239,68,68,0.15);color:#f87171;border:1px solid rgba(239,68,68,0.3);" onclick="removeFavorite('${item.name}', this)">
+                        <i class="fas fa-trash-alt"></i>Remove
+                    </button>
+                </div>`;
+            grid.appendChild(card);
+        });
+    }
+
+    function removeFavorite(name, btn) {
+        favorites = favorites.filter(f => f.name !== name);
+        localStorage.setItem('nexora_favorites', JSON.stringify(favorites));
+        updateFavCount();
+        renderFavorites();
+        showToast('"' + name + '" removed', 'info');
+    }
+
+    function generateLogos() {
+        const brandName = document.getElementById('brandName').value.trim();
+        if (!brandName) { showAlert('Please enter your brand name!', 'error', 'logo-alerts'); return; }
+        const loading = document.getElementById('loadingSection');
+        const results = document.getElementById('resultsSection');
+        loading.classList.remove('hidden');
+        results.classList.add('hidden');
+        document.fonts.ready.then(() => {
+            setTimeout(() => {
+                loading.classList.add('hidden');
+                results.classList.remove('hidden');
+                createLogoVariations(brandName);
+                showAlert('6 unique logos generated successfully!', 'success', 'logo-alerts');
+            }, 2500);
+        });
+    }
+
+    function createLogoVariations(brandName) {
+        const grid = document.getElementById('logosGrid');
+        grid.innerHTML = '';
+        currentLogos = [];
+        const colorMap = {
+            'cyan,purple': ['#00d4ff', '#7c3aed'], 'red,orange': ['#ef4444', '#f97316'],
+            'green,cyan': ['#10b981', '#06b6d4'], 'purple,pink': ['#8b5cf6', '#ec4899'],
+            'yellow,red': ['#f59e0b', '#ef4444'], 'blue,purple': ['#3b82f6', '#8b5cf6'],
+            'white,gray': ['#ffffff', '#94a3b8'], 'gold,amber': ['#fbbf24', '#f59e0b']
+        };
+        const [c1, c2] = colorMap[selectedColors] || colorMap['cyan,purple'];
+        const variations = [
+            { type: 'gradient-orb', label: 'Gradient Orb' },
+            { type: 'hexagon-tech', label: 'Hexagon Tech' },
+            { type: 'elegant-circle', label: 'Elegant Circle' },
+            { type: 'modern-badge', label: 'Modern Badge' },
+            { type: 'abstract-fluid', label: 'Abstract Fluid' },
+            { type: 'minimal-typo', label: 'Minimal Typography' }
+        ];
+        variations.forEach((v, i) => {
+            const canvas = document.createElement('canvas');
+            canvas.width = 1024; canvas.height = 1024;
+            const ctx = canvas.getContext('2d');
+            drawProfessionalLogo(ctx, brandName, v.type, c1, c2, i);
+            const dataUrl = canvas.toDataURL('image/png');
+            currentLogos.push(dataUrl);
+            const card = document.createElement('div');
+            card.className = 'logo-card';
+            card.style.animationDelay = (i * 0.1) + 's';
+            card.innerHTML = `
+                <div class="p-4">
+                    <img src="${dataUrl}" alt="${brandName} logo ${i+1}" class="generated-image mb-3" onclick="previewLogo(${i})">
+                    <p class="text-sm font-medium text-cyan-200/60 mb-3 text-center">${v.label} Style</p>
+                    <div class="flex gap-2">
+                        <button onclick="previewLogo(${i})" class="flex-1 bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/30 text-cyan-300 py-2 rounded-lg text-sm font-medium transition flex items-center justify-center gap-1"><i class="fas fa-eye"></i>View</button>
+                        <button onclick="downloadSingle(${i})" class="flex-1 download-btn text-white py-2 rounded-lg text-sm font-medium flex items-center justify-center gap-1"><i class="fas fa-download"></i>Save</button>
+                    </div>
+                </div>`;
+            grid.appendChild(card);
+        });
+    }
+
+    function drawProfessionalLogo(ctx, name, type, color1, color2, index) {
+        const w = 1024, h = 1024, cx = w/2, cy = h/2;
+        const words = name.trim().split(/\s+/);
+        const initials = words.map(w => w[0]).join('').substring(0,2).toUpperCase();
+        ctx.fillStyle = '#0a0a1a'; ctx.fillRect(0,0,w,h);
+        const mainGrad = ctx.createLinearGradient(0,0,w,h);
+        mainGrad.addColorStop(0, color1);
+        mainGrad.addColorStop(0.5, blendColors(color1, color2, 0.5));
+        mainGrad.addColorStop(1, color2);
+        switch(type) {
+            case 'gradient-orb': drawGradientOrbLogo(ctx,w,h,cx,cy,name,initials,mainGrad,color1,color2); break;
+            case 'hexagon-tech': drawHexagonTechLogo(ctx,w,h,cx,cy,name,initials,mainGrad,color1,color2); break;
+            case 'elegant-circle': drawElegantCircleLogo(ctx,w,h,cx,cy,name,initials,mainGrad,color1,color2); break;
+            case 'modern-badge': drawModernBadgeLogo(ctx,w,h,cx,cy,name,initials,mainGrad,color1,color2); break;
+            case 'abstract-fluid': drawAbstractFluidLogo(ctx,w,h,cx,cy,name,initials,mainGrad,color1,color2); break;
+            case 'minimal-typo': drawMinimalTypoLogo(ctx,w,h,cx,cy,name,initials,mainGrad,color1,color2); break;
+        }
+    }
+
+    function drawGradientOrbLogo(ctx,w,h,cx,cy,name,initials,grad,c1,c2) {
+        ctx.shadowColor=c1; ctx.shadowBlur=80; ctx.fillStyle=c1+'15';
+        ctx.beginPath(); ctx.arc(cx,cy,380,0,Math.PI*2); ctx.fill(); ctx.shadowBlur=0;
+        ctx.shadowColor=c1; ctx.shadowBlur=40; ctx.strokeStyle=grad; ctx.lineWidth=6;
+        ctx.beginPath(); ctx.arc(cx,cy,300,0,Math.PI*2); ctx.stroke(); ctx.shadowBlur=0;
+        ctx.strokeStyle=c2; ctx.lineWidth=3; ctx.setLineDash([15,10]); ctx.globalAlpha=0.6;
+        ctx.beginPath(); ctx.arc(cx,cy,260,0,Math.PI*2); ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha=1;
+        const sphereGrad=ctx.createRadialGradient(cx-70,cy-70,0,cx,cy,220);
+        sphereGrad.addColorStop(0,lightenColor(c1,40)); sphereGrad.addColorStop(0.3,c1);
+        sphereGrad.addColorStop(0.7,c2); sphereGrad.addColorStop(1,darkenColor(c1,30));
+        ctx.fillStyle=sphereGrad; ctx.beginPath(); ctx.arc(cx,cy,220,0,Math.PI*2); ctx.fill();
+        const hlGrad=ctx.createRadialGradient(cx-60,cy-60,0,cx-40,cy-40,100);
+        hlGrad.addColorStop(0,'rgba(255,255,255,0.5)'); hlGrad.addColorStop(0.5,'rgba(255,255,255,0.1)'); hlGrad.addColorStop(1,'rgba(255,255,255,0)');
+        ctx.fillStyle=hlGrad; ctx.beginPath(); ctx.ellipse(cx-50,cy-50,90,60,-Math.PI/4,0,Math.PI*2); ctx.fill();
+        ctx.fillStyle='#ffffff'; ctx.font='bold 200px Montserrat, sans-serif';
+        ctx.textAlign='center'; ctx.textBaseline='middle';
+        ctx.shadowColor='rgba(0,0,0,0.4)'; ctx.shadowBlur=15; ctx.shadowOffsetX=3; ctx.shadowOffsetY=3;
+        ctx.fillText(initials,cx,cy); ctx.shadowColor='transparent'; ctx.shadowBlur=0; ctx.shadowOffsetX=0; ctx.shadowOffsetY=0;
+        ctx.fillStyle=c1; ctx.font='600 52px Poppins, sans-serif'; ctx.fillText(name.substring(0,22),cx,cy+340);
+        ctx.strokeStyle=grad; ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(cx-120,cy+380); ctx.lineTo(cx+120,cy+380); ctx.stroke();
+        ctx.fillStyle=c2; ctx.globalAlpha=0.8; ctx.font='400 36px Poppins, sans-serif'; ctx.fillText('PREMIUM BRAND',cx,cy+430); ctx.globalAlpha=1;
+    }
+
+    function drawHexagonTechLogo(ctx,w,h,cx,cy,name,initials,grad,c1,c2) {
+        ctx.strokeStyle=c1+'20'; ctx.lineWidth=1;
+        for(let x=0;x<w;x+=60){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,h);ctx.stroke();}
+        for(let y=0;y<h;y+=60){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(w,y);ctx.stroke();}
+        drawHexPattern(ctx,cx,cy,350,c1,c2);
+        const hexSize=240;
+        ctx.shadowColor=c1; ctx.shadowBlur=60; ctx.strokeStyle=grad; ctx.lineWidth=8;
+        drawHex(ctx,cx,cy,hexSize); ctx.stroke(); ctx.shadowBlur=0;
+        ctx.fillStyle=grad; ctx.globalAlpha=0.12; drawHex(ctx,cx,cy,hexSize-25); ctx.fill(); ctx.globalAlpha=1;
+        ctx.strokeStyle=c2; ctx.lineWidth=3; drawHex(ctx,cx,cy,hexSize-35); ctx.stroke();
+        ctx.strokeStyle=c1; ctx.lineWidth=2; ctx.globalAlpha=0.5;
+        for(let i=0;i<6;i++){
+            const angle=(i*Math.PI)/3-Math.PI/6;
+            const x1=cx+Math.cos(angle)*(hexSize+15), y1=cy+Math.sin(angle)*(hexSize+15);
+            const x2=cx+Math.cos(angle)*(hexSize+90), y2=cy+Math.sin(angle)*(hexSize+90);
+            ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+            ctx.fillStyle=c1; ctx.globalAlpha=0.8;
+            ctx.beginPath(); ctx.arc(x2,y2,10,0,Math.PI*2); ctx.fill();
+            ctx.strokeStyle=c2; ctx.lineWidth=1; ctx.globalAlpha=0.4;
+            ctx.beginPath(); ctx.arc(x2,y2,18,0,Math.PI*2); ctx.stroke();
+        }
+        ctx.globalAlpha=1;
+        ctx.fillStyle='#0a0a1a'; drawHex(ctx,cx,cy,160); ctx.fill();
+        ctx.strokeStyle=grad; ctx.lineWidth=2; drawHex(ctx,cx,cy,160); ctx.stroke();
+        ctx.fillStyle='#ffffff'; ctx.font='bold 180px Orbitron, sans-serif';
+        ctx.textAlign='center'; ctx.textBaseline='middle';
+        ctx.shadowColor=c1; ctx.shadowBlur=20; ctx.fillText(initials,cx,cy); ctx.shadowBlur=0;
+        ctx.fillStyle=c1; ctx.font='700 48px Montserrat, sans-serif'; ctx.fillText(name.substring(0,22),cx,cy+360);
+        ctx.fillStyle=c2; ctx.globalAlpha=0.7; ctx.font='500 32px Raleway, sans-serif'; ctx.fillText('TECHNOLOGY',cx,cy+420); ctx.globalAlpha=1;
+    }
+
+    function drawElegantCircleLogo(ctx,w,h,cx,cy,name,initials,grad,c1,c2) {
+        ctx.strokeStyle=grad; ctx.lineWidth=1; ctx.globalAlpha=0.15;
+        for(let r=80;r<=400;r+=40){ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.setLineDash(r%80===0?[]:[8,12]);ctx.stroke();}
+        ctx.setLineDash([]); ctx.globalAlpha=1;
+        ctx.shadowColor=c2; ctx.shadowBlur=50; ctx.strokeStyle=grad; ctx.lineWidth=5;
+        ctx.beginPath(); ctx.arc(cx,cy,280,0,Math.PI*2); ctx.stroke(); ctx.shadowBlur=0;
+        ctx.strokeStyle=c1; ctx.lineWidth=2; ctx.globalAlpha=0.6;
+        ctx.beginPath(); ctx.arc(cx,cy,295,0,Math.PI*2); ctx.stroke(); ctx.globalAlpha=1;
+        const opos=[{x:cx-220,y:cy-220},{x:cx+220,y:cy-220},{x:cx-220,y:cy+220},{x:cx+220,y:cy+220}];
+        opos.forEach(pos=>{
+            ctx.strokeStyle=c1; ctx.lineWidth=2;
+            ctx.beginPath(); ctx.arc(pos.x,pos.y,30,0,Math.PI*2); ctx.stroke();
+            ctx.save(); ctx.translate(pos.x,pos.y); ctx.rotate(Math.PI/4);
+            ctx.fillStyle=c2; ctx.globalAlpha=0.4; ctx.fillRect(-12,-12,24,24); ctx.globalAlpha=1; ctx.restore();
+            ctx.fillStyle=c1; ctx.beginPath(); ctx.arc(pos.x,pos.y,6,0,Math.PI*2); ctx.fill();
+        });
+        ctx.save(); ctx.translate(cx,cy); ctx.rotate(Math.PI/4);
+        ctx.strokeStyle=grad; ctx.lineWidth=4; ctx.strokeRect(-130,-130,260,260);
+        ctx.fillStyle=grad; ctx.globalAlpha=0.08; ctx.fillRect(-130,-130,260,260); ctx.globalAlpha=1;
+        ctx.strokeStyle=c1; ctx.lineWidth=2; ctx.strokeRect(-110,-110,220,220); ctx.restore();
+        ctx.fillStyle='#ffffff'; ctx.font='bold 220px "Playfair Display", serif';
+        ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(initials,cx,cy);
+        ctx.fillStyle=c1; ctx.font='italic 500 56px "Playfair Display", serif'; ctx.fillText(name.substring(0,20),cx,cy+340);
+        ctx.strokeStyle=grad; ctx.lineWidth=2;
+        ctx.beginPath(); ctx.moveTo(cx-100,cy+390); ctx.lineTo(cx-20,cy+390); ctx.stroke();
+        ctx.fillStyle=c2; ctx.beginPath(); ctx.arc(cx,cy+390,6,0,Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.moveTo(cx+20,cy+390); ctx.lineTo(cx+100,cy+390); ctx.stroke();
+        ctx.fillStyle=c2; ctx.globalAlpha=0.7; ctx.font='400 32px Raleway, sans-serif'; ctx.fillText('ESTABLISHED 2024',cx,cy+450); ctx.globalAlpha=1;
+    }
+
+    function drawModernBadgeLogo(ctx,w,h,cx,cy,name,initials,grad,c1,c2) {
+        drawStarBurst(ctx,cx,cy,380,16,c1+'15',c2+'10');
+        ctx.shadowColor=c1; ctx.shadowBlur=60; ctx.fillStyle=grad; ctx.globalAlpha=0.12;
+        drawShield(ctx,cx,cy,300); ctx.fill(); ctx.globalAlpha=1;
+        ctx.strokeStyle=grad; ctx.lineWidth=8; drawShield(ctx,cx,cy,300); ctx.stroke(); ctx.shadowBlur=0;
+        ctx.fillStyle='#0a0a1a'; drawShield(ctx,cx,cy,260); ctx.fill();
+        ctx.strokeStyle=c2; ctx.lineWidth=3; drawShield(ctx,cx,cy,260); ctx.stroke();
+        const ig=ctx.createLinearGradient(cx,cy-200,cx,cy+200);
+        ig.addColorStop(0,c1+'20'); ig.addColorStop(0.5,c2+'10'); ig.addColorStop(1,c1+'20');
+        ctx.fillStyle=ig; drawShield(ctx,cx,cy,220); ctx.fill();
+        drawStar(ctx,cx,cy-160,40,5,c1,c2,grad);
+        drawLaurelWreath(ctx,cx,cy,180,c1,c2);
+        ctx.fillStyle='#ffffff'; ctx.font='bold 190px Montserrat, sans-serif';
+        ctx.textAlign='center'; ctx.textBaseline='middle';
+        ctx.shadowColor='rgba(0,0,0,0.3)'; ctx.shadowBlur=10;
+        ctx.fillText(initials,cx,cy+10); ctx.shadowBlur=0;
+        drawRibbonBanner(ctx,cx,cy+200,280,70,grad,c1);
+        ctx.fillStyle='#ffffff'; ctx.font='bold 42px Poppins, sans-serif'; ctx.fillText(name.substring(0,18),cx,cy+210);
+        ctx.fillStyle=c2; ctx.globalAlpha=0.8; ctx.font='500 34px Raleway, sans-serif'; ctx.fillText('OFFICIAL BRAND',cx,cy+380); ctx.globalAlpha=1;
+    }
+
+    function drawAbstractFluidLogo(ctx,w,h,cx,cy,name,initials,grad,c1,c2) {
+        [{x:cx-180,y:cy-120,rx:200,ry:160,rot:-0.4,color:c1},{x:cx+150,y:cy+100,rx:180,ry:140,rot:0.6,color:c2},{x:cx-100,y:cy+180,rx:160,ry:120,rot:-0.9,color:c1}].forEach(b=>{
+            ctx.fillStyle=b.color+'18'; ctx.beginPath(); ctx.ellipse(b.x,b.y,b.rx,b.ry,b.rot,0,Math.PI*2); ctx.fill();
+        });
+        ctx.shadowColor=c1; ctx.shadowBlur=70; ctx.strokeStyle=grad; ctx.lineWidth=7;
+        drawOrganicShape(ctx,cx,cy,270); ctx.stroke(); ctx.shadowBlur=0;
+        ctx.fillStyle=grad; ctx.globalAlpha=0.08; drawOrganicShape(ctx,cx,cy,230); ctx.fill(); ctx.globalAlpha=1;
+        for(let i=0;i<15;i++){
+            const angle=(i/15)*Math.PI*2;
+            const dist=340+Math.sin(i*2.5)*40;
+            const px=cx+Math.cos(angle)*dist, py=cy+Math.sin(angle)*dist;
+            const size=8+Math.sin(i*1.7)*5;
+            ctx.fillStyle=i%3===0?c1:(i%3===1?c2:blendColors(c1,c2,0.5));
+            ctx.globalAlpha=0.5+Math.sin(i)*0.3;
+            ctx.beginPath(); ctx.arc(px,py,size,0,Math.PI*2); ctx.fill();
+        }
+        ctx.globalAlpha=1;
+        ctx.fillStyle='#ffffff'; ctx.font='bold 200px Raleway, sans-serif';
+        ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(initials,cx,cy);
+        ctx.fillStyle=c1; ctx.font='600 52px Poppins, sans-serif'; ctx.fillText(name.substring(0,22),cx,cy+340);
+        ctx.fillStyle=c2; ctx.globalAlpha=0.7; ctx.font='italic 400 36px Raleway, sans-serif'; ctx.fillText('Creative Studio',cx,cy+410); ctx.globalAlpha=1;
+    }
+
+    function drawMinimalTypoLogo(ctx,w,h,cx,cy,name,initials,grad,c1,c2) {
+        ctx.strokeStyle=c1; ctx.lineWidth=1; ctx.globalAlpha=0.08;
+        for(let i=-250;i<=250;i+=50){
+            ctx.beginPath();ctx.moveTo(cx+i,cy-250);ctx.lineTo(cx+i,cy+250);ctx.stroke();
+            ctx.beginPath();ctx.moveTo(cx-250,cy+i);ctx.lineTo(cx+250,cy+i);ctx.stroke();
+        }
+        ctx.globalAlpha=1;
+        ctx.fillStyle=c1+'20'; ctx.fillRect(cx-300,cy-80,60,60); ctx.fillRect(cx+240,cy+20,60,60);
+        ctx.fillStyle=c2+'20'; ctx.fillRect(cx-280,cy+40,40,40); ctx.fillRect(cx+260,cy-60,40,40);
+        ctx.strokeStyle=grad; ctx.lineWidth=5;
+        ctx.beginPath(); ctx.moveTo(cx-150,cy-120); ctx.lineTo(cx+150,cy-120); ctx.stroke();
+        ctx.fillStyle='#ffffff'; ctx.font='900 280px "Bebas Neue", sans-serif';
+        ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(initials,cx,cy-20);
+        ctx.strokeStyle=grad; ctx.lineWidth=3;
+        ctx.beginPath(); ctx.moveTo(cx-100,cy+100); ctx.lineTo(cx+100,cy+100); ctx.stroke();
+        ctx.fillStyle=c1; ctx.font='700 64px Montserrat, sans-serif'; ctx.fillText(name.toUpperCase().substring(0,15),cx,cy+180);
+        ctx.fillStyle=c2; ctx.globalAlpha=0.6; ctx.font='400 32px Raleway, sans-serif'; ctx.fillText('BRAND IDENTITY',cx,cy+250); ctx.globalAlpha=1;
+        const cs=30; ctx.strokeStyle=c1; ctx.lineWidth=3;
+        ctx.beginPath(); ctx.moveTo(cx-280,cy-200); ctx.lineTo(cx-280,cy-200+cs); ctx.moveTo(cx-280,cy-200); ctx.lineTo(cx-280+cs,cy-200); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(cx+280,cy-200); ctx.lineTo(cx+280,cy-200+cs); ctx.moveTo(cx+280,cy-200); ctx.lineTo(cx+280-cs,cy-200); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(cx-280,cy+320); ctx.lineTo(cx-280,cy+320-cs); ctx.moveTo(cx-280,cy+320); ctx.lineTo(cx-280+cs,cy+320); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(cx+280,cy+320); ctx.lineTo(cx+280,cy+320-cs); ctx.moveTo(cx+280,cy+320); ctx.lineTo(cx+280-cs,cy+320); ctx.stroke();
+    }
+
+    function drawHex(ctx,x,y,size) {
+        ctx.beginPath();
+        for(let i=0;i<6;i++){const a=(i*Math.PI)/3-Math.PI/6;i===0?ctx.moveTo(x+Math.cos(a)*size,y+Math.sin(a)*size):ctx.lineTo(x+Math.cos(a)*size,y+Math.sin(a)*size);}
+        ctx.closePath();
+    }
+    function drawHexPattern(ctx,cx,cy,maxR,c1,c2){
+        ctx.strokeStyle=c1+'15'; ctx.lineWidth=1;
+        for(let r=60;r<=maxR;r+=60){for(let i=0;i<6;i++){const a=(i*Math.PI)/3;drawHex(ctx,cx+Math.cos(a)*r,cy+Math.sin(a)*r,30);ctx.stroke();}}
+    }
+    function drawShield(ctx,x,y,size){
+        ctx.beginPath(); ctx.moveTo(x,y-size); ctx.lineTo(x+size*0.85,y-size*0.4);
+        ctx.lineTo(x+size*0.85,y+size*0.2); ctx.quadraticCurveTo(x+size*0.85,y+size*0.8,x,y+size);
+        ctx.quadraticCurveTo(x-size*0.85,y+size*0.8,x-size*0.85,y+size*0.2); ctx.lineTo(x-size*0.85,y-size*0.4); ctx.closePath();
+    }
+    function drawStarBurst(ctx,cx,cy,maxR,rays,c1,c2){
+        for(let i=0;i<rays;i++){
+            const a=(i/rays)*Math.PI*2;
+            ctx.strokeStyle=i%2===0?c1:c2; ctx.lineWidth=2; ctx.globalAlpha=0.15;
+            ctx.beginPath(); ctx.moveTo(cx+Math.cos(a)*maxR*0.3,cy+Math.sin(a)*maxR*0.3);
+            ctx.lineTo(cx+Math.cos(a)*maxR,cy+Math.sin(a)*maxR); ctx.stroke();
+        }
+        ctx.globalAlpha=1;
+    }
+    function drawStar(ctx,cx,cy,outerR,points,c1,c2,grad){
+        ctx.fillStyle=grad||c1; ctx.beginPath();
+        for(let i=0;i<points*2;i++){const r=i%2===0?outerR:outerR*0.4;const a=(i/(points*2))*Math.PI*2-Math.PI/2;i===0?ctx.moveTo(cx+Math.cos(a)*r,cy+Math.sin(a)*r):ctx.lineTo(cx+Math.cos(a)*r,cy+Math.sin(a)*r);}
+        ctx.closePath(); ctx.fill(); ctx.strokeStyle=c1; ctx.lineWidth=2; ctx.stroke();
+    }
+    function drawLaurelWreath(ctx,cx,cy,radius,c1,c2){
+        for(let i=0;i<12;i++){
+            const a=(i/12)*Math.PI-Math.PI/2;
+            ctx.fillStyle=i%2===0?c1:c2; ctx.globalAlpha=0.4;
+            ctx.save(); ctx.translate(cx+Math.cos(a)*radius,cy+Math.sin(a)*radius); ctx.rotate(a+Math.PI/2);
+            ctx.beginPath(); ctx.ellipse(0,0,15,8,0,0,Math.PI*2); ctx.fill(); ctx.restore();
+        }
+        ctx.globalAlpha=1;
+    }
+    function drawRibbonBanner(ctx,cx,cy,width,height,grad,c1){
+        ctx.fillStyle=grad; ctx.beginPath();
+        ctx.moveTo(cx-width/2,cy-height/2); ctx.lineTo(cx+width/2,cy-height/2);
+        ctx.lineTo(cx+width/2+20,cy); ctx.lineTo(cx+width/2,cy+height/2);
+        ctx.lineTo(cx-width/2,cy+height/2); ctx.lineTo(cx-width/2-20,cy); ctx.closePath(); ctx.fill();
+        ctx.fillStyle=darkenColor(c1,20);
+        ctx.beginPath(); ctx.moveTo(cx-width/2-20,cy); ctx.lineTo(cx-width/2-50,cy-20); ctx.lineTo(cx-width/2-50,cy+20); ctx.closePath(); ctx.fill();
+        ctx.beginPath(); ctx.moveTo(cx+width/2+20,cy); ctx.lineTo(cx+width/2+50,cy-20); ctx.lineTo(cx+width/2+50,cy+20); ctx.closePath(); ctx.fill();
+    }
+    function drawOrganicShape(ctx,cx,cy,size){
+        ctx.beginPath();
+        for(let i=0;i<=8;i++){
+            const a=(i/8)*Math.PI*2;
+            const r=size+Math.sin(i*3.7)*size*0.15+Math.cos(i*2.3)*size*0.1;
+            const x=cx+Math.cos(a)*r, y=cy+Math.sin(a)*r;
+            if(i===0){ctx.moveTo(x,y);}else{
+                const pa=((i-1)/8)*Math.PI*2;
+                const pr=size+Math.sin((i-1)*3.7)*size*0.15+Math.cos((i-1)*2.3)*size*0.1;
+                ctx.quadraticCurveTo((cx+Math.cos(pa)*pr+x)/2+Math.sin(i)*20,(cy+Math.sin(pa)*pr+y)/2+Math.cos(i)*20,x,y);
+            }
+        }
+        ctx.closePath();
+    }
+
+    function blendColors(c1,c2,ratio){
+        const h=x=>{x=x.toString(16);return x.length===1?'0'+x:x;};
+        const r=Math.round(parseInt(c1.substring(1,3),16)*(1-ratio)+parseInt(c2.substring(1,3),16)*ratio);
+        const g=Math.round(parseInt(c1.substring(3,5),16)*(1-ratio)+parseInt(c2.substring(3,5),16)*ratio);
+        const b=Math.round(parseInt(c1.substring(5,7),16)*(1-ratio)+parseInt(c2.substring(5,7),16)*ratio);
+        return '#'+h(r)+h(g)+h(b);
+    }
+    function lightenColor(color,percent){
+        const num=parseInt(color.replace('#',''),16), amt=Math.round(2.55*percent);
+        const R=(num>>16)+amt, G=(num>>8&0x00FF)+amt, B=(num&0x0000FF)+amt;
+        return '#'+(0x1000000+(R<255?R<1?0:R:255)*0x10000+(G<255?G<1?0:G:255)*0x100+(B<255?B<1?0:B:255)).toString(16).slice(1);
+    }
+    function darkenColor(color,percent){
+        const num=parseInt(color.replace('#',''),16), amt=Math.round(2.55*percent);
+        const R=(num>>16)-amt, G=(num>>8&0x00FF)-amt, B=(num&0x0000FF)-amt;
+        return '#'+(0x1000000+(R>0?R:0)*0x10000+(G>0?G:0)*0x100+(B>0?B:0)).toString(16).slice(1);
+    }
+
+    function previewLogo(index){
+        previewLogoIndex=index;
+        document.getElementById('previewContainer').innerHTML='<img src="'+currentLogos[index]+'" alt="Preview" style="max-width:400px;border-radius:16px;">';
+        document.getElementById('previewModal').classList.remove('hidden');
+    }
+    function closePreview(){ document.getElementById('previewModal').classList.add('hidden'); }
+    function downloadSingle(index){
+        const a=document.createElement('a'); a.href=currentLogos[index]; a.download='nexora-logo-'+(index+1)+'.png';
+        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+        showAlert('Logo downloaded!', 'success', 'logo-alerts');
+    }
+    function downloadLogo(){ if(previewLogoIndex>=0) downloadSingle(previewLogoIndex); }
+
+    document.addEventListener('click', e => { if(e.target===document.getElementById('previewModal')) closePreview(); });
+    document.addEventListener('keydown', e => { if(e.key==='Escape') closePreview(); });
+    document.addEventListener('DOMContentLoaded', () => {
+        initParticles();
+        const em = document.getElementById('emailAddress');
+        if(em) em.addEventListener('keypress', e => { if(e.key==='Enter') handleEmailLogin(); });
+        const pw = document.getElementById('loginPassword');
+        if(pw) pw.addEventListener('keypress', e => { if(e.key==='Enter') handleEmailLogin(); });
+        checkExistingLogin();
+        updateFavCount();
+    });
+    </script>
+</body>
+</html>
